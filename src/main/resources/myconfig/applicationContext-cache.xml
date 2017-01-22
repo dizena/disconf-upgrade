@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <!-- redis configuration -->
+    <bean id="redisCacheDspMgr" class="com.github.knightliao.apollo.redis.RedisCacheManager">
+        <property name="clientList">
+            <list>
+                <ref bean="redisClientDsp1"/>
+                <ref bean="redisClientDsp2"/>
+            </list>
+        </property>
+        <property name="retryTimes">   <!-- 多写随机读策略重试次数 -->
+            <value>${redis.group1.retry.times}</value>
+        </property>
+        <property name="evictorDelayCheckSeconds">   <!-- 失效检测器轮询检测时间间隔，此值大于0表示启用失效检测器 -->
+            <value>${redis.evictor.delayCheckSeconds}</value>
+        </property>
+        <property name="evictorCheckPeriodSeconds">   <!-- 失效检测器延迟启动时间 -->
+            <value>${redis.evictor.checkPeriodSeconds}</value>
+        </property>
+        <property name="evictorFailedTimesToBeTickOut">  <!-- 失效检测器检测Ping-Pong心跳，连接失败次数超过这个值则剔除，直到心跳正常再恢复 -->
+            <value>${redis.evictor.failedTimesToBeTickOut}</value>
+        </property>
+    </bean>
+
+    <bean id="redisClientConfig1" class="com.github.knightliao.apollo.redis.config.RedisHAClientConfig">
+        <property name="cacheName">
+            <value>${redis.group1.client1.name}</value>
+        </property>
+        <property name="redisServerHost">
+            <value>${redis.group1.client1.host}</value>
+        </property>
+        <property name="redisServerPort">
+            <value>${redis.group1.client1.port}</value>
+        </property>
+        <property name="timeout">
+            <value>${redis.group1.client1.timeout}</value>
+        </property>
+        <property name="redisAuthKey">
+            <value>${redis.group1.client1.password}</value>
+        </property>
+    </bean>
+
+    <bean id="redisClientDsp1" class="com.github.knightliao.apollo.redis.RedisClient">
+        <constructor-arg>
+            <ref bean="redisClientConfig1"/>
+        </constructor-arg>
+    </bean>
+
+    <bean id="redisClientConfig2" class="com.github.knightliao.apollo.redis.config.RedisHAClientConfig">
+        <property name="cacheName">
+            <value>${redis.group1.client2.name}</value>
+        </property>
+        <property name="redisServerHost">
+            <value>${redis.group1.client2.host}</value>
+        </property>
+        <property name="redisServerPort">
+            <value>${redis.group1.client2.port}</value>
+        </property>
+        <property name="timeout">
+            <value>${redis.group1.client2.timeout}</value>
+        </property>
+        <property name="redisAuthKey">
+            <value>${redis.group1.client2.password}</value>
+        </property>
+    </bean>
+
+    <bean id="redisClientDsp2" class="com.github.knightliao.apollo.redis.RedisClient">
+        <constructor-arg>
+            <ref bean="redisClientConfig2"/>
+        </constructor-arg>
+    </bean>
+
+</beans>
