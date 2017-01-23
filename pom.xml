@@ -5,7 +5,7 @@
 
 	<groupId>com.baidu.disconf</groupId>
 	<artifactId>disconf-upgrade</artifactId>
-	<version>2.6.36</version>
+	<version>3.1</version>
 	<packaging>war</packaging>
 
 
@@ -173,6 +173,12 @@
 			<artifactId>javax.servlet-api</artifactId>
 			<version>3.1.0</version>
 		</dependency>
+		
+		<dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+            <version>2.3.20</version>
+        </dependency>
 		
 		<dependency>
             <groupId>com.googlecode.java-diff-utils</groupId>

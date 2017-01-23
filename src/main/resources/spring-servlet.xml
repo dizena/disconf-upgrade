@@ -17,22 +17,30 @@
 	<!-- 静态资源文件 -->
 	<mvc:resources mapping="/html/**" location="/html/" />
 	
-	<bean class="org.springframework.web.servlet.mvc.support.ControllerClassNameHandlerMapping"/>   
+	<bean class="org.springframework.web.servlet.mvc.support.ControllerClassNameHandlerMapping"/> 
+	
+	<bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+		<property name="templateLoaderPath" value="/freemarker/" />
+		<property name="freemarkerSettings">
+			<props>
+				<prop key="template_update_delay">0</prop>
+			</props>
+		</property>
+	</bean>
 
-    <bean id="viewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
-        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
-        <property name="prefix" value="/WEB-INF/jsp/" />
-        <property name="suffix" value=".jsp" />
-    </bean>
+	<bean id="viewResolverFtl" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+		<property name="suffix" value=".ftl" />
+		<property name="order" value="0" />
+		<property name="contentType" value="text/html;charset=UTF-8" />
+		<property name="requestContextAttribute" value="rc" />
+		<property name="cache" value="false" />
+	</bean>  
 
-	<bean id="multipartResolver"
-		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-		<property name="defaultEncoding" value="UTF-8" />
-		<property name="uploadTempDir" value="tmp"></property>
-		<property name="maxInMemorySize" value="4194304" />
-		<!-- 最大内存大小 -->
-		<property name="maxUploadSize" value="4194304" />
-		<!-- 最大文件大小，1024*1024*4 = 4M -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="defaultEncoding"  value="UTF-8" />
+		<property name="uploadTempDir"    value="tmp"/>
+		<property name="maxInMemorySize"  value="10485760" />
+		<property name="maxUploadSize"    value="10485760" />
 	</bean>
 
 </beans>
@@ -70,5 +78,11 @@
 			<value>.jsp</value>
 		</property>
 	</bean>
+	
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
+        <property name="prefix" value="/jsp/" />
+        <property name="suffix" value=".jsp" />
+    </bean>
  -->
  
