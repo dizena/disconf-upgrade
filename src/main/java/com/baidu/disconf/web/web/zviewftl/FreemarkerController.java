@@ -13,7 +13,6 @@ public class FreemarkerController {
 	@NoAuth
 	@RequestMapping({"/","","index"})
 	public String index(){
-		System.out.println("1");
 		return "/index";
 	}
 	
@@ -27,6 +26,37 @@ public class FreemarkerController {
 	@RequestMapping(value="main",method=RequestMethod.GET)
 	public ModelAndView main(){
 		return new ModelAndView("main");
+	}
+	
+	
+	@NoAuth
+	@RequestMapping({"newapp"})
+	public String newapp(){
+		return "/newapp";
+	}
+	
+	@NoAuth
+	@RequestMapping({"newconfig_item"})
+	public String newconfig_item(){
+		return "/newconfig_item";
+	}
+	
+	@NoAuth
+	@RequestMapping({"newconfig_file"})
+	public String newconfig_file(){
+		return "/newconfig_file";
+	}
+	
+	@NoAuth
+	@RequestMapping({"modifypassword"})
+	public String modifypassword(){
+		return "/modifypassword";
+	}
+	
+	@NoAuth
+	@RequestMapping({"configUsage"})
+	public String configUsage(){
+		return "/configUsage";
 	}
 	
 }

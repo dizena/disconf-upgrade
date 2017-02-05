@@ -8,7 +8,7 @@
             <div class="row-fluid">
                 <ul class="breadcrumb" style="background-color:#fff;">
                     <li>
-                        <a href="/main.html">配置</a> /
+                        <a href="/main">配置</a> /
                     </li>
                     <li>
                         <span id="currentData"></span>

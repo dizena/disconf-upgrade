@@ -48,14 +48,14 @@
                                         <span class="zu-top-nav-link">新建<b class="caret"></b></span>
                                     </a>
                                     <ul class="dropdown-menu">
-                                        <li><a href="/newapp.html">新建APP</a></li>
-                                        <li><a href="/newconfig_item.html">新建配置项</a></li>
-                                        <li><a href="/newconfig_file.html">新建配置文件</a></li>
+                                        <li><a href="/newapp">新建APP</a></li>
+                                        <li><a href="/newconfig_item">新建配置项</a></li>
+                                        <li><a href="/newconfig_file">新建配置文件</a></li>
                                     </ul>
                                 </li>
                                 &nbsp;&nbsp;&nbsp;&nbsp;
                                 <li style="display:inline;">
-                                    <a href="/modifypassword.html">
+                                    <a href="/modifypassword">
                                         <span class="zu-top-nav-link" >修改密码</span>
                                     </a>
                                 </li>
