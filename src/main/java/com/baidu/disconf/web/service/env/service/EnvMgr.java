@@ -40,4 +40,9 @@ public interface EnvMgr {
      * @return
      */
     Env getById(Long id);
+    
+    void newEnv(Env env);
+    
+    void deleteEnv(Long id);
+    
 }

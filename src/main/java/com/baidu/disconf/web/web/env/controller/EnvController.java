@@ -8,8 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.baidu.disconf.web.service.env.bo.Env;
 import com.baidu.disconf.web.service.env.service.EnvMgr;
 import com.baidu.disconf.web.service.env.vo.EnvListVo;
 import com.baidu.dsp.common.constant.WebConstants;
@@ -41,6 +43,20 @@ public class EnvController extends BaseController {
         List<EnvListVo> envListVos = envMgr.getVoList();
 
         return buildListSuccess(envListVos, envListVos.size());
+    }
+    
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    @ResponseBody
+    public JsonObjectBase add(Env env) {
+    	envMgr.newEnv(env);
+    	return buildSuccess("创建成功");
+    }
+    
+    @RequestMapping(value = "/delete", method = RequestMethod.GET)
+    @ResponseBody
+    public JsonObjectBase delete(@RequestParam("id")Long id) {
+    	envMgr.deleteEnv(id);
+    	return buildSuccess("删除成功");
     }
 
 }

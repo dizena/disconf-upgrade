@@ -10,11 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.baidu.disconf.web.service.app.form.AppNewForm;
 import com.baidu.disconf.web.service.app.service.AppMgr;
 import com.baidu.disconf.web.service.app.vo.AppListVo;
+import com.baidu.disconf.web.service.config.service.ConfigMgr;
 import com.baidu.disconf.web.web.app.validator.AppValidator;
 import com.baidu.dsp.common.constant.WebConstants;
 import com.baidu.dsp.common.controller.BaseController;
@@ -32,6 +34,9 @@ public class AppController extends BaseController {
 
     @Autowired
     private AppMgr appMgr;
+    
+    @Autowired
+    private ConfigMgr configMgr;
 
     @Autowired
     private AppValidator appValidator;
@@ -66,6 +71,24 @@ public class AppController extends BaseController {
         appMgr.create(appNewForm);
 
         return buildSuccess("创建成功");
+    }
+    
+    /**
+     * delete
+     *
+     * @return
+     */
+    @RequestMapping(value = "delete", method = RequestMethod.GET)
+    @ResponseBody
+    public JsonObjectBase delete(@RequestParam("id") Long appid) {
+
+    	//删除应用
+    	appMgr.delete(appid);
+    	
+    	//删除应用相关配置
+    	configMgr.deleteAppConfig(appid);
+
+        return buildSuccess("删除成功");
     }
 
 }

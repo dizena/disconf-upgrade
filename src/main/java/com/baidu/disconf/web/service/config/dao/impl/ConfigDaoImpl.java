@@ -129,4 +129,14 @@ public class ConfigDaoImpl extends AbstractDao<Long, Config> implements ConfigDa
         Config config = get(configId);
         return config.getValue();
     }
+
+	@Override
+	public void deleteAppConfig(Long appid) {
+		String curTime = DateUtils.format(new Date(), DataFormatConstants.COMMON_TIME_FORMAT);
+        List<Modify> modifyList = new ArrayList<Modify>();
+        modifyList.add(modify(Columns.STATUS, Constants.STATUS_DELETE));
+        modifyList.add(modify(Columns.UPDATE_TIME, curTime));
+
+        update(modifyList, match(Columns.APP_ID, appid));
+	}
 }

@@ -51,6 +51,7 @@ public class RoleResourceMgrImpl implements RoleResourceMgr {
 
         LOG.info("Querying role_resource table to get all...");
         List<RoleResource> roleResList = roleResDao.findAll();
+        
         // 遍历列表，把数据按<url, <method, List<roleId>>>的形式加到infoMap
         for (RoleResource roleRes : roleResList) {
 
@@ -67,6 +68,7 @@ public class RoleResourceMgrImpl implements RoleResourceMgr {
             }
             updateMethodMap(value, roleRes.getRoleId(), roleRes.getMethodMask());
         }
+        LOG.info("infoMap:\n\t"+infoMap);
         return infoMap;
     }
 

@@ -67,4 +67,6 @@ public interface ConfigDao extends BaseDao<Long, Config> {
      * @param configId
      */
     void deleteItem(Long configId);
+
+	void deleteAppConfig(Long appid);
 }

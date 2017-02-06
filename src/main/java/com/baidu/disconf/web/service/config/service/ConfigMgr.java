@@ -69,7 +69,9 @@ public interface ConfigMgr {
      */
     void newConfig(ConfNewItemForm confNewForm, DisConfigTypeEnum disConfigTypeEnum);
 
-    void delete(Long configId);
+	void delete(Long configId);
+	
+	void deleteAppConfig(Long appid);
 
     /**
      * @param confListForm

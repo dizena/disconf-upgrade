@@ -80,4 +80,14 @@ public class EnvMgrImpl implements EnvMgr {
         return envDao.findAll();
     }
 
+	@Override
+	public void newEnv(Env env) {
+		envDao.create(env);
+	}
+
+	@Override
+	public void deleteEnv(Long id) {
+		envDao.delete(id);
+	}
+
 }
