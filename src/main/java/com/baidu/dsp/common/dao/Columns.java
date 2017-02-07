@@ -12,6 +12,8 @@ public class Columns {
     public static final String UPDATE_BY = "update_by";
 
     public static final String NAME = "name";
+    
+    public static final String HOSTPORT = "hostport";
 
     public static final String VERSION = "version";
 
@@ -23,6 +25,7 @@ public class Columns {
     public static final String ENV_ID = "env_id";
     public static final String CONFIG_ID = "config_id";
     public static final String USER_ID = "user_id";
+    public static final String AREA_ID = "area_id";
 
     public static final String TYPE = "type";
 
