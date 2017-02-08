@@ -15,7 +15,7 @@
 	<mvc:default-servlet-handler/>
 	
 	<!-- 静态资源文件 -->
-	<mvc:resources mapping="/html/**" location="/html/" />
+	<!-- 	<mvc:resources mapping="/html/**" location="/html/" /> -->
 	<mvc:resources mapping="/static/**" location="/static/" />
 	
 	<bean class="org.springframework.web.servlet.mvc.support.ControllerClassNameHandlerMapping"/> 

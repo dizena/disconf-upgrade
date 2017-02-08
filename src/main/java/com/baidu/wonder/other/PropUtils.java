@@ -5,7 +5,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class PropUtils {
-	private static final String FILENAME="servers.properties";
+	private static final String FILENAME="area.properties";
 	private static Properties prop=new Properties();
 	static{
 		ClassLoader loader=PropUtils.class.getClassLoader();
@@ -20,4 +20,6 @@ public class PropUtils {
 	public static String getKey(String key){
 		return prop.getProperty(key);
 	}
+	
+	
 }

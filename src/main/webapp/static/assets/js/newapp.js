@@ -27,7 +27,8 @@ $("#item_submit").bind("click", function (e) {
     }).done(function (data) {
         $("#error").removeClass("hide");
         if (data.success === "true") {
-            $("#error").html(data.result);
+            //$("#error").html(data.result);
+        	window.location.href="/app";
         } else {
             Util.input.whiteError($("#error"), data);
         }

@@ -25,5 +25,12 @@ public interface AppDao extends BaseDao<Long, App> {
      * @return
      */
     List<App> getByIds(Set<Long> ids);
+    
+    /**
+     * @param 
+     *
+     * @return int
+     */
+    int getCount();
 
 }

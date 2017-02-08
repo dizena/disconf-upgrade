@@ -139,4 +139,10 @@ public class ConfigDaoImpl extends AbstractDao<Long, Config> implements ConfigDa
 
         update(modifyList, match(Columns.APP_ID, appid));
 	}
+
+	@Override
+	public int getCount() {
+		Match m=new Match(Columns.STATUS, Constants.STATUS_NORMAL);
+		return count(m);
+	}
 }

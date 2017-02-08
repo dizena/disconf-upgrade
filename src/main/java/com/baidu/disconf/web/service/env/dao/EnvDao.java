@@ -16,4 +16,11 @@ public interface EnvDao extends BaseDao<Long, Env> {
      */
     Env getByName(String name);
     
+    /**
+     * @param 
+     *
+     * @return int
+     */
+    int getCount();
+    
 }

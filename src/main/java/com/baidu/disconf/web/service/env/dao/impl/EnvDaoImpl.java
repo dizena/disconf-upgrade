@@ -21,4 +21,9 @@ public class EnvDaoImpl extends AbstractDao<Long, Env> implements EnvDao {
         return findOne(new Match(Columns.NAME, name));
     }
 
+	@Override
+	public int getCount() {
+		return count();
+	}
+
 }

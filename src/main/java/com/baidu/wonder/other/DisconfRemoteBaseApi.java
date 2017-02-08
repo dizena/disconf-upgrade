@@ -32,38 +32,46 @@ public class DisconfRemoteBaseApi {
 	}
 
 	
-	public void login(String name, String passwd) throws IOException {
+	public boolean login(String name, String passwd)  {
 		//
-		HttpPost httpPost = new HttpPost(domain + "/api/account/signin");
+		try{
+			HttpPost httpPost = new HttpPost(domain + "/api/account/signin");
 
-		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
-		nvps.add(new BasicNameValuePair("name", name));
-		nvps.add(new BasicNameValuePair("password", passwd));
-		nvps.add(new BasicNameValuePair("remember", "0"));
+			List<NameValuePair> nvps = new ArrayList<NameValuePair>();
+			nvps.add(new BasicNameValuePair("name", name));
+			nvps.add(new BasicNameValuePair("password", passwd));
+			nvps.add(new BasicNameValuePair("remember", "0"));
 
-		httpPost.setEntity(new UrlEncodedFormEntity(nvps));
+			httpPost.setEntity(new UrlEncodedFormEntity(nvps));
 
-		response = httpClient.execute(httpPost);
+			response = httpClient.execute(httpPost);
 
-		HttpEntity responseEntity = response.getEntity();
+			HttpEntity responseEntity = response.getEntity();
 
-		String res = EntityUtils.toString(responseEntity, "UTF-8");
+			String res = EntityUtils.toString(responseEntity, "UTF-8");
 
-		log.info("\nlogin:\n\t" + res);
+			log.info("\nlogin:\n\t" + res);
 
-		EntityUtils.consume(responseEntity);
+			EntityUtils.consume(responseEntity);
 
-		List<Cookie> cookies = cookieStore.getCookies();
-		if (cookies.isEmpty()) {
-			log.info("None");
-		} else {
-			for (int i = 0; i < cookies.size(); i++) {
-				log.info("- " + cookies.get(i).toString());
+			List<Cookie> cookies = cookieStore.getCookies();
+			if (cookies.isEmpty()) {
+				log.info("None");
+			} else {
+				for (int i = 0; i < cookies.size(); i++) {
+					log.info("- " + cookies.get(i).toString());
+				}
 			}
+			response.close();
+			
+			if(res.contains("success")){
+				return true;
+			}
+			
+		}catch(Exception e){
+			
 		}
-
-		response.close();
-
+		return false;
 		//
 	}
 

@@ -1,15 +1,3 @@
-//删除区域信息
-function delArea(id){
-    if(confirm("您要删除该区域信息吗?")){
-    	$.get("/api/area/delete?id="+id,function(data){
-    		if (data.success === "true") {
-    			window.location.href="/area";
-    		}else{
-    			alert("删除失败："+data)
-    		}
-        });
-    }
-}
     
 (function ($) {
 
@@ -20,7 +8,7 @@ function delArea(id){
     //
     $.ajax({
         type: "GET",
-        url: "/api/area/list"
+        url: "/api/data/list"
     }).done(function (data) {
     	if (data.success === "true") {
             var html = "";
@@ -29,14 +17,14 @@ function delArea(id){
                 html += '<tr>';
 				html += '<td>'+(index+1)+'</td>'; 
 				html += '<td>'+(item.id)+'</td>';
-				html += '<td>'+(item.desc)+'</td>';
-				html += '<td><a href="'+(item.hostport)+'" target="_blank" >'+(item.hostport)+'</a></td>';
 				html += '<td>'+(item.name)+'</td>';
-				html += '<td>'+(item.password)+'</td>';
-				html += '<td><a href="javascript:delArea('+(item.id)+');" >删除</a></td>';             
+				html += '<td>'+(item.desc)+'</td>';
+				html += '<td>'+(item.createTime)+'</td>';
+				html += '<td>'+(item.emails)+'</td>';
+				html += '<td><a href="javascript:delApp('+(item.id)+');" >删除</a></td>';             
 				html += '</tr>';
              });
-            $("#areaBody").html(html);   
+            $("#dataBody").html(html);   
         }
     });
     

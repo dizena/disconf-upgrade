@@ -15,6 +15,7 @@ import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 import com.baidu.dsp.common.constant.ErrorCode;
 import com.baidu.dsp.common.constant.FrontEndInterfaceConstant;
 import com.baidu.dsp.common.context.ContextReader;
+import com.github.knightliao.apollo.utils.data.JsonUtils;
 
 /**
  * 通用的JSON返回器
@@ -47,7 +48,7 @@ public class JsonObjectUtils {
         JsonObject json = new JsonObject();
         json.addData(key, value);
 
-        LOG.info("\nbuildObjectSuccess\n\t"+json.toString());
+        LOG.info("\nbuildObjectSuccess\n\t"+JsonUtils.toJson(json));
 
         return json;
     }

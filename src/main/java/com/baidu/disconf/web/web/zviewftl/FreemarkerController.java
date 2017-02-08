@@ -40,6 +40,12 @@ public class FreemarkerController {
 	}
 	
 	@NoAuth
+	@RequestMapping({"app"})
+	public String app(){
+		return "/app";
+	}
+	
+	@NoAuth
 	@RequestMapping({"newconfig_item"})
 	public String newconfig_item(){
 		return "/newconfig_item";
@@ -93,4 +99,22 @@ public class FreemarkerController {
 	public String areaadd(){
 		return "/areaadd";
 	}
+	
+	
+	@NoAuth
+	@RequestMapping({"data"})
+	public String datasync(){
+		return "/data";
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

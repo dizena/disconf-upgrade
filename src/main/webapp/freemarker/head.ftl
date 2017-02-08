@@ -47,11 +47,28 @@
                                         <span class="zu-top-nav-link">应用配置<b class="caret"></b></span>
                                     </a>
                                     <ul class="dropdown-menu">
-                                    	<li><a href="main">查看配置</a></li>
+                                    	<li><a href="app">查看应用</a></li>
                                         <li><a href="newapp">新建APP</a></li>
+                                    </ul>
+                                </li>
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                
+                                <li style="display:inline;" class="dropdown">
+                                    <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown">
+                                        <span class="zu-top-nav-link">文件配置<b class="caret"></b></span>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                    	<li><a href="main">查看配置</a></li>
                                         <li><a href="newconfig_item">新建配置项</a></li>
                                         <li><a href="newconfig_file">新建配置文件</a></li>
                                     </ul>
+                                </li>
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                
+                                <li style="display:inline;">
+                                    <a href="data">
+                                        <span class="zu-top-nav-link" >数据通知</span>
+                                    </a>
                                 </li>
                                 &nbsp;&nbsp;&nbsp;&nbsp;
                                 

@@ -9,4 +9,9 @@ import com.baidu.dsp.common.dao.AbstractDao;
 @Service
 public class AreaDaoImpl extends AbstractDao<Long, Area> implements AreaDao {
 
+	@Override
+	public int getCount() {
+		return count();
+	}
+
 }

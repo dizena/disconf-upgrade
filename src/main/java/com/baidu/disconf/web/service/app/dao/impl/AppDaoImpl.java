@@ -35,4 +35,9 @@ public class AppDaoImpl extends AbstractDao<Long, App> implements AppDao {
         return find(match(Columns.APP_ID, ids));
     }
 
+	@Override
+	public int getCount() {
+		return count();
+	}
+
 }

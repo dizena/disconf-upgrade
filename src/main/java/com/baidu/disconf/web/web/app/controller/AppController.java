@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.baidu.disconf.web.service.app.bo.App;
 import com.baidu.disconf.web.service.app.form.AppNewForm;
 import com.baidu.disconf.web.service.app.service.AppMgr;
 import com.baidu.disconf.web.service.app.vo.AppListVo;
@@ -51,6 +52,20 @@ public class AppController extends BaseController {
     public JsonObjectBase list() {
 
         List<AppListVo> appListVos = appMgr.getAuthAppVoList();
+
+        return buildListSuccess(appListVos, appListVos.size());
+    }
+    
+    /**
+     * list
+     *
+     * @return
+     */
+    @RequestMapping(value = "/listapp", method = RequestMethod.GET)
+    @ResponseBody
+    public JsonObjectBase listapp() {
+
+        List<App> appListVos = appMgr.getAppList();
 
         return buildListSuccess(appListVos, appListVos.size());
     }
