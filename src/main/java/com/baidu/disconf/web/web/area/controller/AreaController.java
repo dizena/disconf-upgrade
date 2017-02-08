@@ -29,8 +29,7 @@ public class AreaController extends BaseController {
     @ResponseBody
     public JsonObjectBase list() {
 
-		 List<Area> envListVos =areaMgr.list();
-
+		List<Area> envListVos =areaMgr.list();
         return buildListSuccess(envListVos, envListVos.size());
     }
 	

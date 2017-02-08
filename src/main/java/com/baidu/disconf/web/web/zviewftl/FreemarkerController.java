@@ -1,14 +1,18 @@
 package com.baidu.disconf.web.web.zviewftl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.baidu.dsp.common.annotation.NoAuth;
 
 @Controller
 public class FreemarkerController {
+	private static Logger log=LoggerFactory.getLogger(FreemarkerController.class);
 	
 	@NoAuth
 	@RequestMapping({"/","","index"})
@@ -48,6 +52,24 @@ public class FreemarkerController {
 	}
 	
 	@NoAuth
+	@RequestMapping({"modifyFile"})
+	public ModelAndView modifyFile(@RequestParam("configId") String configId){
+		log.info("modifyFile:"+configId);
+		ModelAndView mv=new ModelAndView("modifyFile");
+		mv.addObject("configId", configId);
+		return mv;
+	}
+	
+	@NoAuth
+	@RequestMapping({"modifyItem"})
+	public ModelAndView modifyItem(@RequestParam("configId") String configId){
+		log.info("modifyItem:"+configId);
+		ModelAndView mv=new ModelAndView("modifyItem");
+		mv.addObject("configId", configId);
+		return mv;
+	}
+	
+	@NoAuth
 	@RequestMapping({"modifypassword"})
 	public String modifypassword(){
 		return "/modifypassword";
@@ -59,4 +81,16 @@ public class FreemarkerController {
 		return "/configUsage";
 	}
 	
+	
+	@NoAuth
+	@RequestMapping({"area"})
+	public String area(){
+		return "/area";
+	}
+	
+	@NoAuth
+	@RequestMapping({"areaadd"})
+	public String areaadd(){
+		return "/areaadd";
+	}
 }

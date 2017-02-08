@@ -70,7 +70,7 @@ public class BaseController implements ApplicationContextAware {
      * @return
      */
     protected <T> JsonObjectBase buildListSuccess(List<?> value, int totalCount) {
-
+    	
         return JsonObjectUtils.buildListSuccess(value, totalCount, null);
     }
 

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html class="en">
+
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>Disconf - 分布式配置管理平台</title>
+
+        <link rel="stylesheet" href="dep/bootstrap/css/bootstrap.css" />
+        <!--[if lte IE 6]>
+        <link rel="stylesheet" href="dep/bootstrap/css/bootstrap-ie6.css" />
+        <![endif]-->
+        <!--[if lte IE 7]>
+        <link rel="stylesheet" href="dep/bootstrap/css/ie.css" />
+        <![endif]-->
+        <![if !IE]>
+        <link rel="stylesheet" href="dep/bootstrap/css/noie.css" />
+        <![endif]>
+        <link rel="stylesheet" href="dep/jquery-ui-1.10.4.custom/css/ui-lightness/jquery-ui-1.10.4.custom.css" />
+        <link rel="stylesheet" type="text/css" href="assets/css/project.css" />
+    </head>
+
+    <body>
+        
+        <div class="navbar navbar-fixed-top clearfix">
+            <div class="navbar-inner zu-top">
+                <div class="container">
+                    <button type="button" class="btn btn-navbar collapsed" data-toggle="collapse" data-target=".nav-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <div class="nav-collapse collapse">
+
+                        <a id="brand_url" href="main.html" class="brand" style="margin-left:0px;padding:8px;"> <span class="zu-top-nav-link">深思云配置</span> </a>
+
+                        <ul class="nav pull-right" >
+                            
+                            <div class="login-yes"  style="display:none;padding:10px;">
+                                
+                                <li style="display:inline;" class="dropdown">
+                                    <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown">
+                                        <span class="zu-top-nav-link">区域配置<b class="caret"></b></span>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="area.html">查看区域服务</a></li>
+                                        <li><a href="areaadd.html">新建区域服务</a></li>
+                                    </ul>
+                                </li>
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+								
+                                <li style="display:inline;" class="dropdown">
+                                    <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown">
+                                        <span class="zu-top-nav-link">应用配置<b class="caret"></b></span>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                    	<li><a href="main.html">查看配置</a></li>
+                                        <li><a href="newapp.html">新建APP</a></li>
+                                        <li><a href="newconfig_item.html">新建配置项</a></li>
+                                        <li><a href="newconfig_file.html">新建配置文件</a></li>
+                                    </ul>
+                                </li>
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+								
+                                <li style="display:inline;">
+                                    <a href="modifypassword.html">
+                                        <span class="zu-top-nav-link" >修改密码</span>
+                                    </a>
+                                </li>
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+								
+								
+								
+                                <li style="display:inline;">
+                                    <a href="#" id="signout">
+										<span class="zu-top-nav-link loginName" id="username"></span>
+                                        <span class="zu-top-nav-link" >退出</span>
+                                    </a>
+                                </li>
+                            </div>
+                            
+                            <div class="login-no"  style="padding:10px;">
+                                <li style="display:inline;">
+                                    <a href="login.html"><span class="zu-top-nav-link">登录</span></a>
+                                </li>   
+                            </div>
+                            
+                        </ul>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    
+
+
+		<div id="Wrapper" class="clearfix">
+			<div id="Main" style="margin-top:50px;">
+				<div class="container-fluid">
+					<div class="row-fluid content oz" style="min-height:400px;">
+						<form id="form" class="private-form clearfix">
+                            <h2 class="autoPush-detail-title">新建区域服务信息</h2>
+
+                            <div class="private-item">
+                                <span class="private-item-key">服务地址：</span>
+                                <input id="hostport" type="text" class="private-item-value"/>
+                            </div>
+                            
+                            <div class="private-item">
+                                <span class="private-item-key">用户名：</span>
+                                <input id="name" type="text" class="private-item-value"/>
+                            </div>
+                            
+                            <div class="private-item">
+                                <span class="private-item-key">密码：</span>
+                                <input id="password" type="text" class="private-item-value"/>
+                            </div>
+
+                            <div class="private-item">
+                                <span class="private-item-key">说明：</span>
+                                <textarea id="desc" type="text" class="private-item-value" style="width:400px;height:200px;"></textarea>
+                            </div>
+
+                            <div id="error" class="alert alert-warning hide" role="alert">
+                               	 表单选项不能为空或填写格式错误！
+                            </div>
+                            <div class="private-item" style="text-align:center">
+                                <a id="area_submit" class="btn btn-primary"> 新建 </a>
+                            </div>
+                        </form>						
+					</div>
+				</div>
+			</div>
+		</div>
+        
+        <script src="assets/js/jquery-1.11.0.js"></script>
+        <script src="dep/jquery-ui-1.10.4.custom/js/jquery-ui-1.10.4.custom.js"></script>
+        <script src="dep/bootstrap/js/bootstrap.js"></script>
+        <script src="assets/js/util.js"></script>
+        <script src="assets/js/common.js"></script>
+
+		<script src="assets/js/areaadd.js"></script>
+        <script src="assets/js/footer.js"></script>
+    
+    </body>
+</html>
+

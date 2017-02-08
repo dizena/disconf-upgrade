@@ -140,8 +140,8 @@
 </div>
 
 <#include "/foot.ftl">
-<script src="/html/assets/js/config_common.js"></script>
-<script src="/html/assets/js/jquery.form.js"></script>
-<script src="/html/assets/js/newconfigfile.js"></script>
+<script src="/static/assets/js/config_common.js"></script>
+<script src="/static/assets/js/jquery.form.js"></script>
+<script src="/static/assets/js/newconfigfile.js"></script>
 <#include "/basefoot.ftl">
 

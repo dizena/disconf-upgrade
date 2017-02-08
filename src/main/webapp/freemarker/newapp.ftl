@@ -59,6 +59,6 @@
 
 <#include "/foot.ftl">
 
-<script src="/html/assets/js/newapp.js"></script>
+<script src="/static/assets/js/newapp.js"></script>
 
 <#include "/basefoot.ftl">

@@ -24,7 +24,7 @@
                     function (index, item) {
                         html += '<li role="presentation" role="menuitem" tabindex="-1"><a rel='
                             + item.id
-                            + ' href="#">APP: '
+                            + ' href="javascript:void(0);">APP: '
                             + item.name
                             + '</a></li>';
                     });
@@ -58,7 +58,7 @@
                 var html = "";
                 var result = data.page.result;
                 $.each(result, function (index, item) {
-                    html += '<li><a href="#">' + item + '</a></li>';
+                    html += '<li><a href="javascript:void(0);">' + item + '</a></li>';
                 });
                 $("#versionChoice").html(html);
 
@@ -90,7 +90,7 @@
                 var html = "";
                 var result = data.page.result;
                 $.each(result, function (index, item) {
-                    html += '<li><a rel=' + item.id + ' href="#">'
+                    html += '<li><a rel=' + item.id + ' href="javascript:void(0);">'
                         + item.name + ' 环境</a></li>';
                 });
                 $("#envChoice").html(html);
@@ -186,17 +186,15 @@
                 + item.configId
                 + '" style="cursor: pointer; cursor: hand; " ><i title="删除" class="icon-remove"></i></a>';
             if (item.type == "配置文件") {
-                link = '<a target="_blank" href="modifyFile.html?configId='
+                link = '<a target="_blank" href="/html/modifyFile.html?configId='
                     + item.configId
                     + '"><i title="修改" class="icon-edit"></i></a>';
             } else {
-                link = '<a target="_blank" href="modifyItem.html?configId='
+                link = '<a target="_blank" href="/html/modifyItem.html?configId='
                     + item.configId
                     + '"><i title="修改" class="icon-edit"></i></a>';
             }
-            var downloadlink = '<a href="/api/web/config/download/'
-                + +item.configId
-                + '"><i title="下载" class="icon-download-alt"></i></a>';
+            var downloadlink = '<a href="/api/web/config/download/'+ +item.configId+ '"><i title="下载" class="icon-download-alt"></i></a>';
 
             var type = '<i title="配置项" class="icon-leaf"></i>';
             if (item.type == "配置文件") {

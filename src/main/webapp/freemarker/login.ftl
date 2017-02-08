@@ -48,6 +48,6 @@
 
 <#include "/foot.ftl">
 
-<script src="/html/assets/js/login.js"></script>
+<script src="/static/assets/js/login.js"></script>
 
 <#include "/basefoot.ftl">

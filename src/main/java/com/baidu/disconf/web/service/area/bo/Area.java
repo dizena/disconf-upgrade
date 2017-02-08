@@ -61,7 +61,9 @@ public class Area extends BaseObject<Long> {
 
 	@Override
 	public String toString() {
-		return "Area [hostport=" + hostport + ", name=" + name + ", password=" + password + "]";
+		return "Area [desc=" + desc + ", hostport=" + hostport + ", name=" + name + ", password=" + password + "]";
 	}
+
+	
 
 }

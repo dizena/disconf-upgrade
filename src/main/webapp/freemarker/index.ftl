@@ -6,7 +6,7 @@
         <div class="container-fluid">
             <div class="row-fluid">
                 <div class="contentWrap clearfix">
-                    <img src="/html/assets/img/index-big.jpg" class="index-bigImg"/>
+                    <img src="/static/assets/img/index-big.jpg" class="index-bigImg"/>
                 </div>
             </div>
         </div>
@@ -14,5 +14,5 @@
 </div>
 
 <#include "/foot.ftl">
-<script src="/html/assets/js/index.js"></script>
+<script src="/static/assets/js/index.js"></script>
 <#include "/basefoot.ftl">

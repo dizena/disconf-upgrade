@@ -83,6 +83,6 @@
 
 
 <#include "/foot.ftl">
-<script src="/html/assets/js/config_common.js"></script>
-<script src="/html/assets/js/newconfigitem.js"></script>
+<script src="/static/assets/js/config_common.js"></script>
+<script src="/static/assets/js/newconfigitem.js"></script>
 <#include "/basefoot.ftl">

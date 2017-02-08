@@ -1,10 +1,11 @@
 var appId = -1;
 var envId = -1;
 var version = "";
+
 getSession();
 
 // 提交
-$("#item_submit").on("click", function (e) {
+$("#item_submit").bind("click", function (e) {
     $("#error").addClass("hide");
     var app = $("#app").val();
     var desc = $("#desc").val();
@@ -18,7 +19,7 @@ $("#item_submit").on("click", function (e) {
     }
     $.ajax({
         type: "POST",
-        url: "/api/app",
+        url: "/api/app/add",
         data: {
             "app": app,
             "desc": desc,

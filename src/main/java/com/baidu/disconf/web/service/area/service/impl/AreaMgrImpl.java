@@ -19,11 +19,13 @@ public class AreaMgrImpl implements AreaMgr {
 	private AreaDao areaDao;
 
 	@Override
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
 	public void addArea(Area area) {
 		areaDao.create(area);
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
 	public void delArea(Long id) {
 		areaDao.delete(id);
 	}

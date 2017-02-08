@@ -60,9 +60,9 @@ public class AppController extends BaseController {
      *
      * @return
      */
-    @RequestMapping(value = "", method = RequestMethod.POST)
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
     @ResponseBody
-    public JsonObjectBase create(@Valid AppNewForm appNewForm) {
+    public JsonObjectBase add(@Valid AppNewForm appNewForm) {
 
         LOG.info(appNewForm.toString());
 
@@ -78,7 +78,7 @@ public class AppController extends BaseController {
      *
      * @return
      */
-    @RequestMapping(value = "delete", method = RequestMethod.GET)
+    @RequestMapping(value = "/delete", method = RequestMethod.GET)
     @ResponseBody
     public JsonObjectBase delete(@RequestParam("id") Long appid) {
 

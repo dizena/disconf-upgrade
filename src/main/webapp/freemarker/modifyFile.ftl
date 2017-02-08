@@ -145,9 +145,8 @@
 
 
 
-
 <#include "/foot.ftl">
-<script src="/html/assets/js/modifycommon.js"></script>
-<script src="/html/assets/js/jquery.form.js"></script>
-<script src="/html/assets/js/modifyFile.js"></script>
+<script src="/static/assets/js/modifycommon.js"></script>
+<script src="/static/assets/js/jquery.form.js"></script>
+<script src="/static/assets/js/modifyFile.js"></script>
 <#include "/basefoot.ftl">

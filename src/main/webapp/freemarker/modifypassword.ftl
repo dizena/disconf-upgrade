@@ -57,7 +57,7 @@
 
 <#include "/foot.ftl">
 
-<script src="/html/assets/js/modify_password.js"></script>
+<script src="/static/assets/js/modify_password.js"></script>
 
 <#include "/basefoot.ftl">
 

@@ -87,7 +87,7 @@
 
 <#include "/foot.ftl">
 
-<script src="/html/assets/js/modifycommon.js"></script>
-<script src="/html/assets/js/modifyItem.js"></script>
+<script src="/static/assets/js/modifycommon.js"></script>
+<script src="/static/assets/js/modifyItem.js"></script>
 
 <#include "/basefoot.ftl">

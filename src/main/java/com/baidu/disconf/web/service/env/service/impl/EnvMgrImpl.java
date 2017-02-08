@@ -8,6 +8,8 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.baidu.disconf.web.service.env.bo.Env;
 import com.baidu.disconf.web.service.env.dao.EnvDao;
@@ -81,11 +83,13 @@ public class EnvMgrImpl implements EnvMgr {
     }
 
 	@Override
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
 	public void newEnv(Env env) {
 		envDao.create(env);
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
 	public void deleteEnv(Long id) {
 		envDao.delete(id);
 	}

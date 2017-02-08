@@ -87,6 +87,6 @@
 
 
 <#include "/foot.ftl">
-<script src="/html/assets/js/mainList.js"></script>
+<script src="/static/assets/js/mainList.js"></script>
 <#include "/basefoot.ftl">
 
