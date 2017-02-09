@@ -12,25 +12,26 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
-import com.baidu.disconf.web.service.app.form.AppNewForm;
+import com.baidu.disconf.web.service.area.bo.Area;
 import com.github.knightliao.apollo.utils.data.JsonUtils;
 
-public class DisconfRemoteBizAppApi extends DisconfRemoteBaseApi {
+public class DisconfRemoteBizAreaApi extends DisconfRemoteBaseApi {
 
-	public DisconfRemoteBizAppApi(String domain) {
+	public DisconfRemoteBizAreaApi(String domain) {
 		super(domain);
 	}
 
-	public boolean addapp(AppNewForm appNewForm) {
+	public boolean addArea(Area area) {
 		try {
-			String url=domain + "/api/app/add";
-			
+			String url = domain + "/api/area/add";
+
 			HttpPost httpPost = new HttpPost(url);
 
 			List<NameValuePair> nvps = new ArrayList<NameValuePair>();
-			nvps.add(new BasicNameValuePair("app", appNewForm.getApp()));
-			nvps.add(new BasicNameValuePair("desc", appNewForm.getDesc()));
-			nvps.add(new BasicNameValuePair("emails", appNewForm.getEmails()));
+			nvps.add(new BasicNameValuePair("hostport", area.getHostport()));
+			nvps.add(new BasicNameValuePair("name", area.getName()));
+			nvps.add(new BasicNameValuePair("password", area.getPassword()));
+			nvps.add(new BasicNameValuePair("desc", area.getDesc()));
 
 			httpPost.setEntity(new UrlEncodedFormEntity(nvps));
 
@@ -48,8 +49,8 @@ public class DisconfRemoteBizAppApi extends DisconfRemoteBaseApi {
 
 			if (res.contains("true")) {
 				return true;
-			}else{
-				log.error("error sync "+url+" with data "+JsonUtils.toJson(appNewForm));
+			} else {
+				log.error("error sync " + url + " with data " + JsonUtils.toJson(area));
 			}
 		} catch (Exception e) {
 			return false;
@@ -58,10 +59,11 @@ public class DisconfRemoteBizAppApi extends DisconfRemoteBaseApi {
 		return false;
 	}
 
-	public boolean delapp(Long appid){
+	public boolean delArea(Long appid) {
 		try {
-			String url=domain + "/api/app/delete?id=" + appid;
-			
+
+			String url = domain + "/api/area/delete?id="+ appid;
+
 			HttpGet httpGet = new HttpGet(url);
 
 			CloseableHttpResponse response = httpClient.execute(httpGet);
@@ -78,8 +80,8 @@ public class DisconfRemoteBizAppApi extends DisconfRemoteBaseApi {
 
 			if (res.contains("true")) {
 				return true;
-			}else{
-				log.error("error sync "+url+" with data "+JsonUtils.toJson(appid));
+			} else {
+				log.error("error sync " + url + " with data " + JsonUtils.toJson(appid));
 			}
 		} catch (Exception e) {
 			return false;

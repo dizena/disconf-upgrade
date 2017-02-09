@@ -1,55 +1,35 @@
 package com.baidu.wonder.other;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
-import org.apache.http.impl.client.BasicCookieStore;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.baidu.disconf.web.service.app.form.AppNewForm;
-import com.baidu.wonder.other.bean.OtherServer;
+import com.baidu.disconf.web.service.area.bo.Area;
 
 public class ServerUtil {
+	
+	private static final Logger log = LoggerFactory.getLogger(ServerUtil.class);
+	
+	private static String areaid = PropUtils.getKey("localArea");
 
-	// 根据配置文件得到本机服务和远端服务；得到远端服务的用户/密码;
-	public static List<OtherServer> servers = getRemote();
-
-	// RemoteDisconfUtil.execute(url,params,post/get);execute里在进行多服务的login更新执行；
-
-	public static void addApp(AppNewForm appNewForm) {
-		try {
-			for (OtherServer server : servers) {
-				BasicCookieStore cookieStore=new BasicCookieStore();
-				DisconfRemoteBizAppApi api = new DisconfRemoteBizAppApi(server.getHost(),cookieStore);
-				api.addapp(appNewForm);
-				
-				cookieStore.clear();
-				api.close();
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
+	private static Long area_id = Long.parseLong(areaid);
+	
+	private static List<Area> areas;
+	
+	private static ThreadPoolExecutor threadPool = new ThreadPoolExecutor(5, 50, 10,TimeUnit.MINUTES, new ArrayBlockingQueue<Runnable>(100)); 
+	
+	public static void execute(Runnable command){
+		threadPool.execute(command);
 	}
-
-	public static List<OtherServer> getRemote() {
-		List<OtherServer> list = new ArrayList<>();
-		String auths = PropUtils.getKey("auths");
-		String remotes = PropUtils.getKey("remotes");
-		String[] sss1 = auths.split(",");
-		String[] sss2 = remotes.split(",");
-		if (sss1 != null && sss1.length > 0 && sss1.length == sss2.length) {
-			for (int i = 0; i < sss1.length; i++) {
-				String ss1 = sss1[i];
-				String[] s1 = ss1.split("\\|");
-				OtherServer os = new OtherServer();
-				os.setHost(sss2[i]);
-				os.setName(s1[0]);
-				os.setPasswd(s1[1]);
-				list.add(os);
-			}
-		}
-		return list;
+	
+	public static void get(){
+		
 	}
-
+	
+	
+	
 }

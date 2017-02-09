@@ -50,7 +50,7 @@ public class EnvController extends BaseController {
     
     @RequestMapping(value = "/delete", method = RequestMethod.GET)
     @ResponseBody
-    public JsonObjectBase delete(@RequestParam("id")Long id) {
+    public JsonObjectBase delete(@RequestParam("id") Long id) {
     	envMgr.deleteEnv(id);
     	return buildSuccess("删除成功");
     }

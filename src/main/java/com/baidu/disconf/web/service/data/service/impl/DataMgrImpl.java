@@ -3,7 +3,8 @@ package com.baidu.disconf.web.service.data.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.http.impl.client.BasicCookieStore;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -24,7 +25,8 @@ import com.baidu.wonder.other.PropUtils;
 @Service
 @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
 public class DataMgrImpl implements DataMgr {
-	
+	public static Logger log = LoggerFactory.getLogger(DataMgrImpl.class);
+
 	@Autowired
 	private DataDao dataDao;
 
@@ -33,43 +35,44 @@ public class DataMgrImpl implements DataMgr {
 
 	@Autowired
 	private AppDao appDao;
-	
+
 	@Autowired
-    private EnvDao envDao;
-	
+	private EnvDao envDao;
+
 	@Autowired
 	private ConfigDao configDao;
-	
+
 	private String areaid = PropUtils.getKey("localArea");
-	
+
 	private Long area_id = Long.parseLong(areaid);
-	
+
 	@Override
 	public List<Data> getDataList() {
 		List<Data> datas = new ArrayList<>();
 		// 1,本区域的数据
 		datas.add(getData());
 
-		//2,其他区域的
+		// 2,其他区域的
 		List<Area> areas = areaDao.findAll();
-		if(areas!=null&&!areas.isEmpty()){
+		if (areas != null && !areas.isEmpty()) {
 			for (Area area : areas) {
-				if(area.getId()!=area_id){
-					//进行请求查询
-					BasicCookieStore cookieStore=new BasicCookieStore();
-					DisconfRemoteBizDataApi api=new DisconfRemoteBizDataApi(area.getHostport(),cookieStore);
-					if(api.login(area.getName(), area.getPassword())){
-						Data d=api.getData();
-						if(d!=null){
+				if (area.getId() != area_id) {
+					// 进行请求查询
+					DisconfRemoteBizDataApi api = new DisconfRemoteBizDataApi(area.getHostport());
+					if (api.session()||api.login(area.getName(), area.getPassword())) {
+						Data d = api.getData();
+						if (d != null) {
 							datas.add(d);
 						}
+						api.close();
+					}else{
+						log.error(area.getHostport()+" not connect with "+area.getName());
 					}
-					cookieStore.clear();
-					api.close();
+					
 				}
 			}
 		}
-		
+
 		return datas;
 	}
 
@@ -80,9 +83,9 @@ public class DataMgrImpl implements DataMgr {
 		int appCount = appDao.getCount();
 		int envCount = envDao.getCount();
 		int cfgCount = configDao.getCount();
-		
+
 		Area area = areaDao.get(area_id);
-		if(area!=null){
+		if (area != null) {
 			data.setAreaId(area_id);
 			data.setHostport(area.getHostport());
 			data.setAreaCount(areaCount);
@@ -95,7 +98,6 @@ public class DataMgrImpl implements DataMgr {
 
 	@Override
 	public int exec(String sql) {
-		
 		return dataDao.exec(sql);
 	}
 
@@ -108,7 +110,5 @@ public class DataMgrImpl implements DataMgr {
 	public List<DataSql> getDatas(String tab) {
 		return dataDao.getDatas(tab);
 	}
-
-
 
 }

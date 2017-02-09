@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.baidu.disconf.web.service.data.bo.Data;
 import com.baidu.disconf.web.service.data.bo.DataSql;
 import com.baidu.disconf.web.service.data.service.DataMgr;
+import com.baidu.dsp.common.constant.ErrorCode;
 import com.baidu.dsp.common.constant.WebConstants;
 import com.baidu.dsp.common.controller.BaseController;
 import com.baidu.dsp.common.vo.JsonObjectBase;
@@ -81,20 +82,26 @@ public class DataController  extends BaseController {
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/api2Db", method = RequestMethod.POST)
 	@ResponseBody
-	public Object api2Db(HttpServletRequest request){
+	public JsonObjectBase api2Db(HttpServletRequest request){
 		try {
 			InputStream ins =request.getInputStream();
 			ObjectInputStream objins=new ObjectInputStream(ins);
 			Object obj = objins.readObject();
 			
 			List<DataSql> datas=(List<DataSql>) obj;
-			LOG.info("--->datas: "+datas.size());
+			for (DataSql dataSql : datas) {
+				try{
+					dataMgr.exec(dataSql.getInsertSql());
+				}catch(Exception e){
+					dataMgr.exec(dataSql.getUpdateSql());
+				}
+			}
 			objins.close();
 			ins.close();
-			return obj;
+			return buildSuccess("创建成功");
 		} catch (Exception e) {
 			e.printStackTrace();
+			return buildGlobalError("同步失败", ErrorCode.DAO_ERROR);
 		}
-		return null;
 	}
 }

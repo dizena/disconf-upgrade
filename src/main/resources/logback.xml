@@ -14,7 +14,7 @@
         <Encoding>UTF-8</Encoding>
         <encoder>
         	<!-- %X{sessionId} %date [%thread] %-5level  -->
-            <pattern>%X{sessionId} %logger{80} - %msg%n</pattern>
+            <pattern>%logger{80} - %msg%n</pattern>
         </encoder>
     </appender>
 
@@ -27,7 +27,7 @@
             <FileNamePattern>${log.base}.log.%d{yyyy-MM-dd}</FileNamePattern>
         </rollingPolicy>
         <encoder>
-            <pattern>%X{sessionId} %date [%thread] %-5level %logger{80} - %msg%n</pattern>
+            <pattern>%date [%thread] %-5level %logger{80} - %msg%n</pattern>
         </encoder>
     </appender>
 
@@ -40,7 +40,7 @@
             <FileNamePattern>${log.base}.log.%d{yyyy-MM-dd}</FileNamePattern>
         </rollingPolicy>
         <encoder>
-            <pattern>%X{sessionId} %date [%thread] %-5level %logger{80} - %msg%n</pattern>
+            <pattern>%date [%thread] %-5level %logger{80} - %msg%n</pattern>
         </encoder>
     </appender>
 

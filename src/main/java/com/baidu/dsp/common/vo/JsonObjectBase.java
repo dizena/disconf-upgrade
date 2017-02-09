@@ -29,7 +29,7 @@ public class JsonObjectBase implements Serializable {
     }
 
     /**
-     * 会话ID
+     * 线程会话的类线程
      */
     private String sessionId = "";
 

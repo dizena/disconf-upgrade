@@ -73,7 +73,7 @@ public class LoginInterceptor extends WebCommonInterceptor {
         String requestPath = request.getRequestURI();
 
         // 显示所有用户的请求
-        LOG.debug(request.getRequestURI());
+        LOG.info("请求地址："+request.getRequestURI());
 
         if (notInterceptPathList != null) {
 

@@ -13,7 +13,6 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.BasicHttpEntity;
-import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.util.EntityUtils;
 
 import com.baidu.disconf.web.service.data.bo.Data;
@@ -22,33 +21,36 @@ import com.github.knightliao.apollo.utils.data.JsonUtils;
 
 public class DisconfRemoteBizDataApi extends DisconfRemoteBaseApi {
 
-
+	
 
 	public static void main(String[] args) throws IOException {
-		BasicCookieStore cookieStore=new BasicCookieStore();
-		DisconfRemoteBizDataApi t = new DisconfRemoteBizDataApi("http://127.0.0.1:56789",cookieStore);
-		boolean b = t.login("admin", "admin");
-		Data d = t.getData();
+		DisconfRemoteBizDataApi t = new DisconfRemoteBizDataApi("http://127.0.0.1:56789");
+		if(t.session()||t.login("admin", "admin")){
+			Data d = t.getData();
 
-		List<DataSql> datas = t.db2Api();
-		
-		t.api2Db(datas);
-		
-		cookieStore.clear();
-		
-		t.close();
-		
-		System.out.println("login:" + b + ",data:" + d + ",datas:" + datas.size());
+			List<DataSql> datas = t.db2Api();
+			
+			t.api2Db(datas);
+			
+			t.close();
+			
+			System.out.println("data:" + d + ",datas:" + datas.size());
+		}else{
+			System.out.println("系统有问题");
+		}
 		//login:true,data:Data [areaId=1, hostport=http://127.0.0.1:56789, areaCount=2, appCount=2, envCount=4, cfgCount=3],datas:113
 	}
+	
 
-	public DisconfRemoteBizDataApi(String domain, BasicCookieStore cookieStore) {
-		super(domain, cookieStore);
+	public DisconfRemoteBizDataApi(String domain) {
+		super(domain);
 	}
 
 	public Data getData() {
 		try {
-			HttpGet httpGet = new HttpGet(domain + "/api/data/getCount");
+			String url=domain + "/api/data/getCount";
+			
+			HttpGet httpGet = new HttpGet(url);
 
 			CloseableHttpResponse response = httpClient.execute(httpGet);
 
@@ -66,16 +68,17 @@ public class DisconfRemoteBizDataApi extends DisconfRemoteBaseApi {
 
 			return d;
 		} catch (Exception e) {
-
+			e.printStackTrace();
+			return null;
 		}
-		return null;
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<DataSql> db2Api() {
 		try {
-			// 请求
-			HttpGet httpGet = new HttpGet(domain + "/api/data/db2Api");
+			String url=domain + "/api/data/db2Api";
+			
+			HttpGet httpGet = new HttpGet(url);
 
 			CloseableHttpResponse response = httpClient.execute(httpGet);
 
@@ -92,13 +95,13 @@ public class DisconfRemoteBizDataApi extends DisconfRemoteBaseApi {
 			return datas;
 		} catch (Exception e) {
 			e.printStackTrace();
+			return null;
 		}
-		return null;
 	}
 
-	public void api2Db(List<DataSql> datas) {
+	public boolean api2Db(List<DataSql> datas) {
+		String res =null;
 		try {
-
 			// 转发
 			HttpPost httpPost = new HttpPost(domain + "/api/data/api2Db");
 
@@ -119,7 +122,7 @@ public class DisconfRemoteBizDataApi extends DisconfRemoteBaseApi {
 
 			HttpEntity responseEntity = response.getEntity();
 
-			String res = EntityUtils.toString(responseEntity, "UTF-8");
+			res= EntityUtils.toString(responseEntity, "UTF-8");
 
 			log.info("\n" + domain + " getData:\n\t" + res);
 
@@ -128,9 +131,21 @@ public class DisconfRemoteBizDataApi extends DisconfRemoteBaseApi {
 			response.close();
 			bos.close();
 			instream.close();
+			
 
 		} catch (Exception e) {
 			e.printStackTrace();
+			if (res.contains("true")) {
+				return true;
+			}else{
+				return false;
+			}
+		}
+		
+		if (res.contains("true")) {
+			return true;
+		}else{
+			return false;
 		}
 	}
 
