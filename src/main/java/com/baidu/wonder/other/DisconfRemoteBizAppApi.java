@@ -7,8 +7,10 @@ import java.util.List;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
@@ -16,10 +18,12 @@ import com.baidu.disconf.web.service.app.form.AppNewForm;
 
 public class DisconfRemoteBizAppApi extends DisconfRemoteBaseApi{
 
-	public DisconfRemoteBizAppApi(String domain) {
-		super(domain);
-	}
 	
+	
+	public DisconfRemoteBizAppApi(String domain, BasicCookieStore cookieStore) {
+		super(domain, cookieStore);
+	}
+
 	public void addapp(AppNewForm appNewForm) throws IOException {
 		//
 		HttpPost httpPost = new HttpPost(domain + "/api/app");
@@ -31,7 +35,7 @@ public class DisconfRemoteBizAppApi extends DisconfRemoteBaseApi{
 
 		httpPost.setEntity(new UrlEncodedFormEntity(nvps));
 
-		response = httpClient.execute(httpPost);
+		CloseableHttpResponse response = httpClient.execute(httpPost);
 
 		HttpEntity responseEntity = response.getEntity();
 
@@ -50,7 +54,7 @@ public class DisconfRemoteBizAppApi extends DisconfRemoteBaseApi{
 		//
 		HttpGet httpGet = new HttpGet(domain + "/api/app/delete?id="+appid);
 
-		response = httpClient.execute(httpGet);
+		CloseableHttpResponse response = httpClient.execute(httpGet);
 
 		HttpEntity responseEntity = response.getEntity();
 

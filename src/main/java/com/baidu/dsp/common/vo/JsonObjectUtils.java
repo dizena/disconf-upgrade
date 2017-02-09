@@ -48,7 +48,7 @@ public class JsonObjectUtils {
         JsonObject json = new JsonObject();
         json.addData(key, value);
 
-        LOG.info("\nbuildObjectSuccess\n\t"+JsonUtils.toJson(json));
+        LOG.info("buildObjectSuccess\n\t"+JsonUtils.toJson(json));
 
         return json;
     }
@@ -65,7 +65,7 @@ public class JsonObjectUtils {
         JsonSimpleObject json = new JsonSimpleObject();
         json.setResult(value);
 
-        LOG.info("\nbuildSimpleObjectSuccess\n\t"+json.toString());
+        LOG.info("buildSimpleObjectSuccess\n\t"+JsonUtils.toJson(json));
 
         return json;
     }
@@ -79,14 +79,13 @@ public class JsonObjectUtils {
      */
     public static <T> JsonObjectBase buildListSuccess(List<?> value, int totalCount, T footResult) {
 
-    	LOG.info("value = "+value);
         JsonObjectList json = new JsonObjectList();
 
         json.setPage(totalCount);
         json.addData(value);
         json.addFootData(footResult);
 
-        LOG.info("\nbuildListSuccess\n\t"+json.toString());
+        LOG.info("buildListSuccess\n\t"+JsonUtils.toJson(json));
 
         return json;
     }
@@ -107,7 +106,7 @@ public class JsonObjectUtils {
             json.addFieldError(str, contextReader.getMessage(errors.get(str)));
         }
 
-        LOG.info("\nbuildFieldError\n\t"+json.toString());
+        LOG.info("buildFieldError\n\t"+JsonUtils.toJson(json));
 
         return json;
     }
@@ -134,7 +133,7 @@ public class JsonObjectUtils {
             }
         }
 
-        LOG.info("\n2buildFieldError\n\t"+json.toString());
+        LOG.info("2buildFieldError2\n\t"+JsonUtils.toJson(json));
 
         return json;
     }
@@ -149,7 +148,7 @@ public class JsonObjectUtils {
 
         json.addGlobalError(contextReader.getMessage(error));
 
-        LOG.info("\nbuildGlobalError\n\t"+json.toString());
+        LOG.info("buildGlobalError\n\t"+JsonUtils.toJson(json));
 
         return json;
     }

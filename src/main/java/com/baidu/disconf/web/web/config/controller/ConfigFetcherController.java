@@ -4,8 +4,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -37,8 +35,6 @@ import com.baidu.dsp.common.vo.JsonObjectBase;
 @Controller
 @RequestMapping(WebConstants.API_PREFIX + "/config")
 public class ConfigFetcherController extends BaseController {
-
-    protected static final Logger LOG = LoggerFactory.getLogger(ConfigFetcherController.class);
 
     //@Autowired
     //private ConfigValidator configValidator;

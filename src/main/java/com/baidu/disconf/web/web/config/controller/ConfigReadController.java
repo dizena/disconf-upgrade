@@ -9,8 +9,6 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -44,8 +42,6 @@ import com.baidu.ub.common.db.DaoPageResult;
 @Controller
 @RequestMapping(WebConstants.API_PREFIX + "/web/config")
 public class ConfigReadController extends BaseController {
-
-    protected static final Logger LOG = LoggerFactory.getLogger(ConfigReadController.class);
 
     @Autowired
     private ConfigMgr configMgr;

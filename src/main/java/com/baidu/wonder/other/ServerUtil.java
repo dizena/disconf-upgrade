@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.http.impl.client.BasicCookieStore;
+
 import com.baidu.disconf.web.service.app.form.AppNewForm;
 import com.baidu.wonder.other.bean.OtherServer;
 
@@ -17,8 +19,12 @@ public class ServerUtil {
 	public static void addApp(AppNewForm appNewForm) {
 		try {
 			for (OtherServer server : servers) {
-				DisconfRemoteBizAppApi api = new DisconfRemoteBizAppApi(server.getHost());
+				BasicCookieStore cookieStore=new BasicCookieStore();
+				DisconfRemoteBizAppApi api = new DisconfRemoteBizAppApi(server.getHost(),cookieStore);
 				api.addapp(appNewForm);
+				
+				cookieStore.clear();
+				api.close();
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

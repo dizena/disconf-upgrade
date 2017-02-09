@@ -2,8 +2,6 @@ package com.baidu.disconf.web.web.env.controller;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,8 +23,6 @@ import com.baidu.dsp.common.vo.JsonObjectBase;
 @Controller
 @RequestMapping(WebConstants.API_PREFIX + "/env")
 public class EnvController extends BaseController {
-
-    protected static final Logger LOG = LoggerFactory.getLogger(EnvController.class);
 
     @Autowired
     private EnvMgr envMgr;

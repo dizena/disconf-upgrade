@@ -145,4 +145,10 @@ public class ConfigDaoImpl extends AbstractDao<Long, Config> implements ConfigDa
 		Match m=new Match(Columns.STATUS, Constants.STATUS_NORMAL);
 		return count(m);
 	}
+
+	@Override
+	public List<Config> getAllNormal() {
+		
+		return find(Columns.STATUS, Constants.STATUS_NORMAL);
+	}
 }

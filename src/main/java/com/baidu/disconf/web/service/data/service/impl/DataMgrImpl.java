@@ -3,6 +3,7 @@ package com.baidu.disconf.web.service.data.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.http.impl.client.BasicCookieStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -13,6 +14,8 @@ import com.baidu.disconf.web.service.area.bo.Area;
 import com.baidu.disconf.web.service.area.dao.AreaDao;
 import com.baidu.disconf.web.service.config.dao.ConfigDao;
 import com.baidu.disconf.web.service.data.bo.Data;
+import com.baidu.disconf.web.service.data.bo.DataSql;
+import com.baidu.disconf.web.service.data.dao.DataDao;
 import com.baidu.disconf.web.service.data.service.DataMgr;
 import com.baidu.disconf.web.service.env.dao.EnvDao;
 import com.baidu.wonder.other.DisconfRemoteBizDataApi;
@@ -21,6 +24,9 @@ import com.baidu.wonder.other.PropUtils;
 @Service
 @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
 public class DataMgrImpl implements DataMgr {
+	
+	@Autowired
+	private DataDao dataDao;
 
 	@Autowired
 	private AreaDao areaDao;
@@ -50,13 +56,16 @@ public class DataMgrImpl implements DataMgr {
 			for (Area area : areas) {
 				if(area.getId()!=area_id){
 					//进行请求查询
-					DisconfRemoteBizDataApi api=new DisconfRemoteBizDataApi(area.getHostport());
+					BasicCookieStore cookieStore=new BasicCookieStore();
+					DisconfRemoteBizDataApi api=new DisconfRemoteBizDataApi(area.getHostport(),cookieStore);
 					if(api.login(area.getName(), area.getPassword())){
 						Data d=api.getData();
 						if(d!=null){
 							datas.add(d);
 						}
 					}
+					cookieStore.clear();
+					api.close();
 				}
 			}
 		}
@@ -83,5 +92,23 @@ public class DataMgrImpl implements DataMgr {
 		}
 		return data;
 	}
+
+	@Override
+	public int exec(String sql) {
+		
+		return dataDao.exec(sql);
+	}
+
+	@Override
+	public List<String> getTabs() {
+		return dataDao.getTabs();
+	}
+
+	@Override
+	public List<DataSql> getDatas(String tab) {
+		return dataDao.getDatas(tab);
+	}
+
+
 
 }

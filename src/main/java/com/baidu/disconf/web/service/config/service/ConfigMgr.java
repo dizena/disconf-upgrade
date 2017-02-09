@@ -79,5 +79,12 @@ public interface ConfigMgr {
      * @return
      */
     List<File> getDisconfFileList(ConfListForm confListForm);
+    
+    /**
+     * @param configId
+     *
+     * @return
+     */
+    List<Config> getAllNormal();
 
 }

@@ -76,4 +76,6 @@ public interface ConfigDao extends BaseDao<Long, Config> {
      * @return int
      */
     int getCount();
+    
+    List<Config> getAllNormal();
 }

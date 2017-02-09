@@ -1,6 +1,5 @@
 package com.baidu.wonder.other;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,22 +18,38 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DisconfRemoteBaseApi {
+public abstract class DisconfRemoteBaseApi {
 	public static Logger log = LoggerFactory.getLogger(DisconfRemoteBaseApi.class);
 
-	public BasicCookieStore cookieStore = new BasicCookieStore();
-	public CloseableHttpClient httpClient = HttpClients.custom().setDefaultCookieStore(cookieStore).build();
-	protected CloseableHttpResponse response;
+	private BasicCookieStore cookieStore;
+	public CloseableHttpClient httpClient;
 	protected String domain;
 
-	public DisconfRemoteBaseApi(String domain) {
+	public DisconfRemoteBaseApi(String domain, BasicCookieStore cookieStore) {
 		this.domain = domain;
+		this.cookieStore = cookieStore;
+
+		httpClient = HttpClients.custom().setDefaultCookieStore(cookieStore).build();
+
+		List<Cookie> cookies = cookieStore.getCookies();
+		if (cookies.isEmpty()) {
+			log.info("None");
+		} else {
+			for (int i = 0; i < cookies.size(); i++) {
+				log.info("- " + cookies.get(i).toString());
+			}
+		}
+
 	}
 
-	
-	public boolean login(String name, String passwd)  {
+	public boolean login(String name, String passwd) {
 		//
-		try{
+		try {
+			boolean b =session();
+			if(b){
+				return b;
+			}
+			
 			HttpPost httpPost = new HttpPost(domain + "/api/account/signin");
 
 			List<NameValuePair> nvps = new ArrayList<NameValuePair>();
@@ -44,7 +59,7 @@ public class DisconfRemoteBaseApi {
 
 			httpPost.setEntity(new UrlEncodedFormEntity(nvps));
 
-			response = httpClient.execute(httpPost);
+			CloseableHttpResponse response = httpClient.execute(httpPost);
 
 			HttpEntity responseEntity = response.getEntity();
 
@@ -54,68 +69,74 @@ public class DisconfRemoteBaseApi {
 
 			EntityUtils.consume(responseEntity);
 
-			List<Cookie> cookies = cookieStore.getCookies();
-			if (cookies.isEmpty()) {
-				log.info("None");
-			} else {
-				for (int i = 0; i < cookies.size(); i++) {
-					log.info("- " + cookies.get(i).toString());
-				}
-			}
 			response.close();
-			
-			if(res.contains("success")){
+
+			if (res.contains("true")) {
 				return true;
 			}
-			
-		}catch(Exception e){
-			
+
+		} catch (Exception e) {
+
 		}
 		return false;
 		//
 	}
 
-	public void session() throws IOException {
-		//
-		HttpGet httpGet = new HttpGet(domain + "/api/account/session");
+	public boolean session() {
+		try {
+			HttpGet httpGet = new HttpGet(domain + "/api/account/session");
 
-		response = httpClient.execute(httpGet);
+			CloseableHttpResponse response = httpClient.execute(httpGet);
 
-		HttpEntity responseEntity = response.getEntity();
+			HttpEntity responseEntity = response.getEntity();
 
-		String res = EntityUtils.toString(responseEntity, "UTF-8");
+			String res = EntityUtils.toString(responseEntity, "UTF-8");
 
-		log.info("\nsession:\n\t" + res);
+			log.info("\nsession:\n\t" + res);
 
-		EntityUtils.consume(responseEntity);
+			EntityUtils.consume(responseEntity);
 
-		response.close();
-
-		//
-	}
-
-	public void signout() throws IOException {
-		//
-		HttpGet httpGet = new HttpGet(domain + "/api/account/signout");
-
-		response = httpClient.execute(httpGet);
-
-		HttpEntity responseEntity = response.getEntity();
-
-		String res = EntityUtils.toString(responseEntity, "UTF-8");
-
-		log.info("\nsignout:\n\t" + res);
-
-		EntityUtils.consume(responseEntity);
-
-		response.close();
-		//
-	}
-
-	public void close() throws IOException {
-		if (response != null) {
 			response.close();
+
+			if (res.contains("true")) {
+				return true;
+			}
+		} catch (Exception e) {
+
 		}
-		httpClient.close();
+		return false;
+	}
+
+	public void signout() {
+		try {
+			HttpGet httpGet = new HttpGet(domain + "/api/account/signout");
+
+			CloseableHttpResponse response = httpClient.execute(httpGet);
+
+			HttpEntity responseEntity = response.getEntity();
+
+			String res = EntityUtils.toString(responseEntity, "UTF-8");
+
+			log.info("\nsignout:\n\t" + res);
+
+			EntityUtils.consume(responseEntity);
+
+			response.close();
+
+		} catch (Exception e) {
+
+		}
+	}
+
+	public void close() {
+		try {
+			signout();
+
+			cookieStore.clear();
+
+			httpClient.close();
+		} catch (Exception e) {
+
+		}
 	}
 }

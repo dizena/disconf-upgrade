@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.context.ApplicationContext;
@@ -29,7 +31,9 @@ import com.baidu.ub.common.db.DaoPageResult;
  * @author liaoqiqi
  * @version 2013-11-26
  */
-public class BaseController implements ApplicationContextAware {
+public abstract class BaseController implements ApplicationContextAware {
+	
+	protected final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
     protected ApplicationContext context;
 

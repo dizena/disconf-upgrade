@@ -72,7 +72,7 @@ public class RoleResourceAspect {
 
         if (noAuthCheckUrl != null && noAuthCheckUrl.contains(urlPattarn)) {
 
-            LOG.info("don't need to check this url: " + urlPattarn);
+            LOG.debug("don't need to check this url: " + urlPattarn);
         } else {
 
             // 获取method上标注的http method，若未标注method则默认为GET
@@ -99,7 +99,7 @@ public class RoleResourceAspect {
                 isPriviledged = false;
                 throw new AccessDeniedException("Access Denied: " + urlInfo + visitorInfo);
             }
-            LOG.info("Accessing URL:" + urlInfo + visitorInfo + ", Is priviledged:" + isPriviledged.toString());
+            LOG.debug("Accessing URL:" + urlInfo + visitorInfo + ", Is priviledged:" + isPriviledged.toString());
         }
 
         Object rtnOb = null;

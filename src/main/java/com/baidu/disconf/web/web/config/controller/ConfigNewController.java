@@ -3,8 +3,6 @@ package com.baidu.disconf.web.web.config.controller;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,7 +32,6 @@ import com.baidu.dsp.common.vo.JsonObjectBase;
 @RequestMapping(WebConstants.API_PREFIX + "/web/config")
 public class ConfigNewController extends BaseController {
 
-    protected static final Logger LOG = LoggerFactory.getLogger(ConfigUpdateController.class);
 
     @Autowired
     private ConfigMgr configMgr;

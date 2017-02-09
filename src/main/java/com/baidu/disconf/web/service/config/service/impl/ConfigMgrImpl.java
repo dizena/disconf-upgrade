@@ -559,4 +559,9 @@ public class ConfigMgrImpl implements ConfigMgr {
 		configDao.deleteAppConfig(appid);
 	}
 
+	@Override
+	public List<Config> getAllNormal() {
+		return configDao.getAllNormal();
+	}
+
 }

@@ -13,7 +13,8 @@
     <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
         <Encoding>UTF-8</Encoding>
         <encoder>
-            <pattern>%X{sessionId} %date [%thread] %-5level %logger{80} - %msg%n</pattern>
+        	<!-- %X{sessionId} %date [%thread] %-5level  -->
+            <pattern>%X{sessionId} %logger{80} - %msg%n</pattern>
         </encoder>
     </appender>
 

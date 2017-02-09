@@ -3,8 +3,6 @@ package com.baidu.disconf.web.web.auth;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,8 +34,6 @@ import com.baidu.ub.common.commons.ThreadContext;
 @RequestMapping(WebConstants.API_PREFIX + "/account")
 public class UserController extends BaseController {
 
-    protected static final Logger LOG = LoggerFactory.getLogger(UserController.class);
-
     @Autowired
     private UserMgr userMgr;
 
@@ -64,11 +60,8 @@ public class UserController extends BaseController {
 
         VisitorVo visitorVo = userMgr.getCurVisitor();
         if (visitorVo != null) {
-
             return buildSuccess("visitor", visitorVo);
-
         } else {
-
             // 没有登录啊
             return buildGlobalError("syserror.inner", ErrorCode.GLOBAL_ERROR);
         }
@@ -87,26 +80,18 @@ public class UserController extends BaseController {
     @ResponseBody
     public JsonObjectBase signin(@Valid SigninForm signin, HttpServletRequest request) {
 
-
         // 验证
         authValidator.validateLogin(signin);
-
         // 数据库登录
         User user = signMgr.signin(signin.getName());
-
         // 过期时间
         int expireTime = LoginConstant.SESSION_EXPIRE_TIME;
         if (signin.getRemember().equals(1)) {
             expireTime = LoginConstant.SESSION_EXPIRE_TIME2;
         }
-
         // redis login
         redisLogin.login(request, user, expireTime);
-
         VisitorVo visitorVo = userMgr.getCurVisitor();
-        
-        LOG.info("-->\n\t"+ visitorVo);
-        
         return buildSuccess("visitor", visitorVo);
     }
 
@@ -121,9 +106,7 @@ public class UserController extends BaseController {
     @RequestMapping(value = "/signout", method = RequestMethod.GET)
     @ResponseBody
     public JsonObjectBase signout(HttpServletRequest request) {
-
         redisLogin.logout(request);
-
         return buildSuccess("ok", "ok");
     }
 
@@ -137,17 +120,13 @@ public class UserController extends BaseController {
     @RequestMapping(value = "/password", method = RequestMethod.PUT)
     @ResponseBody
     public JsonObjectBase password(@Valid PasswordModifyForm passwordModifyForm, HttpServletRequest request) {
-
         // 校验
         authValidator.validatePasswordModify(passwordModifyForm);
-
         // 修改
         Visitor visitor = ThreadContext.getSessionVisitor();
         userMgr.modifyPassword(visitor.getLoginUserId(), passwordModifyForm.getNew_password());
-
         // re login
         redisLogin.logout(request);
-
         return buildSuccess("修改成功，请重新登录");
     }
 }
