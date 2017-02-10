@@ -9,7 +9,6 @@
 					<table id="datalist" class="table table-bordered table-condensed table-hover account-tableWrap table-striped" >
                         <thead>
                             <tr>
-                                <td>#</td>
                                 <td>区域编号</td>
                                 <td>服务地址</td>
                                 <td>数据质量</td>

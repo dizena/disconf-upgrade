@@ -35,4 +35,9 @@ public class AreaMgrImpl implements AreaMgr {
 		return areaDao.findAll();
 	}
 
+	@Override
+	public Area getArea(Long id) {
+		return areaDao.get(id);
+	}
+
 }

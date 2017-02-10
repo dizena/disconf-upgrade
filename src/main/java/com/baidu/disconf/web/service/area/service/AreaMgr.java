@@ -10,4 +10,7 @@ public interface AreaMgr {
 	void delArea(Long id);
 	
 	List<Area> list();
+	
+	Area getArea(Long id);
+	
 }

@@ -11,6 +11,7 @@
 					<#include "/leftbar.ftl">
 					
                 </div>
+                
                 <div class="span10" style="float:left">
 
                     <div class="row-fluid">

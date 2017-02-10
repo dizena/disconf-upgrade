@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.baidu.disconf.web.service.sign.form.SigninForm;
@@ -129,4 +130,40 @@ public class UserController extends BaseController {
         redisLogin.logout(request);
         return buildSuccess("修改成功，请重新登录");
     }
+    
+    /**
+     * GET 本机操作是否同步到其他服务器
+     *
+     * @param
+     *
+     * @return
+     */
+    @NoAuth
+    @RequestMapping(value = "/sync", method = RequestMethod.GET)
+    @ResponseBody
+    public JsonObjectBase sync(@RequestParam("flag") Integer flag) {
+    	getSession().setAttribute(WebConstants.SYNC_FLAG, flag);
+    	LOG.info("sync flag "+getSession().getAttribute(WebConstants.SYNC_FLAG));
+    	return buildSuccess("配置成功");
+    }
+    
+    /**
+     * GET 本机操作是否同步到其他服务器
+     *
+     * @param
+     *
+     * @return
+     */
+    @NoAuth
+    @RequestMapping(value = "/getsync", method = RequestMethod.GET)
+    @ResponseBody
+    public Integer getsync() {
+    	Object o= getSession().getAttribute(WebConstants.SYNC_FLAG);
+    	if(o==null){
+    		return 0;
+    	}else{
+    		return 1;
+    	}
+    }
+    
 }

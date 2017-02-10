@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.baidu.disconf.web.service.area.bo.Area;
+import com.baidu.disconf.web.service.area.service.AreaMgr;
 import com.baidu.disconf.web.service.data.bo.Data;
 import com.baidu.disconf.web.service.data.bo.DataSql;
 import com.baidu.disconf.web.service.data.service.DataMgr;
@@ -23,6 +25,8 @@ import com.baidu.dsp.common.constant.ErrorCode;
 import com.baidu.dsp.common.constant.WebConstants;
 import com.baidu.dsp.common.controller.BaseController;
 import com.baidu.dsp.common.vo.JsonObjectBase;
+import com.baidu.wonder.other.DisconfRemoteBizDataApi;
+import com.baidu.wonder.other.DisconfRemoteBizItemApi;
 
 @Controller
 @RequestMapping(WebConstants.API_PREFIX + "/data")
@@ -30,6 +34,9 @@ public class DataController  extends BaseController {
 	
 	@Autowired
     private DataMgr dataMgr;
+	
+	@Autowired
+	private AreaMgr areaMgr;
 	
 	@RequestMapping(value = "/getCount", method = RequestMethod.GET)
     @ResponseBody
@@ -48,8 +55,37 @@ public class DataController  extends BaseController {
 	
 	@RequestMapping(value = "/sync", method = RequestMethod.POST)
     @ResponseBody
-    public void sync(@RequestParam("sql") String sql) {
+    public Object sync(@RequestParam("a") Long a,@RequestParam("") Long b) {
+		Area areaA = areaMgr.getArea(a);
+		Area areaB = areaMgr.getArea(b);
 		
+		//取数据
+		List<DataSql> datas=null;
+		DisconfRemoteBizDataApi api1=new DisconfRemoteBizDataApi(areaA.getHostport());
+		if(api1.session()||api1.login(areaA.getName(), areaA.getPassword())){
+			datas= api1.db2Api();
+			api1.close();
+		}
+		
+		//传数据
+		DisconfRemoteBizDataApi api2=new DisconfRemoteBizDataApi(areaB.getHostport());
+		if(api2.session()||api2.login(areaB.getName(), areaB.getPassword())){
+			if(datas!=null){
+				api2.api2Db(datas);
+			}
+			api2.close();
+		}
+		
+		
+		//做通知
+		DisconfRemoteBizItemApi api3=new DisconfRemoteBizItemApi(areaB.getHostport());
+		if(api3.session()||api3.login(areaB.getName(), areaB.getPassword())){
+			api3.notifySome();
+			api3.close();
+		}
+		//Long local =PropUtils.getLocalAreaId();
+		
+		return 1;
     }
 	
 	//多服务调用使用线程池；

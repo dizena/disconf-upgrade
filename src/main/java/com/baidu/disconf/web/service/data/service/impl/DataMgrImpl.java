@@ -42,9 +42,8 @@ public class DataMgrImpl implements DataMgr {
 	@Autowired
 	private ConfigDao configDao;
 
-	private String areaid = PropUtils.getKey("localArea");
 
-	private Long area_id = Long.parseLong(areaid);
+	private Long area_id = PropUtils.getLocalAreaId();
 
 	@Override
 	public List<Data> getDataList() {
@@ -66,6 +65,14 @@ public class DataMgrImpl implements DataMgr {
 						}
 						api.close();
 					}else{
+						Data data =new Data();
+						data.setAreaId(area.getId());
+						data.setHostport(area.getHostport());
+						data.setAreaCount(0);
+						data.setAppCount(0);
+						data.setEnvCount(0);
+						data.setCfgCount(0);
+						datas.add(data);
 						log.error(area.getHostport()+" not connect with "+area.getName());
 					}
 					

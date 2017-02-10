@@ -12,6 +12,9 @@ function headShowInit() {
         $(".login-yes").show();
         $("#username").show();
         $("#username").html(VISITOR.name);
+        
+        syncget();
+        
     } else {
         $(".login-no").show();
         $(".login-yes").hide();
@@ -63,4 +66,31 @@ function getSession2Redirect() {
         }
     });
     loginActions();
+}
+
+
+//是否设置了同步
+function syncget(){
+	$.ajax({
+        type: "GET",
+        url: "/api/account/getsync"
+    }).done(function (data) {
+        if(data==0){
+			syncset();
+		}
+    });
+}
+
+//设置同步
+function syncset(){
+	var flag=0;
+	if(confirm("是否将本机的 增、删、改 同步到其他区域? ")){
+		flag=1;
+	}
+	$.ajax({
+        type: "GET",
+        url: "/api/account/sync?flag="+flag
+    }).done(function (data) {
+       
+    });
 }

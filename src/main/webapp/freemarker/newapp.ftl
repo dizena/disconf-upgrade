@@ -9,7 +9,7 @@
             <div class="row-fluid">
                 <ul class="breadcrumb" style="background-color:#fff;">
                     <li>
-                        <a href="/main">配置</a>
+                        <a href="/app">应用</a>
                     </li>
                     <li class="active">
                         / 新建APP
@@ -18,11 +18,8 @@
             </div>
 
             <div class="row-fluid">
-
                 <div class="span12">
-
                     <div class="content oz">
-
                         <form id="form" class="private-form clearfix">
                             <h2 class="autoPush-detail-title">新建APP</h2>
 
@@ -53,6 +50,8 @@
                     </div>
                 </div>
             </div>
+            
+            
         </div>
     </div>
 </div>

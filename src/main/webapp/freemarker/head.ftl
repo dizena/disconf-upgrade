@@ -33,21 +33,22 @@
                                 
                                 <li style="display:inline;" class="dropdown">
                                     <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown">
-                                        <span class="zu-top-nav-link">区域配置<b class="caret"></b></span>
+                                        <span class="zu-top-nav-link">配置文件<b class="caret"></b></span>
                                     </a>
                                     <ul class="dropdown-menu">
-                                        <li><a href="area">查看区域服务</a></li>
-                                        <li><a href="areaadd">新建区域服务</a></li>
+                                    	<li><a href="main">查看</a></li>
+                                        <li><a href="newconfig_item">新建配置项</a></li>
+                                        <li><a href="newconfig_file">新建配置文件</a></li>
                                     </ul>
                                 </li>
                                 &nbsp;&nbsp;&nbsp;&nbsp;
                                 
                                 <li style="display:inline;" class="dropdown">
                                     <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown">
-                                        <span class="zu-top-nav-link">应用配置<b class="caret"></b></span>
+                                        <span class="zu-top-nav-link">配置应用<b class="caret"></b></span>
                                     </a>
                                     <ul class="dropdown-menu">
-                                    	<li><a href="app">查看应用</a></li>
+                                    	<li><a href="app">查看</a></li>
                                         <li><a href="newapp">新建APP</a></li>
                                     </ul>
                                 </li>
@@ -55,20 +56,23 @@
                                 
                                 <li style="display:inline;" class="dropdown">
                                     <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown">
-                                        <span class="zu-top-nav-link">文件配置<b class="caret"></b></span>
+                                        <span class="zu-top-nav-link">配置区域<b class="caret"></b></span>
                                     </a>
                                     <ul class="dropdown-menu">
-                                    	<li><a href="main">查看配置</a></li>
-                                        <li><a href="newconfig_item">新建配置项</a></li>
-                                        <li><a href="newconfig_file">新建配置文件</a></li>
+                                        <li><a href="area">查看</a></li>
+                                        <li><a href="areaadd">新建区域</a></li>
                                     </ul>
                                 </li>
                                 &nbsp;&nbsp;&nbsp;&nbsp;
                                 
-                                <li style="display:inline;">
-                                    <a href="data">
-                                        <span class="zu-top-nav-link" >数据通知</span>
+                                <li style="display:inline;" class="dropdown">
+                                    <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown">
+                                        <span class="zu-top-nav-link">数据同步<b class="caret"></b></span>
                                     </a>
+                                    <ul class="dropdown-menu">
+                                    	<li><a href="data">查看</a></li>
+                                        <li><a href="datasync">手动同步</a></li>
+                                    </ul>
                                 </li>
                                 &nbsp;&nbsp;&nbsp;&nbsp;
                                 

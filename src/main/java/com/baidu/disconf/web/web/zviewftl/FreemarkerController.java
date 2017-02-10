@@ -103,13 +103,14 @@ public class FreemarkerController {
 	
 	@NoAuth
 	@RequestMapping({"data"})
-	public String datasync(){
+	public String data(){
 		return "/data";
 	}
 	
-	
-	
-	
-	
+	@NoAuth
+	@RequestMapping({"datasync"})
+	public String datasync(){
+		return "/datasync";
+	}
 	
 }

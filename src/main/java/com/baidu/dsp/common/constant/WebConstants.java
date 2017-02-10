@@ -20,5 +20,10 @@ public class WebConstants {
      * 服务端Controller前缀
      */
     public static final String API_PREFIX = "/api";
+    
+    /**
+     * 是否同步OPT到其他服务标识
+     */
+    public static final String SYNC_FLAG = "DISCONF_SYNC_FLAG";
 
 }

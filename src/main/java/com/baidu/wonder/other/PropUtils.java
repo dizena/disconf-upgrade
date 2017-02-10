@@ -21,5 +21,13 @@ public class PropUtils {
 		return prop.getProperty(key);
 	}
 	
+	public static Long getLocalAreaId(){
+		String s= prop.getProperty("localArea");
+		Long l=null;
+		if(s!=null){
+			l=Long.parseLong(s);
+		}
+		return l;
+	}
 	
 }

@@ -1,4 +1,4 @@
-package com.baidu.disconf.web.service.sync.service;
+package com.baidu.disconf.web.service.sync.service.impl;
 
 import java.util.List;
 
@@ -13,24 +13,41 @@ import com.baidu.disconf.web.service.area.bo.Area;
 import com.baidu.disconf.web.service.area.dao.AreaDao;
 import com.baidu.disconf.web.service.config.form.ConfNewForm;
 import com.baidu.disconf.web.service.config.form.ConfNewItemForm;
+import com.baidu.disconf.web.service.sync.service.SyncMgr;
 import com.baidu.wonder.other.DisconfRemoteBizAppApi;
 import com.baidu.wonder.other.DisconfRemoteBizAreaApi;
 import com.baidu.wonder.other.DisconfRemoteBizItemApi;
 import com.baidu.wonder.other.PropUtils;
 
 @Service
-public class SyncServiceImpl implements SyncService {
-	public static Logger log = LoggerFactory.getLogger(SyncServiceImpl.class);
+public class SyncMgrImpl implements SyncMgr {
+	public static Logger log = LoggerFactory.getLogger(SyncMgrImpl.class);
+	
 	@Autowired
 	private AreaDao areaDao;
 
-	private String areaid = PropUtils.getKey("localArea");
-	private Long area_id = Long.parseLong(areaid);
-	private List<Area> areas = areaDao.findAll();
-	private int otherCount = areas.size() - 1;
+	private Long area_id;
+	private List<Area> areas;
+	private int otherCount;
+	
+	private void init(){
+		if(area_id==null){
+			area_id =PropUtils.getLocalAreaId();
+		}
+		if(areas==null){
+			areas = areaDao.findAll();
+			
+			if(areas!=null&&areas.size()>0){
+				otherCount = areas.size() - 1;
+			}
+		}
+		
+	}
 
 	@Override
-	public int addApp(AppNewForm appNewForm) {
+	public int addAppSync(AppNewForm appNewForm) {
+		init();
+		
 		int res = 0;
 		for (Area area : areas) {
 			if (area.getId() != area_id) {
@@ -42,6 +59,8 @@ public class SyncServiceImpl implements SyncService {
 						res++;
 					}
 					api.close();
+				}else{
+					log.error("remote host connect or login error @  "+area.getHostport());
 				}
 				// end
 			}
@@ -50,7 +69,9 @@ public class SyncServiceImpl implements SyncService {
 	}
 
 	@Override
-	public int delApp(Long appid) {
+	public int delAppSync(Long appid) {
+		init();
+		
 		int res = 0;
 		for (Area area : areas) {
 			if (area.getId() != area_id) {
@@ -62,6 +83,8 @@ public class SyncServiceImpl implements SyncService {
 						res++;
 					}
 					api.close();
+				}else{
+					log.error("remote host connect or login error @  "+area.getHostport());
 				}
 				// end
 			}
@@ -70,7 +93,9 @@ public class SyncServiceImpl implements SyncService {
 	}
 
 	@Override
-	public int addArea(Area a) {
+	public int addAreaSync(Area a) {
+		init();
+		
 		int res = 0;
 		for (Area area : areas) {
 			if (area.getId() != area_id) {
@@ -82,6 +107,8 @@ public class SyncServiceImpl implements SyncService {
 						res++;
 					}
 					api.close();
+				}else{
+					log.error("remote host connect or login error @  "+area.getHostport());
 				}
 				// end
 			}
@@ -90,7 +117,9 @@ public class SyncServiceImpl implements SyncService {
 	}
 
 	@Override
-	public int delArea(Long id) {
+	public int delAreaSync(Long id) {
+		init();
+		
 		int res = 0;
 		for (Area area : areas) {
 			if (area.getId() != area_id) {
@@ -102,6 +131,8 @@ public class SyncServiceImpl implements SyncService {
 						res++;
 					}
 					api.close();
+				}else{
+					log.error("remote host connect or login error @  "+area.getHostport());
 				}
 				// end
 			}
@@ -110,7 +141,9 @@ public class SyncServiceImpl implements SyncService {
 	}
 
 	@Override
-	public int addItem(ConfNewItemForm confNewForm) {
+	public int addItemSync(ConfNewItemForm confNewForm) {
+		init();
+		
 		int res = 0;
 		for (Area area : areas) {
 			if (area.getId() != area_id) {
@@ -122,6 +155,8 @@ public class SyncServiceImpl implements SyncService {
 						res++;
 					}
 					api.close();
+				}else{
+					log.error("remote host connect or login error @  "+area.getHostport());
 				}
 				// end
 			}
@@ -130,7 +165,9 @@ public class SyncServiceImpl implements SyncService {
 	}
 
 	@Override
-	public int updateFile(ConfNewForm confNewForm, MultipartFile file) {
+	public int updateFileSync(ConfNewForm confNewForm, MultipartFile file) {
+		init();
+		
 		int res = 0;
 		for (Area area : areas) {
 			if (area.getId() != area_id) {
@@ -142,6 +179,8 @@ public class SyncServiceImpl implements SyncService {
 						res++;
 					}
 					api.close();
+				}else{
+					log.error("remote host connect or login error @  "+area.getHostport());
 				}
 				// end
 			}
@@ -150,7 +189,9 @@ public class SyncServiceImpl implements SyncService {
 	}
 
 	@Override
-	public int updateFileWithText(ConfNewForm confNewForm, String fileContent, String fileName) {
+	public int updateFileWithTextSync(ConfNewForm confNewForm, String fileContent, String fileName) {
+		init();
+		
 		int res = 0;
 		for (Area area : areas) {
 			if (area.getId() != area_id) {
@@ -162,6 +203,8 @@ public class SyncServiceImpl implements SyncService {
 						res++;
 					}
 					api.close();
+				}else{
+					log.error("remote host connect or login error @  "+area.getHostport());
 				}
 				// end
 			}
@@ -170,7 +213,9 @@ public class SyncServiceImpl implements SyncService {
 	}
 
 	@Override
-	public int updateItem(long configId, String value) {
+	public int updateItemSync(long configId, String value) {
+		init();
+		
 		int res = 0;
 		for (Area area : areas) {
 			if (area.getId() != area_id) {
@@ -182,6 +227,8 @@ public class SyncServiceImpl implements SyncService {
 						res++;
 					}
 					api.close();
+				}else{
+					log.error("remote host connect or login error @  "+area.getHostport());
 				}
 				// end
 			}
@@ -190,7 +237,9 @@ public class SyncServiceImpl implements SyncService {
 	}
 
 	@Override
-	public int updateFile(long configId, MultipartFile file) {
+	public int updateFileSync(long configId, MultipartFile file) {
+		init();
+		
 		int res = 0;
 		for (Area area : areas) {
 			if (area.getId() != area_id) {
@@ -202,6 +251,8 @@ public class SyncServiceImpl implements SyncService {
 						res++;
 					}
 					api.close();
+				}else{
+					log.error("remote host connect or login error @  "+area.getHostport());
 				}
 				// end
 			}
@@ -210,7 +261,9 @@ public class SyncServiceImpl implements SyncService {
 	}
 
 	@Override
-	public int updateFileWithText(long configId, String fileContent) {
+	public int updateFileWithTextSync(long configId, String fileContent) {
+		init();
+		
 		int res = 0;
 		for (Area area : areas) {
 			if (area.getId() != area_id) {
@@ -222,6 +275,8 @@ public class SyncServiceImpl implements SyncService {
 						res++;
 					}
 					api.close();
+				}else{
+					log.error("remote host connect or login error @  "+area.getHostport());
 				}
 				// end
 			}
@@ -230,7 +285,9 @@ public class SyncServiceImpl implements SyncService {
 	}
 
 	@Override
-	public int deleteConfig(long configId) {
+	public int deleteConfigSync(long configId) {
+		init();
+		
 		int res = 0;
 		for (Area area : areas) {
 			if (area.getId() != area_id) {
@@ -242,6 +299,8 @@ public class SyncServiceImpl implements SyncService {
 						res++;
 					}
 					api.close();
+				}else{
+					log.error("remote host connect or login error @  "+area.getHostport());
 				}
 				// end
 			}
@@ -250,7 +309,9 @@ public class SyncServiceImpl implements SyncService {
 	}
 
 	@Override
-	public int notifyOne(Long configId) {
+	public int notifyOneSync(Long configId) {
+		init();
+		
 		int res = 0;
 		for (Area area : areas) {
 			if (area.getId() != area_id) {
@@ -262,6 +323,8 @@ public class SyncServiceImpl implements SyncService {
 						res++;
 					}
 					api.close();
+				}else{
+					log.error("remote host connect or login error @  "+area.getHostport());
 				}
 				// end
 			}
@@ -270,7 +333,9 @@ public class SyncServiceImpl implements SyncService {
 	}
 
 	@Override
-	public int notifySome() {
+	public int notifySomeSync() {
+		init();
+		
 		int res = 0;
 		for (Area area : areas) {
 			if (area.getId() != area_id) {
@@ -282,6 +347,8 @@ public class SyncServiceImpl implements SyncService {
 						res++;
 					}
 					api.close();
+				}else{
+					log.error("remote host connect or login error @  "+area.getHostport());
 				}
 				// end
 			}
