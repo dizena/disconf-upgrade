@@ -41,6 +41,7 @@ public class ConfigNewController extends BaseController {
 
     @Autowired
     private FileUploadValidator fileUploadValidator;
+    
 
     /**
      * 配置项的新建
@@ -58,6 +59,8 @@ public class ConfigNewController extends BaseController {
 
         //
         configMgr.newConfig(confNewForm, DisConfigTypeEnum.ITEM);
+        
+        
 
         return buildSuccess("创建成功");
     }

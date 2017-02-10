@@ -29,77 +29,77 @@ import com.baidu.dsp.common.vo.JsonObjectBase;
 @RequestMapping(WebConstants.API_PREFIX + "/app")
 public class AppController extends BaseController {
 
-    @Autowired
-    private AppMgr appMgr;
-    
-    @Autowired
-    private ConfigMgr configMgr;
+	@Autowired
+	private AppMgr appMgr;
 
-    @Autowired
-    private AppValidator appValidator;
+	@Autowired
+	private ConfigMgr configMgr;
 
-    /**
-     * list
-     *
-     * @return
-     */
-    @RequestMapping(value = "/list", method = RequestMethod.GET)
-    @ResponseBody
-    public JsonObjectBase list() {
+	@Autowired
+	private AppValidator appValidator;
 
-        List<AppListVo> appListVos = appMgr.getAuthAppVoList();
+	/**
+	 * list
+	 *
+	 * @return
+	 */
+	@RequestMapping(value = "/list", method = RequestMethod.GET)
+	@ResponseBody
+	public JsonObjectBase list() {
 
-        return buildListSuccess(appListVos, appListVos.size());
-    }
-    
-    /**
-     * list
-     *
-     * @return
-     */
-    @RequestMapping(value = "/listapp", method = RequestMethod.GET)
-    @ResponseBody
-    public JsonObjectBase listapp() {
+		List<AppListVo> appListVos = appMgr.getAuthAppVoList();
 
-        List<App> appListVos = appMgr.getAppList();
+		return buildListSuccess(appListVos, appListVos.size());
+	}
 
-        return buildListSuccess(appListVos, appListVos.size());
-    }
+	/**
+	 * list
+	 *
+	 * @return
+	 */
+	@RequestMapping(value = "/listapp", method = RequestMethod.GET)
+	@ResponseBody
+	public JsonObjectBase listapp() {
 
-    /**
-     * create
-     *
-     * @return
-     */
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
-    @ResponseBody
-    public JsonObjectBase add(@Valid AppNewForm appNewForm) {
+		List<App> appListVos = appMgr.getAppList();
 
-        LOG.info(appNewForm.toString());
+		return buildListSuccess(appListVos, appListVos.size());
+	}
 
-        appValidator.validateCreate(appNewForm);
+	/**
+	 * create
+	 *
+	 * @return
+	 */
+	@RequestMapping(value = "/add", method = RequestMethod.POST)
+	@ResponseBody
+	public JsonObjectBase add(@Valid AppNewForm appNewForm) {
 
-        appMgr.create(appNewForm);
+		LOG.info(appNewForm.toString());
 
-        return buildSuccess("创建成功");
-    }
-    
-    /**
-     * delete
-     *
-     * @return
-     */
-    @RequestMapping(value = "/delete", method = RequestMethod.GET)
-    @ResponseBody
-    public JsonObjectBase delete(@RequestParam("id") Long appid) {
+		appValidator.validateCreate(appNewForm);
 
-    	//删除应用
-    	appMgr.delete(appid);
-    	
-    	//删除应用相关配置
-    	configMgr.deleteAppConfig(appid);
+		appMgr.create(appNewForm);
 
-        return buildSuccess("删除成功");
-    }
+		return buildSuccess("创建成功");
+	}
+
+	/**
+	 * delete
+	 *
+	 * @return
+	 */
+	@RequestMapping(value = "/delete", method = RequestMethod.GET)
+	@ResponseBody
+	public JsonObjectBase delete(@RequestParam("id") Long appid) {
+
+		// 删除应用
+		appMgr.delete(appid);
+
+		// 删除应用相关配置
+		configMgr.deleteAppConfig(appid);
+
+		return buildSuccess("删除成功");
+	}
 
 }

@@ -124,7 +124,7 @@ public class DisconfRemoteBizDataApi extends DisconfRemoteBaseApi {
 
 			res= EntityUtils.toString(responseEntity, "UTF-8");
 
-			log.info("\n" + domain + " getData:\n\t" + res);
+			log.info("\n" + domain + " api2Db:\n\t" + res);
 
 			EntityUtils.consume(responseEntity);
 

@@ -41,7 +41,7 @@ public class DisconfRemoteBizAreaApi extends DisconfRemoteBaseApi {
 
 			String res = EntityUtils.toString(responseEntity, "UTF-8");
 
-			log.info("\n" + domain + " addapp:\n\t" + res);
+			log.info("\n" + domain + " addArea:\n\t" + res);
 
 			EntityUtils.consume(responseEntity);
 
@@ -72,7 +72,7 @@ public class DisconfRemoteBizAreaApi extends DisconfRemoteBaseApi {
 
 			String res = EntityUtils.toString(responseEntity, "UTF-8");
 
-			log.info("\n" + domain + " delapp:\n\t" + res);
+			log.info("\n" + domain + " delArea:\n\t" + res);
 
 			EntityUtils.consume(responseEntity);
 

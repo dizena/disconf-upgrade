@@ -6,7 +6,6 @@ import com.baidu.disconf.web.service.app.form.AppNewForm;
 import com.baidu.disconf.web.service.area.bo.Area;
 import com.baidu.disconf.web.service.config.form.ConfNewForm;
 import com.baidu.disconf.web.service.config.form.ConfNewItemForm;
-import com.baidu.disconf.web.service.env.bo.Env;
 
 public interface SyncService {
 
@@ -30,14 +29,10 @@ public interface SyncService {
 
 	int updateFileWithText(long configId, String fileContent);
 
-	int delete(long configId);
+	int deleteConfig(long configId);
 
 	int notifyOne(Long configId);
 
 	int notifySome();
-
-	int addEnv(Env env);
-
-	int deleteEnv(Long id);
-
+	
 }

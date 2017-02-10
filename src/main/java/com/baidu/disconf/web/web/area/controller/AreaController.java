@@ -34,6 +34,7 @@ public class AreaController extends BaseController {
 	@ResponseBody
 	public JsonObjectBase add(Area area) {
 		areaMgr.addArea(area);
+
 		return buildSuccess("创建成功");
 	}
 
@@ -41,6 +42,7 @@ public class AreaController extends BaseController {
 	@ResponseBody
 	public JsonObjectBase delete(@RequestParam("id") Long id) {
 		areaMgr.delArea(id);
+
 		return buildSuccess("删除成功");
 	}
 
