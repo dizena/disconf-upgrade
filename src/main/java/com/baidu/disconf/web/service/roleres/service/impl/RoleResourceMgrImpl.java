@@ -68,7 +68,7 @@ public class RoleResourceMgrImpl implements RoleResourceMgr {
             updateMethodMap(value, roleRes.getRoleId(), roleRes.getMethodMask());
         }
         
-        LOG.debug("infoMap:\n\t"+infoMap);
+        LOG.info("user role res infoMap:\n\t"+infoMap);
         
         return infoMap;
     }
