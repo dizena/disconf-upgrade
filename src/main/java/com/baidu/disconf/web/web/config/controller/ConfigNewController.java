@@ -15,6 +15,7 @@ import com.baidu.disconf.core.common.constants.DisConfigTypeEnum;
 import com.baidu.disconf.web.service.config.form.ConfNewForm;
 import com.baidu.disconf.web.service.config.form.ConfNewItemForm;
 import com.baidu.disconf.web.service.config.service.ConfigMgr;
+import com.baidu.disconf.web.service.sync.service.SyncMgr;
 import com.baidu.disconf.web.web.config.validator.ConfigValidator;
 import com.baidu.disconf.web.web.config.validator.FileUploadValidator;
 import com.baidu.dsp.common.constant.WebConstants;
@@ -32,116 +33,134 @@ import com.baidu.dsp.common.vo.JsonObjectBase;
 @RequestMapping(WebConstants.API_PREFIX + "/web/config")
 public class ConfigNewController extends BaseController {
 
+	@Autowired
+	private ConfigMgr configMgr;
 
-    @Autowired
-    private ConfigMgr configMgr;
+	@Autowired
+	private ConfigValidator configValidator;
 
-    @Autowired
-    private ConfigValidator configValidator;
+	@Autowired
+	private FileUploadValidator fileUploadValidator;
 
-    @Autowired
-    private FileUploadValidator fileUploadValidator;
-    
+	@Autowired
+	private SyncMgr syncMgr;
 
-    /**
-     * 配置项的新建
-     *
-     * @param confNewForm
-     *
-     * @return
-     */
-    @RequestMapping(value = "/item", method = RequestMethod.POST)
-    @ResponseBody
-    public JsonObjectBase newItem(@Valid ConfNewItemForm confNewForm) {
+	/**
+	 * 配置项的新建
+	 *
+	 * @param confNewForm
+	 *
+	 * @return
+	 */
+	@RequestMapping(value = "/item", method = RequestMethod.POST)
+	@ResponseBody
+	public JsonObjectBase newItem(@Valid ConfNewItemForm confNewForm) {
 
-        // 业务校验
-        configValidator.validateNew(confNewForm, DisConfigTypeEnum.ITEM);
+		// 业务校验
+		configValidator.validateNew(confNewForm, DisConfigTypeEnum.ITEM);
 
-        //
-        configMgr.newConfig(confNewForm, DisConfigTypeEnum.ITEM);
-        
-        
+		//
+		configMgr.newConfig(confNewForm, DisConfigTypeEnum.ITEM);
 
-        return buildSuccess("创建成功");
-    }
+		// HTTP联动操作
+		if (getSysc()) {
+			int i = syncMgr.addItemSync(confNewForm);
+			LOG.info("sync add item " + i);
+		}
 
-    /**
-     * 配置文件的新建(使用上传配置文件)
-     *
-     * @param confNewForm
-     * @param file
-     *
-     * @return
-     */
-    @ResponseBody
-    @RequestMapping(value = "/file", method = RequestMethod.POST)
-    public JsonObjectBase updateFile(@Valid ConfNewForm confNewForm, @RequestParam("myfilerar") MultipartFile file) {
+		return buildSuccess("创建成功");
+	}
 
-        LOG.info(confNewForm.toString());
+	/**
+	 * 配置文件的新建(使用上传配置文件)
+	 *
+	 * @param confNewForm
+	 * @param file
+	 *
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/file", method = RequestMethod.POST)
+	public JsonObjectBase updateFile(@Valid ConfNewForm confNewForm, @RequestParam("myfilerar") MultipartFile file) {
 
-        //
-        // 校验
-        //
-        int fileSize = 1024 * 1024 * 4;
-        String[] allowExtName = {".properties", ".xml"};
-        fileUploadValidator.validateFile(file, fileSize, allowExtName);
+		LOG.info(confNewForm.toString());
 
-        //
-        // 更新
-        //
-        String fileContent = "";
-        try {
+		//
+		// 校验
+		//
+		int fileSize = 1024 * 1024 * 4;
+		String[] allowExtName = { ".properties", ".xml" };
+		fileUploadValidator.validateFile(file, fileSize, allowExtName);
 
-            fileContent = new String(file.getBytes(), "UTF-8");
-            LOG.info("receive file: " + fileContent);
+		//
+		// 更新
+		//
+		String fileContent = "";
+		try {
 
-        } catch (Exception e) {
+			fileContent = new String(file.getBytes(), "UTF-8");
+			LOG.info("receive file: " + fileContent);
 
-            LOG.error(e.toString());
-            throw new FileUploadException("upload file error", e);
-        }
+		} catch (Exception e) {
 
-        // 创建配置文件表格
-        ConfNewItemForm confNewItemForm = new ConfNewItemForm(confNewForm);
-        confNewItemForm.setKey(file.getOriginalFilename());
-        confNewItemForm.setValue(fileContent);
+			LOG.error(e.toString());
+			throw new FileUploadException("upload file error", e);
+		}
 
-        // 业务校验
-        configValidator.validateNew(confNewItemForm, DisConfigTypeEnum.FILE);
+		// 创建配置文件表格
+		ConfNewItemForm confNewItemForm = new ConfNewItemForm(confNewForm);
+		confNewItemForm.setKey(file.getOriginalFilename());
+		confNewItemForm.setValue(fileContent);
 
-        //
-        configMgr.newConfig(confNewItemForm, DisConfigTypeEnum.FILE);
+		// 业务校验
+		configValidator.validateNew(confNewItemForm, DisConfigTypeEnum.FILE);
 
-        return buildSuccess("创建成功");
-    }
+		//
+		configMgr.newConfig(confNewItemForm, DisConfigTypeEnum.FILE);
 
-    /**
-     * 配置文件的新建(使用文本)
-     *
-     * @param confNewForm
-     * @param fileContent
-     * @param fileName
-     *
-     * @return
-     */
-    @ResponseBody
-    @RequestMapping(value = "/filetext", method = RequestMethod.POST)
-    public JsonObjectBase updateFileWithText(@Valid ConfNewForm confNewForm, @NotNull String fileContent,
-                                             @NotNull String fileName) {
+		// HTTP联动操作
+		if (getSysc()) {
+			int i = syncMgr.updateFileSync(confNewForm, file);
+			LOG.info("sync add file " + i);
+		}
 
-        LOG.info(confNewForm.toString());
+		return buildSuccess("创建成功");
+	}
 
-        // 创建配置文件表格
-        ConfNewItemForm confNewItemForm = new ConfNewItemForm(confNewForm);
-        confNewItemForm.setKey(fileName);
-        confNewItemForm.setValue(fileContent);
+	/**
+	 * 配置文件的新建(使用文本)
+	 *
+	 * @param confNewForm
+	 * @param fileContent
+	 * @param fileName
+	 *
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/filetext", method = RequestMethod.POST)
+	public JsonObjectBase updateFileWithText(@Valid ConfNewForm confNewForm, @NotNull String fileContent,
+			@NotNull String fileName) {
 
-        // 业务校验
-        configValidator.validateNew(confNewItemForm, DisConfigTypeEnum.FILE);
+		LOG.info(confNewForm.toString());
 
-        //
-        configMgr.newConfig(confNewItemForm, DisConfigTypeEnum.FILE);
+		// 创建配置文件表格
+		ConfNewItemForm confNewItemForm = new ConfNewItemForm(confNewForm);
+		confNewItemForm.setKey(fileName);
+		confNewItemForm.setValue(fileContent);
 
-        return buildSuccess("创建成功");
-    }
+		// 业务校验
+		configValidator.validateNew(confNewItemForm, DisConfigTypeEnum.FILE);
+
+		//
+		configMgr.newConfig(confNewItemForm, DisConfigTypeEnum.FILE);
+		
+		// HTTP联动操作
+		if (getSysc()) {
+			int i = syncMgr.updateFileWithTextSync(confNewForm, fileContent, fileName);
+			LOG.info("sync add file with text " + i);
+		}
+
+
+		return buildSuccess("创建成功");
+	}
 }

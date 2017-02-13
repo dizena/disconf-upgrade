@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.baidu.disconf.web.service.area.bo.Area;
 import com.baidu.disconf.web.service.area.service.AreaMgr;
+import com.baidu.disconf.web.service.sync.service.SyncMgr;
 import com.baidu.dsp.common.constant.WebConstants;
 import com.baidu.dsp.common.controller.BaseController;
 import com.baidu.dsp.common.vo.JsonObjectBase;
@@ -21,6 +22,9 @@ public class AreaController extends BaseController {
 
 	@Autowired
 	private AreaMgr areaMgr;
+
+	@Autowired
+	private SyncMgr syncMgr;
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	@ResponseBody
@@ -35,6 +39,12 @@ public class AreaController extends BaseController {
 	public JsonObjectBase add(Area area) {
 		areaMgr.addArea(area);
 
+		// HTTP联动操作
+		if (getSysc()) {
+			int i = syncMgr.addAreaSync(area);
+			LOG.info("sync add area " + i);
+		}
+
 		return buildSuccess("创建成功");
 	}
 
@@ -42,6 +52,12 @@ public class AreaController extends BaseController {
 	@ResponseBody
 	public JsonObjectBase delete(@RequestParam("id") Long id) {
 		areaMgr.delArea(id);
+
+		// HTTP联动操作
+		if (getSysc()) {
+			int i = syncMgr.delAreaSync(id);
+			LOG.info("sync del area " + i);
+		}
 
 		return buildSuccess("删除成功");
 	}

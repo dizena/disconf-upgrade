@@ -204,4 +204,19 @@ public abstract class BaseController implements ApplicationContextAware {
 		}
 		return false;
 	}
+	
+	public boolean getSysc(){
+		Object o= getSession().getAttribute(WebConstants.SYNC_FLAG);
+		if(o==null){
+			return false;
+		}else{
+			Integer i=(Integer) o;
+			if(i==1){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	
 }

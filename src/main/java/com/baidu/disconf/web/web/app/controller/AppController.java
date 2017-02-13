@@ -16,6 +16,7 @@ import com.baidu.disconf.web.service.app.form.AppNewForm;
 import com.baidu.disconf.web.service.app.service.AppMgr;
 import com.baidu.disconf.web.service.app.vo.AppListVo;
 import com.baidu.disconf.web.service.config.service.ConfigMgr;
+import com.baidu.disconf.web.service.sync.service.SyncMgr;
 import com.baidu.disconf.web.web.app.validator.AppValidator;
 import com.baidu.dsp.common.constant.WebConstants;
 import com.baidu.dsp.common.controller.BaseController;
@@ -37,6 +38,9 @@ public class AppController extends BaseController {
 
 	@Autowired
 	private AppValidator appValidator;
+
+	@Autowired
+	private SyncMgr syncMgr;
 
 	/**
 	 * list
@@ -81,6 +85,12 @@ public class AppController extends BaseController {
 
 		appMgr.create(appNewForm);
 
+		// HTTP联动操作
+		if (getSysc()) {
+			int i = syncMgr.addAppSync(appNewForm);
+			LOG.info("sync add app " + i);
+		}
+
 		return buildSuccess("创建成功");
 	}
 
@@ -98,6 +108,12 @@ public class AppController extends BaseController {
 
 		// 删除应用相关配置
 		configMgr.deleteAppConfig(appid);
+
+		// HTTP联动操作
+		if (getSysc()) {
+			int i = syncMgr.delAppSync(appid);
+			LOG.info("sync del app " + i);
+		}
 
 		return buildSuccess("删除成功");
 	}

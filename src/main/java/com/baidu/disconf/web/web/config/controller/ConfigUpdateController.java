@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.baidu.disconf.web.service.config.bo.Config;
 import com.baidu.disconf.web.service.config.service.ConfigMgr;
+import com.baidu.disconf.web.service.sync.service.SyncMgr;
 import com.baidu.disconf.web.web.config.validator.ConfigValidator;
 import com.baidu.disconf.web.web.config.validator.FileUploadValidator;
 import com.baidu.dsp.common.constant.WebConstants;
@@ -40,6 +41,9 @@ public class ConfigUpdateController extends BaseController {
 
 	@Autowired
 	private FileUploadValidator fileUploadValidator;
+
+	@Autowired
+	private SyncMgr syncMgr;
 
 	/**
 	 * 配置项的更新
@@ -68,6 +72,12 @@ public class ConfigUpdateController extends BaseController {
 		// 通知ZK
 		//
 		configMgr.notifyZookeeper(configId);
+
+		// HTTP联动操作
+		if (getSysc()) {
+			int i = syncMgr.updateItemSync(configId, value);
+			LOG.info("sync updateItem " + i);
+		}
 
 		return buildSuccess(emailNotification);
 	}
@@ -117,6 +127,12 @@ public class ConfigUpdateController extends BaseController {
 		//
 		configMgr.notifyZookeeper(configId);
 
+		// HTTP联动操作
+		if (getSysc()) {
+			int i = syncMgr.updateFileSync(configId, file);
+			LOG.info("sync updatefile " + i);
+		}
+
 		return buildSuccess(emailNotification);
 	}
 
@@ -154,6 +170,12 @@ public class ConfigUpdateController extends BaseController {
 		//
 		configMgr.notifyZookeeper(configId);
 
+		// HTTP联动操作
+		if (getSysc()) {
+			int i = syncMgr.updateFileWithTextSync(configId, fileContent);
+			LOG.info("sync updatefileWithText " + i);
+		}
+
 		return buildSuccess(emailNotification);
 	}
 
@@ -170,6 +192,12 @@ public class ConfigUpdateController extends BaseController {
 
 		configMgr.delete(configId);
 
+		// HTTP联动操作
+		if (getSysc()) {
+			int i = syncMgr.deleteConfigSync(configId);
+			LOG.info("sync deleteConfigSync " + i);
+		}
+
 		return buildSuccess("删除成功");
 	}
 
@@ -182,6 +210,13 @@ public class ConfigUpdateController extends BaseController {
 	@ResponseBody
 	public JsonObjectBase notifyOne(@RequestParam("id") Long configId) {
 		configMgr.notifyZookeeper(configId);
+
+		// HTTP联动操作
+		if (getSysc()) {
+			int i = syncMgr.notifyOneSync(configId);
+			LOG.info("sync notifyOneSync " + i);
+		}
+
 		return buildSuccess("通知成功");
 	}
 
@@ -199,6 +234,13 @@ public class ConfigUpdateController extends BaseController {
 				configMgr.notifyZookeeper(config.getId());
 			}
 		}
+
+		// HTTP联动操作
+		if (getSysc()) {
+			int i = syncMgr.notifySomeSync();
+			LOG.info("sync notifySomeSync " + i);
+		}
+
 		return buildSuccess("通知成功");
 	}
 
