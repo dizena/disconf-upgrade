@@ -23,10 +23,11 @@ public abstract class DisconfRemoteBaseApi {
 
 	public CloseableHttpClient httpClient;
 	protected String domain;
-	private CookieStore cookieStore = new BasicCookieStore();
+	private CookieStore cookieStore;
 
 	public DisconfRemoteBaseApi(String domain) {
 		this.domain = domain;
+		cookieStore = new BasicCookieStore();
 		httpClient = HttpClients.custom().setDefaultCookieStore(cookieStore).build();
 	}
 
@@ -76,8 +77,6 @@ public abstract class DisconfRemoteBaseApi {
 			String res = EntityUtils.toString(responseEntity, "UTF-8");
 
 			log.info("\nsession:\n\t" + res);
-
-			System.out.println(res);
 
 			EntityUtils.consume(responseEntity);
 

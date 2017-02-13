@@ -1,9 +1,5 @@
-package com.baidu.wonder.other;
+package test;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,52 +16,27 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
-import com.baidu.disconf.web.service.data.bo.DataSql;
+public class TestHttp {
+	public static void main(String[] args) {
+		for (int i = 0; i < 3; i++) {
+			TestHttp http=new TestHttp("http://192.168.10.135");
+			http.session();
+			http.login("admin", "admin");
+			http.session();
+			http.applist();
+			http.signout();
+			System.out.println("----------------------------------------");
+		}
+	}
 
-public class Test {
-	CookieStore cookieStore = new BasicCookieStore();
-	CloseableHttpClient httpClient = HttpClients.custom().setDefaultCookieStore(cookieStore).build();
-	static String domain = "http://192.168.10.135";
+	protected String domain;
+	private CookieStore cookieStore;
+	public CloseableHttpClient httpClient;
 
-	public static void main(String[] args) throws Exception {
-		Test t=new Test();
-		t.session();
-		
-		t.applist();
-		
-		t.login("admin", "admin");
-		
-		t.session();
-		
-		t.applist();
-		
-		t.signout();
-		
-		DisconfRemoteBizAppApi api=new DisconfRemoteBizAppApi(domain);
-		
-		api.session();
-		
-		api.login("admin", "admin");
-		
-		api.session();
-		
-		HttpGet get = new HttpGet(domain + "/api/app/list");
-		
-		CloseableHttpResponse response = api.httpClient.execute(get);
-
-		HttpEntity responseEntity = response.getEntity();
-
-		String res = EntityUtils.toString(responseEntity, "UTF-8");
-
-		System.out.println("\nlist:\n\t" + res);
-
-		EntityUtils.consume(responseEntity);
-
-		response.close();
-		
-		api.signout();
-		
-		
+	public TestHttp(String domain) {
+		this.domain = domain;
+		cookieStore = new BasicCookieStore();
+		httpClient = HttpClients.custom().setDefaultCookieStore(cookieStore).build();
 	}
 
 	public boolean login(String name, String passwd) {
@@ -128,31 +99,6 @@ public class Test {
 		return false;
 	}
 
-	public boolean applist() {
-		try {
-			HttpGet httpGet = new HttpGet(domain + "/api/app/list");
-
-			CloseableHttpResponse response = httpClient.execute(httpGet);
-
-			HttpEntity responseEntity = response.getEntity();
-
-			String res = EntityUtils.toString(responseEntity, "UTF-8");
-
-			System.out.println("\nlist:\n\t" + res);
-
-			EntityUtils.consume(responseEntity);
-
-			response.close();
-
-			if (res.contains("true")) {
-				return true;
-			}
-		} catch (Exception e) {
-			return false;
-		}
-		return false;
-	}
-	
 	public void signout() {
 		if (session()) {
 			try {
@@ -177,6 +123,31 @@ public class Test {
 
 	}
 
+	public boolean applist() {
+		try {
+			HttpGet httpGet = new HttpGet(domain + "/api/app/list");
+
+			CloseableHttpResponse response = httpClient.execute(httpGet);
+
+			HttpEntity responseEntity = response.getEntity();
+
+			String res = EntityUtils.toString(responseEntity, "UTF-8");
+
+			System.out.println("\nlist:\n\t" + res);
+
+			EntityUtils.consume(responseEntity);
+
+			response.close();
+
+			if (res.contains("true")) {
+				return true;
+			}
+		} catch (Exception e) {
+			return false;
+		}
+		return false;
+	}
+
 	public void close() {
 		try {
 			signout();
@@ -185,32 +156,6 @@ public class Test {
 		} catch (Exception e) {
 
 		}
-	}
-
-	public static void write() throws Exception {
-		List<DataSql> list = new ArrayList<>();
-		DataSql e = new DataSql();
-		e.setInsertSql("insert into tab(id,name) values(1,'app')");
-		e.setUpdateSql("update tab set name='haha' where id=1");
-		list.add(e);
-		//
-		FileOutputStream out = new FileOutputStream("test");
-		ObjectOutputStream objout = new ObjectOutputStream(out);
-		objout.writeObject(list);
-		objout.flush();
-		objout.close();
-		out.close();
-		//
-	}
-
-	public static void read() throws Exception {
-		FileInputStream ins = new FileInputStream("test");
-		ObjectInputStream objins = new ObjectInputStream(ins);
-		Object obj = objins.readObject();
-		System.out.println("--->obj:\n\t" + obj);
-		objins.close();
-		ins.close();
-		//
 	}
 
 }
