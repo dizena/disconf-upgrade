@@ -17,6 +17,7 @@ import com.baidu.disconf.web.service.app.service.AppMgr;
 import com.baidu.disconf.web.service.app.vo.AppListVo;
 import com.baidu.disconf.web.service.config.service.ConfigMgr;
 import com.baidu.disconf.web.service.sync.service.SyncMgr;
+import com.baidu.disconf.web.utils.ThreadPools;
 import com.baidu.disconf.web.web.app.validator.AppValidator;
 import com.baidu.dsp.common.constant.WebConstants;
 import com.baidu.dsp.common.controller.BaseController;
@@ -86,10 +87,17 @@ public class AppController extends BaseController {
 		appMgr.create(appNewForm);
 
 		// HTTP联动操作
-		if (getSysc()) {
-			int i = syncMgr.addAppSync(appNewForm);
-			LOG.info("sync add app " + i);
-		}
+		final AppNewForm appNewFormT=appNewForm;
+		ThreadPools.execute(new Runnable() {
+			@Override
+			public void run() {
+				if (getSysc()) {
+					int i = syncMgr.addAppSync(appNewFormT);
+					LOG.info("sync add app " + i);
+				}
+			}
+		});
+		
 
 		return buildSuccess("创建成功");
 	}
@@ -110,10 +118,17 @@ public class AppController extends BaseController {
 		configMgr.deleteAppConfig(appid);
 
 		// HTTP联动操作
-		if (getSysc()) {
-			int i = syncMgr.delAppSync(appid);
-			LOG.info("sync del app " + i);
-		}
+		final Long appidT=appid;
+		ThreadPools.execute(new Runnable() {
+			@Override
+			public void run() {
+				if (getSysc()) {
+					int i = syncMgr.delAppSync(appidT);
+					LOG.info("sync del app " + i);
+				}
+			}
+		});
+		
 
 		return buildSuccess("删除成功");
 	}

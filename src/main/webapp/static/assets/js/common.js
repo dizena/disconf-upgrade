@@ -13,7 +13,7 @@ function headShowInit() {
         $("#username").show();
         $("#username").html(VISITOR.name);
         
-        syncget();
+        setTimeout(syncget(), 1000);
         
     } else {
         $(".login-no").show();

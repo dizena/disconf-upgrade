@@ -16,6 +16,7 @@ import com.baidu.disconf.web.service.config.form.ConfNewForm;
 import com.baidu.disconf.web.service.config.form.ConfNewItemForm;
 import com.baidu.disconf.web.service.config.service.ConfigMgr;
 import com.baidu.disconf.web.service.sync.service.SyncMgr;
+import com.baidu.disconf.web.utils.ThreadPools;
 import com.baidu.disconf.web.web.config.validator.ConfigValidator;
 import com.baidu.disconf.web.web.config.validator.FileUploadValidator;
 import com.baidu.dsp.common.constant.WebConstants;
@@ -63,10 +64,17 @@ public class ConfigNewController extends BaseController {
 		configMgr.newConfig(confNewForm, DisConfigTypeEnum.ITEM);
 
 		// HTTP联动操作
-		if (getSysc()) {
-			int i = syncMgr.addItemSync(confNewForm);
-			LOG.info("sync add item " + i);
-		}
+		final ConfNewItemForm confNewFormT =confNewForm;
+		ThreadPools.execute(new Runnable() {
+			@Override
+			public void run() {
+				if (getSysc()) {
+					int i = syncMgr.addItemSync(confNewFormT);
+					LOG.info("sync add item " + i);
+				}
+			}
+		});
+		
 
 		return buildSuccess("创建成功");
 	}
@@ -119,10 +127,18 @@ public class ConfigNewController extends BaseController {
 		configMgr.newConfig(confNewItemForm, DisConfigTypeEnum.FILE);
 
 		// HTTP联动操作
-		if (getSysc()) {
-			int i = syncMgr.updateFileSync(confNewForm, file);
-			LOG.info("sync add file " + i);
-		}
+		final ConfNewForm confNewFormT=confNewForm;
+		final MultipartFile fileT=file;
+		ThreadPools.execute(new Runnable() {
+			@Override
+			public void run() {
+				if (getSysc()) {
+					int i = syncMgr.updateFileSync(confNewFormT, fileT);
+					LOG.info("sync add file " + i);
+				}
+			}
+		});
+		
 
 		return buildSuccess("创建成功");
 	}
@@ -155,10 +171,20 @@ public class ConfigNewController extends BaseController {
 		configMgr.newConfig(confNewItemForm, DisConfigTypeEnum.FILE);
 		
 		// HTTP联动操作
-		if (getSysc()) {
-			int i = syncMgr.updateFileWithTextSync(confNewForm, fileContent, fileName);
-			LOG.info("sync add file with text " + i);
-		}
+		final ConfNewForm confNewFormT=confNewForm;
+		final String fileContentT=fileContent;
+		final String fileNameT=fileName;
+		
+		ThreadPools.execute(new Runnable() {
+			@Override
+			public void run() {
+				if (getSysc()) {
+					int i = syncMgr.updateFileWithTextSync(confNewFormT, fileContentT, fileNameT);
+					LOG.info("sync add file with text " + i);
+				}
+			}
+		});
+		
 
 
 		return buildSuccess("创建成功");

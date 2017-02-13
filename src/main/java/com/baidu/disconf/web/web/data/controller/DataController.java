@@ -55,7 +55,7 @@ public class DataController  extends BaseController {
 	
 	@RequestMapping(value = "/sync", method = RequestMethod.POST)
     @ResponseBody
-    public Object sync(@RequestParam("a") Long a,@RequestParam("") Long b) {
+    public Object sync(@RequestParam("a") Long a,@RequestParam("b") Long b) {
 		Area areaA = areaMgr.getArea(a);
 		Area areaB = areaMgr.getArea(b);
 		

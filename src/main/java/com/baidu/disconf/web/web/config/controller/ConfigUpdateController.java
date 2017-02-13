@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.baidu.disconf.web.service.config.bo.Config;
 import com.baidu.disconf.web.service.config.service.ConfigMgr;
 import com.baidu.disconf.web.service.sync.service.SyncMgr;
+import com.baidu.disconf.web.utils.ThreadPools;
 import com.baidu.disconf.web.web.config.validator.ConfigValidator;
 import com.baidu.disconf.web.web.config.validator.FileUploadValidator;
 import com.baidu.dsp.common.constant.WebConstants;
@@ -74,10 +75,18 @@ public class ConfigUpdateController extends BaseController {
 		configMgr.notifyZookeeper(configId);
 
 		// HTTP联动操作
-		if (getSysc()) {
-			int i = syncMgr.updateItemSync(configId, value);
-			LOG.info("sync updateItem " + i);
-		}
+		final  long configIdT=configId;
+		final String valueT=value;
+		ThreadPools.execute(new Runnable() {
+			@Override
+			public void run() {
+				if (getSysc()) {
+					int i = syncMgr.updateItemSync(configIdT, valueT);
+					LOG.info("sync updateItem " + i);
+				}
+			}
+		});
+		
 
 		return buildSuccess(emailNotification);
 	}
@@ -128,10 +137,18 @@ public class ConfigUpdateController extends BaseController {
 		configMgr.notifyZookeeper(configId);
 
 		// HTTP联动操作
-		if (getSysc()) {
-			int i = syncMgr.updateFileSync(configId, file);
-			LOG.info("sync updatefile " + i);
-		}
+		final long configIdT=configId;
+		final MultipartFile fileT=file;
+		ThreadPools.execute(new Runnable() {
+			@Override
+			public void run() {
+				if (getSysc()) {
+					int i = syncMgr.updateFileSync(configIdT, fileT);
+					LOG.info("sync updatefile " + i);
+				}
+			}
+		});
+		
 
 		return buildSuccess(emailNotification);
 	}
@@ -171,10 +188,19 @@ public class ConfigUpdateController extends BaseController {
 		configMgr.notifyZookeeper(configId);
 
 		// HTTP联动操作
-		if (getSysc()) {
-			int i = syncMgr.updateFileWithTextSync(configId, fileContent);
-			LOG.info("sync updatefileWithText " + i);
-		}
+		final long configIdT=configId;
+		final String fileContentT=fileContent;
+		ThreadPools.execute(new Runnable() {
+			
+			@Override
+			public void run() {
+				if (getSysc()) {
+					int i = syncMgr.updateFileWithTextSync(configIdT, fileContentT);
+					LOG.info("sync updatefileWithText " + i);
+				}
+			}
+		});
+		
 
 		return buildSuccess(emailNotification);
 	}
@@ -193,10 +219,18 @@ public class ConfigUpdateController extends BaseController {
 		configMgr.delete(configId);
 
 		// HTTP联动操作
-		if (getSysc()) {
-			int i = syncMgr.deleteConfigSync(configId);
-			LOG.info("sync deleteConfigSync " + i);
-		}
+		final long configIdT=configId;
+		ThreadPools.execute(new Runnable() {
+			
+			@Override
+			public void run() {
+				if (getSysc()) {
+					int i = syncMgr.deleteConfigSync(configIdT);
+					LOG.info("sync deleteConfigSync " + i);
+				}				
+			}
+		});
+		
 
 		return buildSuccess("删除成功");
 	}
@@ -212,10 +246,18 @@ public class ConfigUpdateController extends BaseController {
 		configMgr.notifyZookeeper(configId);
 
 		// HTTP联动操作
-		if (getSysc()) {
-			int i = syncMgr.notifyOneSync(configId);
-			LOG.info("sync notifyOneSync " + i);
-		}
+		final Long configIdT=configId;
+		ThreadPools.execute(new Runnable() {
+			
+			@Override
+			public void run() {
+				if (getSysc()) {
+					int i = syncMgr.notifyOneSync(configIdT);
+					LOG.info("sync notifyOneSync " + i);
+				}
+			}
+		});
+		
 
 		return buildSuccess("通知成功");
 	}
@@ -236,10 +278,16 @@ public class ConfigUpdateController extends BaseController {
 		}
 
 		// HTTP联动操作
-		if (getSysc()) {
-			int i = syncMgr.notifySomeSync();
-			LOG.info("sync notifySomeSync " + i);
-		}
+		ThreadPools.execute(new Runnable() {
+			@Override
+			public void run() {
+				if (getSysc()) {
+					int i = syncMgr.notifySomeSync();
+					LOG.info("sync notifySomeSync " + i);
+				}
+			}
+		});
+		
 
 		return buildSuccess("通知成功");
 	}

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.baidu.disconf.web.service.area.bo.Area;
 import com.baidu.disconf.web.service.area.service.AreaMgr;
 import com.baidu.disconf.web.service.sync.service.SyncMgr;
+import com.baidu.disconf.web.utils.ThreadPools;
 import com.baidu.dsp.common.constant.WebConstants;
 import com.baidu.dsp.common.controller.BaseController;
 import com.baidu.dsp.common.vo.JsonObjectBase;
@@ -40,10 +41,17 @@ public class AreaController extends BaseController {
 		areaMgr.addArea(area);
 
 		// HTTP联动操作
-		if (getSysc()) {
-			int i = syncMgr.addAreaSync(area);
-			LOG.info("sync add area " + i);
-		}
+		final Area areaT=area;
+		ThreadPools.execute(new Runnable() {
+			@Override
+			public void run() {
+				if (getSysc()) {
+					int i = syncMgr.addAreaSync(areaT);
+					LOG.info("sync add area " + i);
+				}
+			}
+		});
+		
 
 		return buildSuccess("创建成功");
 	}
@@ -54,10 +62,17 @@ public class AreaController extends BaseController {
 		areaMgr.delArea(id);
 
 		// HTTP联动操作
-		if (getSysc()) {
-			int i = syncMgr.delAreaSync(id);
-			LOG.info("sync del area " + i);
-		}
+		final Long idT =id;
+		ThreadPools.execute(new Runnable() {
+			@Override
+			public void run() {
+				if (getSysc()) {
+					int i = syncMgr.delAreaSync(idT);
+					LOG.info("sync del area " + i);
+				}
+			}
+		});
+		
 
 		return buildSuccess("删除成功");
 	}
