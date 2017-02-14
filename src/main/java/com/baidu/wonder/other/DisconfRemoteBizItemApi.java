@@ -53,6 +53,8 @@ public class DisconfRemoteBizItemApi extends DisconfRemoteBaseApi {
 			EntityUtils.consume(responseEntity);
 
 			response.close();
+			
+			httpPost.releaseConnection();
 
 			if (res.contains("true")) {
 				return true;
@@ -89,6 +91,8 @@ public class DisconfRemoteBizItemApi extends DisconfRemoteBaseApi {
 			EntityUtils.consume(responseEntity);
 
 			response.close();
+			
+			httpPost.releaseConnection();
 
 			if (res.contains("true")) {
 				return true;
@@ -128,6 +132,8 @@ public class DisconfRemoteBizItemApi extends DisconfRemoteBaseApi {
 			EntityUtils.consume(responseEntity);
 
 			response.close();
+			
+			httpPost.releaseConnection();
 
 			if (res.contains("true")) {
 				return true;
@@ -162,6 +168,8 @@ public class DisconfRemoteBizItemApi extends DisconfRemoteBaseApi {
 			EntityUtils.consume(responseEntity);
 
 			response.close();
+			
+			httpPut.releaseConnection();
 
 			if (res.contains("true")) {
 				return true;
@@ -198,6 +206,8 @@ public class DisconfRemoteBizItemApi extends DisconfRemoteBaseApi {
 			EntityUtils.consume(responseEntity);
 
 			response.close();
+			
+			httpPost.releaseConnection();
 
 			if (res.contains("true")) {
 				return true;
@@ -233,6 +243,8 @@ public class DisconfRemoteBizItemApi extends DisconfRemoteBaseApi {
 			EntityUtils.consume(responseEntity);
 
 			response.close();
+			
+			httpPut.releaseConnection();
 
 			if (res.contains("true")) {
 				return true;
@@ -263,6 +275,8 @@ public class DisconfRemoteBizItemApi extends DisconfRemoteBaseApi {
 			EntityUtils.consume(responseEntity);
 
 			response.close();
+			
+			http.releaseConnection();
 
 			if (res.contains("true")) {
 				return true;
@@ -293,6 +307,8 @@ public class DisconfRemoteBizItemApi extends DisconfRemoteBaseApi {
 			EntityUtils.consume(responseEntity);
 
 			response.close();
+			
+			http.releaseConnection();
 
 			if (res.contains("true")) {
 				return true;
@@ -323,6 +339,8 @@ public class DisconfRemoteBizItemApi extends DisconfRemoteBaseApi {
 			EntityUtils.consume(responseEntity);
 
 			response.close();
+			
+			http.releaseConnection();
 
 			if (res.contains("true")) {
 				return true;

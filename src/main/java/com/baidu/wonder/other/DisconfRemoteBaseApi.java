@@ -54,6 +54,8 @@ public abstract class DisconfRemoteBaseApi {
 			EntityUtils.consume(responseEntity);
 
 			response.close();
+			
+			httpPost.releaseConnection();
 
 			if (res.contains("true")) {
 				return true;
@@ -81,6 +83,8 @@ public abstract class DisconfRemoteBaseApi {
 			EntityUtils.consume(responseEntity);
 
 			response.close();
+			
+			httpGet.releaseConnection();
 
 			if (res.contains("true")) {
 				return true;
@@ -107,6 +111,8 @@ public abstract class DisconfRemoteBaseApi {
 				EntityUtils.consume(responseEntity);
 
 				response.close();
+				
+				httpGet.releaseConnection();
 
 			} catch (Exception e) {
 
@@ -118,7 +124,7 @@ public abstract class DisconfRemoteBaseApi {
 	public void close() {
 		try {
 			signout();
-
+			cookieStore.clear();
 			httpClient.close();
 		} catch (Exception e) {
 

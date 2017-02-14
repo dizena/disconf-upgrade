@@ -46,6 +46,8 @@ public class DisconfRemoteBizAreaApi extends DisconfRemoteBaseApi {
 			EntityUtils.consume(responseEntity);
 
 			response.close();
+			
+			httpPost.releaseConnection();
 
 			if (res.contains("true")) {
 				return true;
@@ -77,6 +79,8 @@ public class DisconfRemoteBizAreaApi extends DisconfRemoteBaseApi {
 			EntityUtils.consume(responseEntity);
 
 			response.close();
+			
+			httpGet.releaseConnection();
 
 			if (res.contains("true")) {
 				return true;

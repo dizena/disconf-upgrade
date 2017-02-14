@@ -65,6 +65,8 @@ public class DisconfRemoteBizDataApi extends DisconfRemoteBaseApi {
 			Data d = (Data) JsonUtils.json2Object(res, Data.class);
 
 			response.close();
+			
+			httpGet.releaseConnection();
 
 			return d;
 		} catch (Exception e) {
@@ -91,6 +93,8 @@ public class DisconfRemoteBizDataApi extends DisconfRemoteBaseApi {
 			List<DataSql> datas = (List<DataSql>) objins.readObject();
 
 			response.close();
+			
+			httpGet.releaseConnection();
 
 			return datas;
 		} catch (Exception e) {
@@ -131,6 +135,8 @@ public class DisconfRemoteBizDataApi extends DisconfRemoteBaseApi {
 			response.close();
 			bos.close();
 			instream.close();
+			
+			httpPost.releaseConnection();
 			
 
 		} catch (Exception e) {
