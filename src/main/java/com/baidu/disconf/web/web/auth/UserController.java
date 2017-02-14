@@ -141,10 +141,10 @@ public class UserController extends BaseController {
     @NoAuth
     @RequestMapping(value = "/sync", method = RequestMethod.GET)
     @ResponseBody
-    public JsonObjectBase sync(@RequestParam("flag") Integer flag) {
+    public Integer sync(@RequestParam("flag") Integer flag) {
     	getSession().setAttribute(WebConstants.SYNC_FLAG, flag);
     	LOG.info("sync flag "+getSession().getAttribute(WebConstants.SYNC_FLAG));
-    	return buildSuccess("配置成功");
+    	return flag;
     }
     
     /**

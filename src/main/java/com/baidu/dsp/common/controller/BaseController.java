@@ -172,25 +172,6 @@ public abstract class BaseController implements ApplicationContextAware {
 		return ParamValidateUtils.getParamErrors(e);
 	}
 
-	public HttpSession getSession() {
-		ServletRequestAttributes attrs = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-		return attrs.getRequest().getSession();
-	}
-
-	public void addSessionObj(String key, Object obj) {
-		String sid = getSession().getId();
-		getSession().setAttribute(sid + key, obj);
-	}
-
-	public <T> T getSessionObj(String key, Class<T> cls) {
-		String sid = getSession().getId();
-		Object obj = getSession().getAttribute(sid + key);
-		if (obj != null) {
-			return cls.cast(obj);
-		}
-		return null;
-	}
-
 	public boolean isEmpty(String str) {
 		if (isNotEmpty(str)) {
 			return false;
@@ -204,6 +185,12 @@ public abstract class BaseController implements ApplicationContextAware {
 		}
 		return false;
 	}
+	
+	public HttpSession getSession() {
+		ServletRequestAttributes attrs = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+		return attrs.getRequest().getSession();
+	}
+	
 	
 	public boolean getSysc(){
 		Object o= getSession().getAttribute(WebConstants.SYNC_FLAG);

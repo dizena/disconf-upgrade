@@ -87,17 +87,16 @@ public class AppController extends BaseController {
 		appMgr.create(appNewForm);
 
 		// HTTP联动操作
-		final AppNewForm appNewFormT=appNewForm;
-		ThreadPools.execute(new Runnable() {
-			@Override
-			public void run() {
-				if (getSysc()) {
+		if (getSysc()) {
+			final AppNewForm appNewFormT=appNewForm;
+			ThreadPools.execute(new Runnable() {
+				@Override
+				public void run() {
 					int i = syncMgr.addAppSync(appNewFormT);
 					LOG.info("sync add app " + i);
 				}
-			}
-		});
-		
+			});
+		}
 
 		return buildSuccess("创建成功");
 	}
@@ -118,16 +117,17 @@ public class AppController extends BaseController {
 		configMgr.deleteAppConfig(appid);
 
 		// HTTP联动操作
-		final Long appidT=appid;
-		ThreadPools.execute(new Runnable() {
-			@Override
-			public void run() {
-				if (getSysc()) {
+		if (getSysc()) {
+			final Long appidT=appid;
+			ThreadPools.execute(new Runnable() {
+				@Override
+				public void run() {
 					int i = syncMgr.delAppSync(appidT);
 					LOG.info("sync del app " + i);
 				}
-			}
-		});
+			});
+		}
+		
 		
 
 		return buildSuccess("删除成功");

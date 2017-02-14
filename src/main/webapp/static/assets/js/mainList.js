@@ -6,6 +6,8 @@
     var appId = -1;
     var envId = -1;
     var version = "#";
+    
+    syncget();
 
     //
     // 获取APP信息

@@ -64,17 +64,16 @@ public class ConfigNewController extends BaseController {
 		configMgr.newConfig(confNewForm, DisConfigTypeEnum.ITEM);
 
 		// HTTP联动操作
-		final ConfNewItemForm confNewFormT =confNewForm;
-		ThreadPools.execute(new Runnable() {
-			@Override
-			public void run() {
-				if (getSysc()) {
+		if (getSysc()) {
+			final ConfNewItemForm confNewFormT =confNewForm;
+			ThreadPools.execute(new Runnable() {
+				@Override
+				public void run() {
 					int i = syncMgr.addItemSync(confNewFormT);
 					LOG.info("sync add item " + i);
 				}
-			}
-		});
-		
+			});
+		}
 
 		return buildSuccess("创建成功");
 	}
@@ -127,18 +126,17 @@ public class ConfigNewController extends BaseController {
 		configMgr.newConfig(confNewItemForm, DisConfigTypeEnum.FILE);
 
 		// HTTP联动操作
-		final ConfNewForm confNewFormT=confNewForm;
-		final MultipartFile fileT=file;
-		ThreadPools.execute(new Runnable() {
-			@Override
-			public void run() {
-				if (getSysc()) {
+		if (getSysc()) {
+			final ConfNewForm confNewFormT=confNewForm;
+			final MultipartFile fileT=file;
+			ThreadPools.execute(new Runnable() {
+				@Override
+				public void run() {
 					int i = syncMgr.updateFileSync(confNewFormT, fileT);
 					LOG.info("sync add file " + i);
 				}
-			}
-		});
-		
+			});
+		}
 
 		return buildSuccess("创建成功");
 	}
@@ -171,21 +169,19 @@ public class ConfigNewController extends BaseController {
 		configMgr.newConfig(confNewItemForm, DisConfigTypeEnum.FILE);
 		
 		// HTTP联动操作
-		final ConfNewForm confNewFormT=confNewForm;
-		final String fileContentT=fileContent;
-		final String fileNameT=fileName;
-		
-		ThreadPools.execute(new Runnable() {
-			@Override
-			public void run() {
-				if (getSysc()) {
+		if (getSysc()) {
+			final ConfNewForm confNewFormT=confNewForm;
+			final String fileContentT=fileContent;
+			final String fileNameT=fileName;
+			
+			ThreadPools.execute(new Runnable() {
+				@Override
+				public void run() {
 					int i = syncMgr.updateFileWithTextSync(confNewFormT, fileContentT, fileNameT);
 					LOG.info("sync add file with text " + i);
 				}
-			}
-		});
-		
-
+			});
+		}
 
 		return buildSuccess("创建成功");
 	}

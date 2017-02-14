@@ -41,17 +41,17 @@ public class AreaController extends BaseController {
 		areaMgr.addArea(area);
 
 		// HTTP联动操作
-		final Area areaT=area;
-		ThreadPools.execute(new Runnable() {
-			@Override
-			public void run() {
-				if (getSysc()) {
+		if (getSysc()) {
+			final Area areaT=area;
+			ThreadPools.execute(new Runnable() {
+				@Override
+				public void run() {
 					int i = syncMgr.addAreaSync(areaT);
 					LOG.info("sync add area " + i);
+					
 				}
-			}
-		});
-		
+			});
+		}
 
 		return buildSuccess("创建成功");
 	}
@@ -62,17 +62,16 @@ public class AreaController extends BaseController {
 		areaMgr.delArea(id);
 
 		// HTTP联动操作
-		final Long idT =id;
-		ThreadPools.execute(new Runnable() {
-			@Override
-			public void run() {
-				if (getSysc()) {
+		if (getSysc()) {
+			final Long idT =id;
+			ThreadPools.execute(new Runnable() {
+				@Override
+				public void run() {
 					int i = syncMgr.delAreaSync(idT);
 					LOG.info("sync del area " + i);
 				}
-			}
-		});
-		
+			});
+		}
 
 		return buildSuccess("删除成功");
 	}
