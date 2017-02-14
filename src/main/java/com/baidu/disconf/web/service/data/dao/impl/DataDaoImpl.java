@@ -1,6 +1,5 @@
 package com.baidu.disconf.web.service.data.dao.impl;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -35,24 +34,14 @@ public class DataDaoImpl implements DataDao {
 
 	@Override
 	public List<String> getTabs() {
-		try {
-			return DataUtil.getTabs(jdbcTemplate.getDataSource().getConnection());
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return null;
+		return DataUtil.getTabs(jdbcTemplate);
 	}
 
 	@Override
 	public List<DataSql> getDatas(String tab) {
-		try {
-			List<TabFiled> filedNameAndClassList =DataUtil.getFileds(jdbcTemplate.getDataSource().getConnection(), tab);
-			List<DataSql> list =DataUtil.getDatas(jdbcTemplate.getDataSource().getConnection(), tab, filedNameAndClassList);
-			return list;
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return null;
+		List<TabFiled> filedNameAndClassList =DataUtil.getFileds(jdbcTemplate, tab);
+		List<DataSql> list =DataUtil.getDatas(jdbcTemplate, tab, filedNameAndClassList);
+		return list;
 	}
 
 

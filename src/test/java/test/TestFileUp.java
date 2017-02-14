@@ -17,7 +17,7 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
-public class FileUp {
+public class TestFileUp {
 	protected String domain;
 	public CloseableHttpClient httpClient = HttpClients.custom().build();
 
@@ -25,7 +25,7 @@ public class FileUp {
 
 		try {
 
-			FileUp t = new FileUp();
+			TestFileUp t = new TestFileUp();
 
 			t.domain = "http://192.168.10.130";
 
