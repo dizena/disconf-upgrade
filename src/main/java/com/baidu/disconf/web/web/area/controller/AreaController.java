@@ -47,7 +47,7 @@ public class AreaController extends BaseController {
 				@Override
 				public void run() {
 					int i = syncMgr.addAreaSync(areaT);
-					LOG.info("sync add area " + i);
+					LOG.info("not sync add area " + i);
 					
 				}
 			});
@@ -68,7 +68,7 @@ public class AreaController extends BaseController {
 				@Override
 				public void run() {
 					int i = syncMgr.delAreaSync(idT);
-					LOG.info("sync del area " + i);
+					LOG.info("not sync del area " + i);
 				}
 			});
 		}

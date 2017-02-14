@@ -82,7 +82,7 @@ public class ConfigUpdateController extends BaseController {
 				@Override
 				public void run() {
 					int i = syncMgr.updateItemSync(configIdT, valueT);
-					LOG.info("sync updateItem " + i);
+					LOG.info("not sync updateItem " + i);
 				}
 			});
 		}
@@ -143,7 +143,7 @@ public class ConfigUpdateController extends BaseController {
 				@Override
 				public void run() {
 					int i = syncMgr.updateFileSync(configIdT, fileT);
-					LOG.info("sync updatefile " + i);
+					LOG.info("not sync updatefile " + i);
 				}
 			});
 		}
@@ -194,7 +194,7 @@ public class ConfigUpdateController extends BaseController {
 				@Override
 				public void run() {
 					int i = syncMgr.updateFileWithTextSync(configIdT, fileContentT);
-					LOG.info("sync updatefileWithText " + i);
+					LOG.info("not sync updatefileWithText " + i);
 				}
 			});
 		}
@@ -223,7 +223,7 @@ public class ConfigUpdateController extends BaseController {
 				@Override
 				public void run() {
 					int i = syncMgr.deleteConfigSync(configIdT);
-					LOG.info("sync deleteConfigSync " + i);
+					LOG.info("not sync deleteConfigSync " + i);
 				}
 			});
 		}	
@@ -249,7 +249,7 @@ public class ConfigUpdateController extends BaseController {
 				@Override
 				public void run() {
 					int i = syncMgr.notifyOneSync(configIdT);
-					LOG.info("sync notifyOneSync " + i);
+					LOG.info("not sync notifyOneSync " + i);
 				}
 			});
 		}
@@ -278,7 +278,7 @@ public class ConfigUpdateController extends BaseController {
 				@Override
 				public void run() {
 					int i = syncMgr.notifySomeSync();
-					LOG.info("sync notifySomeSync " + i);
+					LOG.info("not sync notifySomeSync " + i);
 				}
 			});
 		}

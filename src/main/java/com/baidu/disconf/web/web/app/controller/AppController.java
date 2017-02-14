@@ -93,7 +93,7 @@ public class AppController extends BaseController {
 				@Override
 				public void run() {
 					int i = syncMgr.addAppSync(appNewFormT);
-					LOG.info("sync add app " + i);
+					LOG.info("not sync add app " + i);
 				}
 			});
 		}
@@ -123,7 +123,7 @@ public class AppController extends BaseController {
 				@Override
 				public void run() {
 					int i = syncMgr.delAppSync(appidT);
-					LOG.info("sync del app " + i);
+					LOG.info("not sync del app " + i);
 				}
 			});
 		}

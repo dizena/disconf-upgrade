@@ -70,7 +70,7 @@ public class ConfigNewController extends BaseController {
 				@Override
 				public void run() {
 					int i = syncMgr.addItemSync(confNewFormT);
-					LOG.info("sync add item " + i);
+					LOG.info("not sync add item " + i);
 				}
 			});
 		}
@@ -133,7 +133,7 @@ public class ConfigNewController extends BaseController {
 				@Override
 				public void run() {
 					int i = syncMgr.updateFileSync(confNewFormT, fileT);
-					LOG.info("sync add file " + i);
+					LOG.info("not sync add file " + i);
 				}
 			});
 		}
@@ -178,7 +178,7 @@ public class ConfigNewController extends BaseController {
 				@Override
 				public void run() {
 					int i = syncMgr.updateFileWithTextSync(confNewFormT, fileContentT, fileNameT);
-					LOG.info("sync add file with text " + i);
+					LOG.info("not sync add file with text " + i);
 				}
 			});
 		}
