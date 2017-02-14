@@ -5,12 +5,10 @@ import java.util.List;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.CookieStore;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
@@ -23,17 +21,15 @@ public abstract class DisconfRemoteBaseApi {
 
 	public CloseableHttpClient httpClient;
 	protected String domain;
-	private CookieStore cookieStore;
 
 	public DisconfRemoteBaseApi(String domain) {
 		this.domain = domain;
-		cookieStore = new BasicCookieStore();
-		httpClient = HttpClients.custom().setDefaultCookieStore(cookieStore).build();
+		httpClient = HttpClients.custom().build();
 	}
 
 	public boolean login(String name, String passwd) {
 		try {
-			
+
 			HttpPost httpPost = new HttpPost(domain + "/api/account/signin");
 
 			List<NameValuePair> nvps = new ArrayList<NameValuePair>();
@@ -54,7 +50,7 @@ public abstract class DisconfRemoteBaseApi {
 			EntityUtils.consume(responseEntity);
 
 			response.close();
-			
+
 			httpPost.releaseConnection();
 
 			if (res.contains("true")) {
@@ -83,7 +79,7 @@ public abstract class DisconfRemoteBaseApi {
 			EntityUtils.consume(responseEntity);
 
 			response.close();
-			
+
 			httpGet.releaseConnection();
 
 			if (res.contains("true")) {
@@ -111,7 +107,7 @@ public abstract class DisconfRemoteBaseApi {
 				EntityUtils.consume(responseEntity);
 
 				response.close();
-				
+
 				httpGet.releaseConnection();
 
 			} catch (Exception e) {
@@ -124,7 +120,6 @@ public abstract class DisconfRemoteBaseApi {
 	public void close() {
 		try {
 			signout();
-			cookieStore.clear();
 			httpClient.close();
 		} catch (Exception e) {
 

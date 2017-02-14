@@ -2,7 +2,6 @@ package com.baidu.wonder.other;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -21,35 +20,14 @@ import com.github.knightliao.apollo.utils.data.JsonUtils;
 
 public class DisconfRemoteBizDataApi extends DisconfRemoteBaseApi {
 
-	
-
-	public static void main(String[] args) throws IOException {
-		DisconfRemoteBizDataApi t = new DisconfRemoteBizDataApi("http://127.0.0.1:56789");
-		if(t.session()||t.login("admin", "admin")){
-			Data d = t.getData();
-
-			List<DataSql> datas = t.db2Api();
-			
-			t.api2Db(datas);
-			
-			t.close();
-			
-			System.out.println("data:" + d + ",datas:" + datas.size());
-		}else{
-			System.out.println("系统有问题");
-		}
-		//login:true,data:Data [areaId=1, hostport=http://127.0.0.1:56789, areaCount=2, appCount=2, envCount=4, cfgCount=3],datas:113
-	}
-	
-
 	public DisconfRemoteBizDataApi(String domain) {
 		super(domain);
 	}
 
 	public Data getData() {
 		try {
-			String url=domain + "/api/data/getCount";
-			
+			String url = domain + "/api/data/getCount";
+
 			HttpGet httpGet = new HttpGet(url);
 
 			CloseableHttpResponse response = httpClient.execute(httpGet);
@@ -65,7 +43,7 @@ public class DisconfRemoteBizDataApi extends DisconfRemoteBaseApi {
 			Data d = (Data) JsonUtils.json2Object(res, Data.class);
 
 			response.close();
-			
+
 			httpGet.releaseConnection();
 
 			return d;
@@ -78,8 +56,8 @@ public class DisconfRemoteBizDataApi extends DisconfRemoteBaseApi {
 	@SuppressWarnings("unchecked")
 	public List<DataSql> db2Api() {
 		try {
-			String url=domain + "/api/data/db2Api";
-			
+			String url = domain + "/api/data/db2Api";
+
 			HttpGet httpGet = new HttpGet(url);
 
 			CloseableHttpResponse response = httpClient.execute(httpGet);
@@ -93,7 +71,7 @@ public class DisconfRemoteBizDataApi extends DisconfRemoteBaseApi {
 			List<DataSql> datas = (List<DataSql>) objins.readObject();
 
 			response.close();
-			
+
 			httpGet.releaseConnection();
 
 			return datas;
@@ -104,7 +82,7 @@ public class DisconfRemoteBizDataApi extends DisconfRemoteBaseApi {
 	}
 
 	public boolean api2Db(List<DataSql> datas) {
-		String res =null;
+		String res = null;
 		try {
 			// 转发
 			HttpPost httpPost = new HttpPost(domain + "/api/data/api2Db");
@@ -126,7 +104,7 @@ public class DisconfRemoteBizDataApi extends DisconfRemoteBaseApi {
 
 			HttpEntity responseEntity = response.getEntity();
 
-			res= EntityUtils.toString(responseEntity, "UTF-8");
+			res = EntityUtils.toString(responseEntity, "UTF-8");
 
 			log.info("\n" + domain + " api2Db:\n\t" + res);
 
@@ -135,22 +113,21 @@ public class DisconfRemoteBizDataApi extends DisconfRemoteBaseApi {
 			response.close();
 			bos.close();
 			instream.close();
-			
+
 			httpPost.releaseConnection();
-			
 
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (res.contains("true")) {
 				return true;
-			}else{
+			} else {
 				return false;
 			}
 		}
-		
+
 		if (res.contains("true")) {
 			return true;
-		}else{
+		} else {
 			return false;
 		}
 	}

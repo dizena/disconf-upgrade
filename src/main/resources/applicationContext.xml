@@ -73,11 +73,10 @@
 
     <!-- profile -->
     <beans profile="db-test">
-        <import resource="classpath*:applicationContext-dbconfig.xml"/>
-        <bean id="loginRedisLogin" class="com.baidu.disconf.web.web.auth.login.impl.RedisLoginImplMock"/>
-        <bean id="roleResourceAspect"
-              class="com.baidu.disconf.web.service.roleres.service.RoleResourceAspectMock"/>
-        <bean id="zookeeperDriver" class="com.baidu.disconf.web.innerapi.zookeeper.impl.ZookeeperDriverMock"/>
+        <import resource="classpath*:myconfig/applicationContext-dbconfig.xml"/>
+        <bean id="loginRedisLogin" class="com.baidu.disconf.web.web.auth.login.impl.RedisLoginImpl"/>
+        <bean id="roleResourceAspect" class="com.baidu.disconf.web.service.roleres.service.RoleResourceAspect"/>
+        <bean id="zookeeperDriver" class="com.baidu.disconf.web.innerapi.zookeeper.impl.ZookeeperDriverImpl"/>
     </beans>
 
     <beans profile="db-normal">
@@ -96,10 +95,9 @@
 
     <beans profile="rd">
         <import resource="classpath*:myconfig/applicationContext-dbconfig.xml"/>
-        <bean id="loginRedisLogin" class="com.baidu.disconf.web.web.auth.login.impl.RedisLoginImplMock"/>
-        <bean id="roleResourceAspect"
-              class="com.baidu.disconf.web.service.roleres.service.RoleResourceAspectMock"/>
-        <bean id="zookeeperDriver" class="com.baidu.disconf.web.innerapi.zookeeper.impl.ZookeeperDriverMock"/>
+        <bean id="loginRedisLogin" class="com.baidu.disconf.web.web.auth.login.impl.RedisLoginImpl"/>
+        <bean id="roleResourceAspect" class="com.baidu.disconf.web.service.roleres.service.RoleResourceAspect"/>
+        <bean id="zookeeperDriver" class="com.baidu.disconf.web.innerapi.zookeeper.impl.ZookeeperDriverImpl"/>
     </beans>
 
 
