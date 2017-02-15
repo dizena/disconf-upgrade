@@ -24,6 +24,7 @@ import com.baidu.disconf.web.service.area.service.AreaMgr;
 import com.baidu.disconf.web.service.data.bo.Data;
 import com.baidu.disconf.web.service.data.bo.DataSql;
 import com.baidu.disconf.web.service.data.service.DataMgr;
+import com.baidu.disconf.web.utils.ThreadPools;
 import com.baidu.dsp.common.constant.ErrorCode;
 import com.baidu.dsp.common.constant.WebConstants;
 import com.baidu.dsp.common.controller.BaseController;
@@ -58,33 +59,46 @@ public class DataController extends BaseController {
 	@RequestMapping(value = "/sync", method = RequestMethod.POST)
 	@ResponseBody
 	public Object sync(@RequestParam("a") Long a, @RequestParam("b") Long b) {
-		Area areaA = areaMgr.getArea(a);
-		Area areaB = areaMgr.getArea(b);
+		
+		LOG.info("a="+a+",b="+b);
+		
+		final Area areaA = areaMgr.getArea(a);
+		final Area areaB = areaMgr.getArea(b);
 
-		// 取数据
-		List<DataSql> datas = null;
-		DisconfRemoteBizDataApi api1 = new DisconfRemoteBizDataApi(areaA.getHostport());
-		if (api1.session() || api1.login(areaA.getName(), areaA.getPassword())) {
-			datas = api1.db2Api();
-			api1.close();
-		}
+		//开启一个线程来处理
+		ThreadPools.execute(new Runnable() {
+			@Override
+			public void run() {
+				// 取数据
+				List<DataSql> datas = null;
+				DisconfRemoteBizDataApi api1 = new DisconfRemoteBizDataApi(areaA.getHostport());
+				if (api1.session() || api1.login(areaA.getName(), areaA.getPassword())) {
+					datas = api1.db2Api();
+					api1.close();
+				}
+				
+				LOG.info("取数据 datas "+datas.size());
 
-		// 传数据
-		DisconfRemoteBizDataApi api2 = new DisconfRemoteBizDataApi(areaB.getHostport());
-		if (api2.session() || api2.login(areaB.getName(), areaB.getPassword())) {
-			if (datas != null) {
-				api2.api2Db(datas);
+				// 传数据
+				DisconfRemoteBizDataApi api2 = new DisconfRemoteBizDataApi(areaB.getHostport());
+				if (api2.session() || api2.login(areaB.getName(), areaB.getPassword())) {
+					if (datas != null) {
+						api2.api2Db(datas);
+					}
+					api2.close();
+				}
+				
+				LOG.info("传数据 datas "+datas.size());
+
+				// 通知ZK
+				DisconfRemoteBizItemApi api3 = new DisconfRemoteBizItemApi(areaB.getHostport());
+				if (api3.session() || api3.login(areaB.getName(), areaB.getPassword())) {
+					api3.notifySome();
+					api3.close();
+				}
+				LOG.info("通知ZK "+areaB.getHostport());
 			}
-			api2.close();
-		}
-
-		// 通知ZK
-		DisconfRemoteBizItemApi api3 = new DisconfRemoteBizItemApi(areaB.getHostport());
-		if (api3.session() || api3.login(areaB.getName(), areaB.getPassword())) {
-			api3.notifySome();
-			api3.close();
-		}
-		// Long local =PropUtils.getLocalAreaId();
+		});
 
 		return 1;
 	}
@@ -144,9 +158,11 @@ public class DataController extends BaseController {
 
 			for (DataSql dataSql : datas) {
 				try {
-					dataMgr.exec(dataSql.getInsertSql());
+					int i = dataMgr.exec(dataSql.getUpdateSql());
+					if(i==0){
+						dataMgr.exec(dataSql.getInsertSql());
+					}
 				} catch (Exception e) {
-					dataMgr.exec(dataSql.getUpdateSql());
 				}
 			}
 

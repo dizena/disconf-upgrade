@@ -1,10 +1,14 @@
 package com.baidu.disconf.web.service.data.dao.impl;
 
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.StatementCallback;
 import org.springframework.stereotype.Service;
 
 import com.baidu.disconf.web.service.data.bo.DataSql;
@@ -27,9 +31,13 @@ public class DataDaoImpl implements DataDao {
 	}
 
 	@Override
-	public int exec(String sql) {
-		int i = jdbcTemplate.update(sql);
-		return i;
+	public int exec(final String sql) {
+		return jdbcTemplate.execute(new StatementCallback<Integer>() {
+			@Override
+			public Integer doInStatement(Statement stmt) throws SQLException, DataAccessException {
+				return stmt.executeUpdate(sql);
+			}
+		});
 	}
 
 	@Override

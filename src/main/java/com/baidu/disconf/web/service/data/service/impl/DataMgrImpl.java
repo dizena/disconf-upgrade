@@ -104,13 +104,19 @@ public class DataMgrImpl implements DataMgr {
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
 	public int exec(String sql) {
 		return dataDao.exec(sql);
 	}
 
 	@Override
 	public List<String> getTabs() {
-		return dataDao.getTabs();
+		//return dataDao.getTabs();
+		List<String> list=new ArrayList<>();
+		list.add("area");
+		list.add("app");
+		list.add("config");
+		return list;
 	}
 
 	@Override

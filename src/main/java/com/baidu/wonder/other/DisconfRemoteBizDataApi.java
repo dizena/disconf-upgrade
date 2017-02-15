@@ -11,7 +11,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.BasicHttpEntity;
+import org.apache.http.entity.InputStreamEntity;
 import org.apache.http.util.EntityUtils;
 
 import com.baidu.disconf.web.service.data.bo.Data;
@@ -87,8 +87,6 @@ public class DisconfRemoteBizDataApi extends DisconfRemoteBaseApi {
 			// 转发
 			HttpPost httpPost = new HttpPost(domain + "/api/data/api2Db");
 
-			BasicHttpEntity entity = new BasicHttpEntity();
-
 			ByteArrayOutputStream bos = new ByteArrayOutputStream();
 			ObjectOutputStream objout = new ObjectOutputStream(bos);
 			objout.writeObject(datas);
@@ -97,7 +95,7 @@ public class DisconfRemoteBizDataApi extends DisconfRemoteBaseApi {
 			bos.flush();
 			InputStream instream = new ByteArrayInputStream(bs);
 
-			entity.setContent(instream);
+			InputStreamEntity entity=new InputStreamEntity(instream);
 			httpPost.setEntity(entity);
 
 			CloseableHttpResponse response = httpClient.execute(httpPost);

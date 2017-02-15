@@ -15,7 +15,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.BasicHttpEntity;
+import org.apache.http.entity.InputStreamEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
@@ -24,6 +24,7 @@ import org.apache.http.util.EntityUtils;
 import com.baidu.disconf.web.service.data.bo.Data;
 import com.baidu.disconf.web.service.data.bo.DataSql;
 import com.baidu.wonder.other.DisconfRemoteBizDataApi;
+import com.baidu.wonder.other.DisconfRemoteBizItemApi;
 
 public class TestDataSync {
 
@@ -33,22 +34,37 @@ public class TestDataSync {
 	public static void main(String[] args) throws IOException {
 		try {
 			
-			TestDataSync t=new TestDataSync();
-			
-			t.domain = "http://127.0.0.1:56789";
-			
-			boolean b= t.login("admin", "admin");
-			
-			if(b){
-
-				List<DataSql>  datas =t.db2Api();
-				
-				System.out.println(datas);
-				
-				t.api2Db(datas);
+			// 取数据
+			List<DataSql> datas = null;
+			DisconfRemoteBizDataApi api1 = new DisconfRemoteBizDataApi("http://192.168.10.130");
+			if (api1.session() || api1.login("admin", "admin")) {
+				datas = api1.db2Api();
+				api1.close();
 			}
 			
-			t.httpClient.close();
+			System.out.println("取数据 datas "+datas);
+			System.out.println("\n");
+
+			// 传数据
+			DisconfRemoteBizDataApi api2 = new DisconfRemoteBizDataApi("http://127.0.0.1:56789");
+			if (api2.session() || api2.login("admin", "admin")) {
+				if (datas != null) {
+					api2.api2Db(datas);
+				}
+				api2.close();
+			}
+			
+			System.out.println("传数据 datas "+datas.size());
+			System.out.println("\n");
+
+			// 通知ZK
+			DisconfRemoteBizItemApi api3 = new DisconfRemoteBizItemApi("http://127.0.0.1:56789");
+			if (api3.session() || api3.login("admin", "admin")) {
+				api3.notifySome();
+				api3.close();
+			}
+			System.out.println("通知ZK ");
+			
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -89,8 +105,6 @@ public class TestDataSync {
 			// 转发
 			HttpPost httpPost = new HttpPost(domain + "/api/data/api2Db");
 
-			BasicHttpEntity entity = new BasicHttpEntity();
-
 			ByteArrayOutputStream bos = new ByteArrayOutputStream();
 			ObjectOutputStream objout = new ObjectOutputStream(bos);
 			objout.writeObject(datas);
@@ -99,7 +113,7 @@ public class TestDataSync {
 			bos.flush();
 			InputStream instream = new ByteArrayInputStream(bs);
 
-			entity.setContent(instream);
+			InputStreamEntity entity=new InputStreamEntity(instream);
 			httpPost.setEntity(entity);
 
 			CloseableHttpResponse response = httpClient.execute(httpPost);
@@ -191,6 +205,25 @@ public class TestDataSync {
 		}
 
 		// end
+	}
+	
+	public static void test() throws IOException{
+		TestDataSync t=new TestDataSync();
+		
+		t.domain = "http://127.0.0.1:56789";
+		
+		boolean b= t.login("admin", "admin");
+		
+		if(b){
+
+			List<DataSql>  datas =t.db2Api();
+			
+			System.out.println(datas);
+			
+			t.api2Db(datas);
+		}
+		
+		t.httpClient.close();
 	}
 
 }

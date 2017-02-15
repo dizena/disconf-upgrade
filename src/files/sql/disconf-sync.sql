@@ -1,7 +1,23 @@
+/*
+Navicat MySQL Data Transfer
 
+Source Server         : localhost_3306
+Source Server Version : 50173
+Source Host           : localhost:3306
+Source Database       : disconf
+
+Target Server Type    : MYSQL
+Target Server Version : 50173
+File Encoding         : 65001
+
+Date: 2017-02-15 09:45:43
+*/
 
 SET FOREIGN_KEY_CHECKS=0;
 
+-- ----------------------------
+-- Table structure for app
+-- ----------------------------
 DROP TABLE IF EXISTS `app`;
 CREATE TABLE `app` (
   `app_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '唯一的ID（没有啥意义，主键，自增长而已）',
@@ -11,8 +27,15 @@ CREATE TABLE `app` (
   `update_time` varchar(14) NOT NULL DEFAULT '99991231235959' COMMENT '修改时',
   `emails` varchar(255) NOT NULL DEFAULT '' COMMENT '邮箱列表逗号分隔',
   PRIMARY KEY (`app_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='app';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='app';
 
+-- ----------------------------
+-- Records of app
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for area
+-- ----------------------------
 DROP TABLE IF EXISTS `area`;
 CREATE TABLE `area` (
   `area_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '唯一的ID（没有啥意义，主键，自增长而已）',
@@ -23,8 +46,11 @@ CREATE TABLE `area` (
   PRIMARY KEY (`area_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
-INSERT INTO `area` VALUES ('1', '北京', 'http://192.168.10.130', 'admin', 'admin');
-INSERT INTO `area` VALUES ('2', '上海', 'http://192.168.10.135', 'admin', 'admin');
+-- ----------------------------
+-- Records of area
+-- ----------------------------
+INSERT INTO `area` VALUES ('1', '北京', 'http://127.0.0.1:56789', 'admin', 'admin');
+INSERT INTO `area` VALUES ('2', '上海', 'http://192.168.10.130', 'admin', 'admin');
 
 -- ----------------------------
 -- Table structure for config
@@ -42,7 +68,7 @@ CREATE TABLE `config` (
   `create_time` varchar(14) NOT NULL DEFAULT '99991231235959' COMMENT '生成时间',
   `update_time` varchar(14) NOT NULL DEFAULT '99991231235959' COMMENT '修改时间',
   PRIMARY KEY (`config_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='配置';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='配置';
 
 -- ----------------------------
 -- Records of config
@@ -60,7 +86,7 @@ CREATE TABLE `config_history` (
   `create_time` varchar(14) NOT NULL DEFAULT '99991231235959',
   `update_by` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of config_history
@@ -102,7 +128,7 @@ CREATE TABLE `role` (
 -- ----------------------------
 -- Records of role
 -- ----------------------------
-INSERT INTO `role` VALUES ('1', '管理员', '99991231235959', '2', '99991231235959', '2');
+INSERT INTO `role` VALUES ('1', '管理员', '99991231235959', '1', '99991231235959', '1');
 
 -- ----------------------------
 -- Table structure for role_resource
@@ -138,27 +164,28 @@ INSERT INTO `role_resource` VALUES ('14', '1', '/api/data/api2Db', '数据导入
 INSERT INTO `role_resource` VALUES ('15', '1', '/api/data/db2Api', '数据导出', '1000', '99991231235959');
 INSERT INTO `role_resource` VALUES ('16', '1', '/api/data/getCount', '获取数据结果', '1000', '99991231235959');
 INSERT INTO `role_resource` VALUES ('17', '1', '/api/data/list', '枚举数据', '1000', '99991231235959');
-INSERT INTO `role_resource` VALUES ('18', '1', '/api/env/add', '增加环境', '0010', '99991231235959');
-INSERT INTO `role_resource` VALUES ('19', '1', '/api/env/delete', '删除环境', '1000', '99991231235959');
-INSERT INTO `role_resource` VALUES ('20', '1', '/api/env/list', 'env-list', '1000', '99991231235959');
-INSERT INTO `role_resource` VALUES ('21', '1', '/api/web/config/download/{configId}', 'download', '1000', '99991231235959');
-INSERT INTO `role_resource` VALUES ('22', '1', '/api/web/config/downloadfilebatch', 'download', '1000', '99991231235959');
-INSERT INTO `role_resource` VALUES ('23', '1', '/api/web/config/file', '创建file-config', '0010', '99991231235959');
-INSERT INTO `role_resource` VALUES ('24', '1', '/api/web/config/file/{configId}', 'update/post', '0010', '99991231235959');
-INSERT INTO `role_resource` VALUES ('25', '1', '/api/web/config/filetext', '创建file-config', '0010', '99991231235959');
-INSERT INTO `role_resource` VALUES ('26', '1', '/api/web/config/filetext/{configId}', 'update', '0100', '99991231235959');
-INSERT INTO `role_resource` VALUES ('27', '1', '/api/web/config/item', '创建item-config', '0010', '99991231235959');
-INSERT INTO `role_resource` VALUES ('28', '1', '/api/web/config/item/{configId}', 'update', '0100', '99991231235959');
-INSERT INTO `role_resource` VALUES ('29', '1', '/api/web/config/list', 'config-list', '1000', '99991231235959');
-INSERT INTO `role_resource` VALUES ('30', '1', '/api/web/config/notifyOne', '通知一个', '1000', '99991231235959');
-INSERT INTO `role_resource` VALUES ('31', '1', '/api/web/config/notifySome', '通知多个', '1000', '99991231235959');
-INSERT INTO `role_resource` VALUES ('32', '1', '/api/web/config/simple/list', 'config-list', '1000', '99991231235959');
-INSERT INTO `role_resource` VALUES ('33', '1', '/api/web/config/versionlist', '版本list', '1000', '99991231235959');
-INSERT INTO `role_resource` VALUES ('34', '1', '/api/web/config/zk/{configId}', 'get-zk', '1000', '99991231235959');
-INSERT INTO `role_resource` VALUES ('35', '1', '/api/web/config/{configId}', 'get/post', '1001', '99991231235959');
-INSERT INTO `role_resource` VALUES ('36', '1', '/api/zoo/hosts', 'zoo', '1000', '99991231235959');
-INSERT INTO `role_resource` VALUES ('37', '1', '/api/zoo/prefix', 'zoo', '1000', '99991231235959');
-INSERT INTO `role_resource` VALUES ('38', '1', '/api/zoo/zkdeploy', 'zoo', '1000', '99991231235959');
+INSERT INTO `role_resource` VALUES ('18', '1', '/api/data/sync', '同步接口', '0010', '99991231235959');
+INSERT INTO `role_resource` VALUES ('19', '1', '/api/env/add', '增加环境', '0010', '99991231235959');
+INSERT INTO `role_resource` VALUES ('20', '1', '/api/env/delete', '删除环境', '1000', '99991231235959');
+INSERT INTO `role_resource` VALUES ('21', '1', '/api/env/list', 'env-list', '1000', '99991231235959');
+INSERT INTO `role_resource` VALUES ('22', '1', '/api/web/config/download/{configId}', 'download', '1000', '99991231235959');
+INSERT INTO `role_resource` VALUES ('23', '1', '/api/web/config/downloadfilebatch', 'download', '1000', '99991231235959');
+INSERT INTO `role_resource` VALUES ('24', '1', '/api/web/config/file', '创建file-config', '0010', '99991231235959');
+INSERT INTO `role_resource` VALUES ('25', '1', '/api/web/config/file/{configId}', 'update/post', '0010', '99991231235959');
+INSERT INTO `role_resource` VALUES ('26', '1', '/api/web/config/filetext', '创建file-config', '0010', '99991231235959');
+INSERT INTO `role_resource` VALUES ('27', '1', '/api/web/config/filetext/{configId}', 'update', '0100', '99991231235959');
+INSERT INTO `role_resource` VALUES ('28', '1', '/api/web/config/item', '创建item-config', '0010', '99991231235959');
+INSERT INTO `role_resource` VALUES ('29', '1', '/api/web/config/item/{configId}', 'update', '0100', '99991231235959');
+INSERT INTO `role_resource` VALUES ('30', '1', '/api/web/config/list', 'config-list', '1000', '99991231235959');
+INSERT INTO `role_resource` VALUES ('31', '1', '/api/web/config/notifyOne', '通知一个', '1000', '99991231235959');
+INSERT INTO `role_resource` VALUES ('32', '1', '/api/web/config/notifySome', '通知多个', '1000', '99991231235959');
+INSERT INTO `role_resource` VALUES ('33', '1', '/api/web/config/simple/list', 'config-list', '1000', '99991231235959');
+INSERT INTO `role_resource` VALUES ('34', '1', '/api/web/config/versionlist', '版本list', '1000', '99991231235959');
+INSERT INTO `role_resource` VALUES ('35', '1', '/api/web/config/zk/{configId}', 'get-zk', '1000', '99991231235959');
+INSERT INTO `role_resource` VALUES ('36', '1', '/api/web/config/{configId}', 'get/post', '1001', '99991231235959');
+INSERT INTO `role_resource` VALUES ('37', '1', '/api/zoo/hosts', 'zoo', '1000', '99991231235959');
+INSERT INTO `role_resource` VALUES ('38', '1', '/api/zoo/prefix', 'zoo', '1000', '99991231235959');
+INSERT INTO `role_resource` VALUES ('39', '1', '/api/zoo/zkdeploy', 'zoo', '1000', '99991231235959');
 
 -- ----------------------------
 -- Table structure for user
