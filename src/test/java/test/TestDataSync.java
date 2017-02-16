@@ -23,6 +23,7 @@ import org.apache.http.util.EntityUtils;
 
 import com.baidu.disconf.web.service.data.bo.Data;
 import com.baidu.disconf.web.service.data.bo.DataSql;
+import com.baidu.disconf.web.service.data.bo.DataSync;
 import com.baidu.wonder.other.DisconfRemoteBizDataApi;
 import com.baidu.wonder.other.DisconfRemoteBizItemApi;
 
@@ -33,7 +34,7 @@ public class TestDataSync {
 
 	public static void main(String[] args) throws IOException {
 		try {
-			
+
 			// 取数据
 			List<DataSql> datas = null;
 			DisconfRemoteBizDataApi api1 = new DisconfRemoteBizDataApi("http://192.168.10.130");
@@ -41,8 +42,8 @@ public class TestDataSync {
 				datas = api1.db2Api();
 				api1.close();
 			}
-			
-			System.out.println("取数据 datas "+datas);
+
+			System.out.println("取数据 datas " + datas);
 			System.out.println("\n");
 
 			// 传数据
@@ -53,8 +54,8 @@ public class TestDataSync {
 				}
 				api2.close();
 			}
-			
-			System.out.println("传数据 datas "+datas.size());
+
+			System.out.println("传数据 datas " + datas.size());
 			System.out.println("\n");
 
 			// 通知ZK
@@ -64,8 +65,7 @@ public class TestDataSync {
 				api3.close();
 			}
 			System.out.println("通知ZK ");
-			
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -98,7 +98,7 @@ public class TestDataSync {
 			return null;
 		}
 	}
-	
+
 	public boolean api2Db(List<DataSql> datas) {
 		String res = null;
 		try {
@@ -113,7 +113,84 @@ public class TestDataSync {
 			bos.flush();
 			InputStream instream = new ByteArrayInputStream(bs);
 
-			InputStreamEntity entity=new InputStreamEntity(instream);
+			InputStreamEntity entity = new InputStreamEntity(instream);
+			httpPost.setEntity(entity);
+
+			CloseableHttpResponse response = httpClient.execute(httpPost);
+
+			HttpEntity responseEntity = response.getEntity();
+
+			res = EntityUtils.toString(responseEntity, "UTF-8");
+
+			System.out.println("\n" + domain + " api2Db:\n\t" + res);
+
+			EntityUtils.consume(responseEntity);
+
+			response.close();
+			bos.close();
+			instream.close();
+
+			httpPost.releaseConnection();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (res.contains("true")) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+
+		if (res.contains("true")) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<DataSync> data2Api() {
+		try {
+			String url = domain + "/api/data/db2Api";
+
+			HttpGet httpGet = new HttpGet(url);
+
+			CloseableHttpResponse response = httpClient.execute(httpGet);
+
+			HttpEntity responseEntity = response.getEntity();
+
+			InputStream ins = responseEntity.getContent();
+
+			ObjectInputStream objins = new ObjectInputStream(ins);
+
+			List<DataSync> datas = (List<DataSync>) objins.readObject();
+
+			response.close();
+
+			httpGet.releaseConnection();
+
+			return datas;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public boolean api2Data(List<DataSync> datas) {
+		String res = null;
+		try {
+			// 转发
+			HttpPost httpPost = new HttpPost(domain + "/api/data/api2Db");
+
+			ByteArrayOutputStream bos = new ByteArrayOutputStream();
+			ObjectOutputStream objout = new ObjectOutputStream(bos);
+			objout.writeObject(datas);
+			objout.flush();
+			byte[] bs = bos.toByteArray();
+			bos.flush();
+			InputStream instream = new ByteArrayInputStream(bs);
+
+			InputStreamEntity entity = new InputStreamEntity(instream);
 			httpPost.setEntity(entity);
 
 			CloseableHttpResponse response = httpClient.execute(httpPost);
@@ -206,23 +283,23 @@ public class TestDataSync {
 
 		// end
 	}
-	
-	public static void test() throws IOException{
-		TestDataSync t=new TestDataSync();
-		
-		t.domain = "http://127.0.0.1:56789";
-		
-		boolean b= t.login("admin", "admin");
-		
-		if(b){
 
-			List<DataSql>  datas =t.db2Api();
-			
+	public static void test() throws IOException {
+		TestDataSync t = new TestDataSync();
+
+		t.domain = "http://127.0.0.1:56789";
+
+		boolean b = t.login("admin", "admin");
+
+		if (b) {
+
+			List<DataSql> datas = t.db2Api();
+
 			System.out.println(datas);
-			
+
 			t.api2Db(datas);
 		}
-		
+
 		t.httpClient.close();
 	}
 

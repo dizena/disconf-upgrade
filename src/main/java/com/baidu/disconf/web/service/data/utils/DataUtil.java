@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.baidu.disconf.web.service.data.bo.DataSql;
+import com.baidu.disconf.web.service.data.bo.DataSync;
 import com.baidu.disconf.web.service.data.bo.TabFiled;
 
 public class DataUtil {
@@ -134,5 +135,62 @@ public class DataUtil {
 		});
 
 		return list;
+	}
+
+	public static DataSync getDataSync(JdbcTemplate jdbcTemplate, String tab, final List<TabFiled> filedNameAndClassList) {
+		
+		DataSync ds=new DataSync();
+		
+		ds.setDelSql("DELETE FROM "+tab);
+		
+		
+		String dataQuerySql = "SELECT ";
+		String dataInsertSql = "INSERT INTO " + tab + "(";
+
+		for (TabFiled filed : filedNameAndClassList) {
+			dataQuerySql += filed.getColumnName() + ",";
+			dataInsertSql += filed.getColumnName() + ",";
+		}
+		dataQuerySql = dataQuerySql.substring(0, dataQuerySql.length() - 1);
+		dataInsertSql = dataInsertSql.substring(0, dataInsertSql.length() - 1);
+		dataQuerySql += " FROM " + tab;
+		dataInsertSql += ") VALUES (";
+		
+		
+		final String dataInsertSqlF = dataInsertSql;
+		
+		List<String> list = jdbcTemplate.query(dataQuerySql, new RowMapper<String>(){
+			@Override
+			public String mapRow(ResultSet res, int i) throws SQLException {
+				String dataInsertSqlDo = dataInsertSqlF;
+				int index = 1;
+				// 一行数据取出
+				for (TabFiled filed : filedNameAndClassList) {
+					String ClassName = filed.getColumnClassName();
+					
+					if (ClassName.contains("String")) {
+						dataInsertSqlDo += "'" + res.getString(index) + "',";
+					}
+					if (ClassName.contains("Long")) {
+						dataInsertSqlDo += res.getLong(index) + ",";
+					}
+					if (ClassName.contains("Integer")) {
+						dataInsertSqlDo += res.getInt(index) + ",";
+					}
+					if (ClassName.contains("Date")) {
+						dataInsertSqlDo += "'" + res.getDate(index) + "',";
+					}
+					index++;
+				}
+				dataInsertSqlDo = dataInsertSqlDo.substring(0, dataInsertSqlDo.length() - 1);
+				dataInsertSqlDo += ")";
+				return dataInsertSqlDo;
+			}
+			
+		});
+		
+		ds.setInsertSqls(list);
+
+		return ds;
 	}
 }

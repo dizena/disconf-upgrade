@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,7 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.baidu.disconf.web.service.area.bo.Area;
 import com.baidu.disconf.web.service.area.service.AreaMgr;
 import com.baidu.disconf.web.service.data.bo.Data;
-import com.baidu.disconf.web.service.data.bo.DataSql;
+import com.baidu.disconf.web.service.data.bo.DataSync;
 import com.baidu.disconf.web.service.data.service.DataMgr;
 import com.baidu.disconf.web.utils.ThreadPools;
 import com.baidu.dsp.common.constant.ErrorCode;
@@ -70,10 +69,10 @@ public class DataController extends BaseController {
 			@Override
 			public void run() {
 				// 取数据
-				List<DataSql> datas = null;
+				List<DataSync> datas = null;
 				DisconfRemoteBizDataApi api1 = new DisconfRemoteBizDataApi(areaA.getHostport());
 				if (api1.session() || api1.login(areaA.getName(), areaA.getPassword())) {
-					datas = api1.db2Api();
+					datas = api1.data2Api();
 					api1.close();
 				}
 				
@@ -83,7 +82,7 @@ public class DataController extends BaseController {
 				DisconfRemoteBizDataApi api2 = new DisconfRemoteBizDataApi(areaB.getHostport());
 				if (api2.session() || api2.login(areaB.getName(), areaB.getPassword())) {
 					if (datas != null) {
-						api2.api2Db(datas);
+						api2.api2Data(datas);
 					}
 					api2.close();
 				}
@@ -109,12 +108,8 @@ public class DataController extends BaseController {
 		ByteArrayOutputStream out = null;
 		ObjectOutputStream oos = null;
 		try {
-			List<DataSql> all = new ArrayList<>();
-			List<String> tabs = dataMgr.getTabs();
-			for (String tab : tabs) {
-				List<DataSql> datas = dataMgr.getDatas(tab);
-				all.addAll(datas);
-			}
+			
+			List<DataSync> all = dataMgr.getDataSync();
 
 			// IO
 			out = new ByteArrayOutputStream();
@@ -152,16 +147,21 @@ public class DataController extends BaseController {
 			ObjectInputStream objins = new ObjectInputStream(ins);
 			Object obj = objins.readObject();
 
-			List<DataSql> datas = (List<DataSql>) obj;
+			List<DataSync> datas = (List<DataSync>) obj;
 
 			LOG.info("api2Db:" + datas.size());
 
-			for (DataSql dataSql : datas) {
+			for (DataSync ds : datas) {
 				try {
-					int i = dataMgr.exec(dataSql.getUpdateSql());
-					if(i==0){
-						dataMgr.exec(dataSql.getInsertSql());
+					int resD=dataMgr.exec(ds.getDelSql());
+					int resI=0;
+					List<String> ss =ds.getInsertSqls();
+					if(ss!=null&&ss.size()>0){
+						for (String s : ss) {
+							resI+=dataMgr.exec(s);
+						}
 					}
+					LOG.info("del "+resD+" add "+resI);
 				} catch (Exception e) {
 				}
 			}

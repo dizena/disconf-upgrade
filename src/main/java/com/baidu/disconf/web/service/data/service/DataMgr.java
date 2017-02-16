@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.baidu.disconf.web.service.data.bo.Data;
 import com.baidu.disconf.web.service.data.bo.DataSql;
+import com.baidu.disconf.web.service.data.bo.DataSync;
 
 public interface DataMgr {
 
@@ -16,4 +17,6 @@ public interface DataMgr {
 	List<String> getTabs();
 
 	List<DataSql> getDatas(String tab);
+	
+	List<DataSync> getDataSync();
 }

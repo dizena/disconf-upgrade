@@ -16,6 +16,7 @@ import com.baidu.disconf.web.service.area.dao.AreaDao;
 import com.baidu.disconf.web.service.config.dao.ConfigDao;
 import com.baidu.disconf.web.service.data.bo.Data;
 import com.baidu.disconf.web.service.data.bo.DataSql;
+import com.baidu.disconf.web.service.data.bo.DataSync;
 import com.baidu.disconf.web.service.data.dao.DataDao;
 import com.baidu.disconf.web.service.data.service.DataMgr;
 import com.baidu.disconf.web.service.env.dao.EnvDao;
@@ -122,6 +123,16 @@ public class DataMgrImpl implements DataMgr {
 	@Override
 	public List<DataSql> getDatas(String tab) {
 		return dataDao.getDatas(tab);
+	}
+
+	@Override
+	public List<DataSync> getDataSync() {
+		List<DataSync> dss=new ArrayList<>();
+		List<String> tabs= getTabs();
+		for (String tab : tabs) {
+			dss.add(dataDao.getDataSync(tab));
+		}
+		return dss;
 	}
 
 }

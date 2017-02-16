@@ -12,6 +12,7 @@ import org.springframework.jdbc.core.StatementCallback;
 import org.springframework.stereotype.Service;
 
 import com.baidu.disconf.web.service.data.bo.DataSql;
+import com.baidu.disconf.web.service.data.bo.DataSync;
 import com.baidu.disconf.web.service.data.bo.TabFiled;
 import com.baidu.disconf.web.service.data.dao.DataDao;
 import com.baidu.disconf.web.service.data.utils.DataUtil;
@@ -50,6 +51,12 @@ public class DataDaoImpl implements DataDao {
 		List<TabFiled> filedNameAndClassList =DataUtil.getFileds(jdbcTemplate, tab);
 		List<DataSql> list =DataUtil.getDatas(jdbcTemplate, tab, filedNameAndClassList);
 		return list;
+	}
+
+	@Override
+	public DataSync getDataSync(String tab) {
+		List<TabFiled> filedNameAndClassList =DataUtil.getFileds(jdbcTemplate, tab);
+		return DataUtil.getDataSync(jdbcTemplate, tab, filedNameAndClassList);
 	}
 
 

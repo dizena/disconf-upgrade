@@ -6,7 +6,13 @@
     //
     // 获取Area信息
     //
-    $.ajax({
+    getDatas();
+    
+    
+})(jQuery);
+
+function getDatas(){
+	$.ajax({
         type: "GET",
         url: "/api/data/list"
     }).done(function (data) {
@@ -27,5 +33,4 @@
             $("#dataBody").html(html);   
         }
     });
-    
-})(jQuery);
+}

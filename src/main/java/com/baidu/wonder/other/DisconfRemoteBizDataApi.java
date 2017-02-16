@@ -16,6 +16,7 @@ import org.apache.http.util.EntityUtils;
 
 import com.baidu.disconf.web.service.data.bo.Data;
 import com.baidu.disconf.web.service.data.bo.DataSql;
+import com.baidu.disconf.web.service.data.bo.DataSync;
 import com.github.knightliao.apollo.utils.data.JsonUtils;
 
 public class DisconfRemoteBizDataApi extends DisconfRemoteBaseApi {
@@ -82,6 +83,83 @@ public class DisconfRemoteBizDataApi extends DisconfRemoteBaseApi {
 	}
 
 	public boolean api2Db(List<DataSql> datas) {
+		String res = null;
+		try {
+			// 转发
+			HttpPost httpPost = new HttpPost(domain + "/api/data/api2Db");
+
+			ByteArrayOutputStream bos = new ByteArrayOutputStream();
+			ObjectOutputStream objout = new ObjectOutputStream(bos);
+			objout.writeObject(datas);
+			objout.flush();
+			byte[] bs = bos.toByteArray();
+			bos.flush();
+			InputStream instream = new ByteArrayInputStream(bs);
+
+			InputStreamEntity entity=new InputStreamEntity(instream);
+			httpPost.setEntity(entity);
+
+			CloseableHttpResponse response = httpClient.execute(httpPost);
+
+			HttpEntity responseEntity = response.getEntity();
+
+			res = EntityUtils.toString(responseEntity, "UTF-8");
+
+			log.info("\n" + domain + " api2Db:\n\t" + res);
+
+			EntityUtils.consume(responseEntity);
+
+			response.close();
+			bos.close();
+			instream.close();
+
+			httpPost.releaseConnection();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (res.contains("true")) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+
+		if (res.contains("true")) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<DataSync> data2Api() {
+		try {
+			String url = domain + "/api/data/db2Api";
+
+			HttpGet httpGet = new HttpGet(url);
+
+			CloseableHttpResponse response = httpClient.execute(httpGet);
+
+			HttpEntity responseEntity = response.getEntity();
+
+			InputStream ins = responseEntity.getContent();
+
+			ObjectInputStream objins = new ObjectInputStream(ins);
+
+			List<DataSync> datas = (List<DataSync>) objins.readObject();
+
+			response.close();
+
+			httpGet.releaseConnection();
+
+			return datas;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public boolean api2Data(List<DataSync> datas) {
 		String res = null;
 		try {
 			// 转发
