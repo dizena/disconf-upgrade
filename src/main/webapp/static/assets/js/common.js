@@ -42,6 +42,7 @@ function getSession() {
         if (data.success === "true") {
             window.VISITOR = data.message.visitor;
             headShowInit();
+            showLocal();
         } else {
         	window.location.href = "/login";
         }
@@ -84,4 +85,12 @@ function syncset(){
 	$.get("/api/account/sync?flag="+flag,function (data) {
        
     });
+}
+
+//显示区域信息
+function showLocal(){
+	$.get("/api/area/local",function(data){
+		$("#showlocal").text("深思云配置中心  区域 "+data);
+	});
+	
 }

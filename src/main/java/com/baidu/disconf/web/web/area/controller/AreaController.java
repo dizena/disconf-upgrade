@@ -13,9 +13,11 @@ import com.baidu.disconf.web.service.area.bo.Area;
 import com.baidu.disconf.web.service.area.service.AreaMgr;
 import com.baidu.disconf.web.service.sync.service.SyncMgr;
 import com.baidu.disconf.web.utils.ThreadPools;
+import com.baidu.dsp.common.annotation.NoAuth;
 import com.baidu.dsp.common.constant.WebConstants;
 import com.baidu.dsp.common.controller.BaseController;
 import com.baidu.dsp.common.vo.JsonObjectBase;
+import com.baidu.wonder.other.PropUtils;
 
 @Controller
 @RequestMapping(WebConstants.API_PREFIX + "/area")
@@ -75,5 +77,20 @@ public class AreaController extends BaseController {
 
 		return buildSuccess("删除成功");
 	}
+	
+	/**
+     * GET 获取
+     *
+     * @param
+     *
+     * @return
+     */
+    @NoAuth
+    @RequestMapping(value = "/local", method = RequestMethod.GET)
+    @ResponseBody
+    public Object local() {
+    	Long areaId= PropUtils.getLocalAreaId();
+    	return areaId;
+    }
 
 }

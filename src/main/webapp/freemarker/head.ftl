@@ -25,7 +25,7 @@
                     </button>
                     <div class="nav-collapse collapse">
 
-                        <a id="brand_url" href="/main" class="brand" style="margin-left:0px;padding:8px;"> <span class="zu-top-nav-link">深思云配置中心</span> </a>
+                        <a id="brand_url" href="/main" class="brand" style="margin-left:0px;padding:8px;"> <span class="zu-top-nav-link" id="showlocal">深思云配置中心</span> </a>
                         
                         <ul class="nav pull-right" >
                             
