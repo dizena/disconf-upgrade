@@ -89,9 +89,9 @@ public class ConfigNewController extends BaseController {
 	@ResponseBody
 	@RequestMapping(value = "/file", method = RequestMethod.POST)
 	public JsonObjectBase updateFile(@Valid ConfNewForm confNewForm, @RequestParam("myfilerar") MultipartFile file) {
-
-		LOG.info(confNewForm.toString());
-
+		
+		
+		
 		//
 		// 校验
 		//
@@ -103,11 +103,14 @@ public class ConfigNewController extends BaseController {
 		// 更新
 		//
 		String fileContent = "";
+		byte[] bs=null;
+		String name="";
 		try {
-
-			fileContent = new String(file.getBytes(), "UTF-8");
+			bs=file.getBytes();
+			name=file.getOriginalFilename();
+			fileContent = new String(bs, "UTF-8");
 			LOG.info("receive file: " + fileContent);
-
+			
 		} catch (Exception e) {
 
 			LOG.error(e.toString());
@@ -128,11 +131,12 @@ public class ConfigNewController extends BaseController {
 		// HTTP联动操作
 		if (getSysc()) {
 			final ConfNewForm confNewFormT=confNewForm;
-			final MultipartFile fileT=file;
+			final byte[] bsT=bs;
+			final String nameT=name;
 			ThreadPools.execute(new Runnable() {
 				@Override
 				public void run() {
-					int i = syncMgr.updateFileSync(confNewFormT, fileT);
+					int i = syncMgr.updateFileSync(confNewFormT, bsT,nameT);
 					LOG.info("not sync add file " + i);
 				}
 			});

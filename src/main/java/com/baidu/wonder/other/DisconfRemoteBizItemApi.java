@@ -1,6 +1,5 @@
 package com.baidu.wonder.other;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,10 +10,9 @@ import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.message.BasicNameValuePair;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.baidu.disconf.web.service.config.form.ConfNewForm;
 import com.baidu.disconf.web.service.config.form.ConfNewItemForm;
@@ -55,67 +53,6 @@ public class DisconfRemoteBizItemApi extends DisconfRemoteBaseApi {
 		return false;
 	}
 
-	public boolean updateFile(ConfNewForm confNewForm, MultipartFile file) {
-		try {
-			String url = domain + "/api/web/config/file";
-
-			HttpPost httpPost = new HttpPost(url);
-			
-			File f=new File(file.getName());
-			
-			file.transferTo(f);
-
-			HttpEntity httpEntity = MultipartEntityBuilder.create()
-					.addPart("myfilerar", new FileBody(f))
-					.addTextBody("appId", confNewForm.getAppId() + "")
-					.addTextBody("version", confNewForm.getVersion())
-					.addTextBody("envId", confNewForm.getEnvId() + "")
-					.build();
-
-			httpPost.setEntity(httpEntity);
-
-			String res = execute(httpPost);
-
-			if (res.contains("true")) {
-				return true;
-			} else {
-				log.error("error sync " + url + " with data " + JsonUtils.toJson(confNewForm));
-			}
-		} catch (Exception e) {
-			return false;
-		}
-
-		return false;
-	}
-
-	public boolean updateFileWithText(ConfNewForm confNewForm, String fileContent, String fileName) {
-		try {
-			String url = domain + "/api/web/config/filetext";
-
-			HttpPost httpPost = new HttpPost(url);
-
-			List<NameValuePair> nvps = new ArrayList<NameValuePair>();
-			nvps.add(new BasicNameValuePair("appId", confNewForm.getAppId() + ""));
-			nvps.add(new BasicNameValuePair("version", confNewForm.getVersion()));
-			nvps.add(new BasicNameValuePair("fileContent", fileContent));
-			nvps.add(new BasicNameValuePair("envId", confNewForm.getEnvId() + ""));
-			nvps.add(new BasicNameValuePair("fileName", fileName));
-
-			httpPost.setEntity(new UrlEncodedFormEntity(nvps,"UTF-8"));
-			String res =execute(httpPost);
-			
-			if (res.contains("true")) {
-				return true;
-			} else {
-				log.error("error sync " + url + " with data " + JsonUtils.toJson(confNewForm));
-			}
-		} catch (Exception e) {
-			return false;
-		}
-
-		return false;
-	}
-
 	public boolean updateItem(long configId, String value) {
 		try {
 			String url = domain + "/api/web/config/item/" + configId;
@@ -140,29 +77,75 @@ public class DisconfRemoteBizItemApi extends DisconfRemoteBaseApi {
 
 		return false;
 	}
+	
+	public boolean updateFile(ConfNewForm confNewForm, byte[] bs,String name) {
+		String url = domain + "/api/web/config/file";
 
-	public boolean updateFile(long configId, MultipartFile file) {
+		HttpPost httpPost = new HttpPost(url);
+		
+		HttpEntity httpEntity = MultipartEntityBuilder.create()
+				.addBinaryBody("myfilerar",bs,ContentType.MULTIPART_FORM_DATA,name)
+				.addTextBody("appId", confNewForm.getAppId() + "")
+				.addTextBody("version", confNewForm.getVersion())
+				.addTextBody("envId", confNewForm.getEnvId() + "")
+				.build();
+
+		httpPost.setEntity(httpEntity);
+
+		String res = execute(httpPost);
+
+		if (res.contains("true")) {
+			return true;
+		} else {
+			log.error("error sync " + url + " with data " + JsonUtils.toJson(confNewForm)+" \n"+new String(bs));
+		}
+
+		return false;
+	}
+
+	public boolean updateFile(long configId, byte[] bs,String name) {
+		String url = domain + "/api/web/config/file/" + configId;
+
+		HttpPost httpPost = new HttpPost(url);
+
+
+		HttpEntity httpEntity = MultipartEntityBuilder.create()
+				.addBinaryBody("myfilerar",bs,ContentType.MULTIPART_FORM_DATA,name)
+				.build();
+
+		httpPost.setEntity(httpEntity);
+
+		String res = execute(httpPost);
+
+		if (res.contains("true")) {
+			return true;
+		} else {
+			log.error("error sync " + url + " with data " + JsonUtils.toJson(configId));
+		}
+
+		return false;
+	}
+	
+	public boolean updateFileWithText(ConfNewForm confNewForm, String fileContent, String fileName) {
 		try {
-			String url = domain + "/api/web/config/file/" + configId;
+			String url = domain + "/api/web/config/filetext";
 
 			HttpPost httpPost = new HttpPost(url);
 
-			File f=new File(file.getName());
+			List<NameValuePair> nvps = new ArrayList<NameValuePair>();
+			nvps.add(new BasicNameValuePair("appId", confNewForm.getAppId() + ""));
+			nvps.add(new BasicNameValuePair("version", confNewForm.getVersion()));
+			nvps.add(new BasicNameValuePair("fileContent", fileContent));
+			nvps.add(new BasicNameValuePair("envId", confNewForm.getEnvId() + ""));
+			nvps.add(new BasicNameValuePair("fileName", fileName));
+
+			httpPost.setEntity(new UrlEncodedFormEntity(nvps,"UTF-8"));
+			String res =execute(httpPost);
 			
-			file.transferTo(f);
-
-			HttpEntity httpEntity = MultipartEntityBuilder.create()
-					.addPart("myfilerar", new FileBody(f))
-					.build();
-
-			httpPost.setEntity(httpEntity);
-
-			String res = execute(httpPost);
-
 			if (res.contains("true")) {
 				return true;
 			} else {
-				log.error("error sync " + url + " with data " + JsonUtils.toJson(configId));
+				log.error("error sync " + url + " with data " + JsonUtils.toJson(confNewForm));
 			}
 		} catch (Exception e) {
 			return false;

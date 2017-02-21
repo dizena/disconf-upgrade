@@ -79,12 +79,12 @@ public abstract class DisconfRemoteBaseApi {
 	public String execute(HttpRequestBase httpRequest) {
 		CloseableHttpResponse response = null;
 		try {
-			httpRequest.setHeader("Accept", "*/*"); 
-			httpRequest.setHeader("Accept-Encoding", "gzip, deflate"); 
-			httpRequest.setHeader("Accept-Language", "zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3");
-			httpRequest.setHeader("Connection", "keep-alive");
-			httpRequest.addHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
-			httpRequest.setHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:51.0) Gecko/20100101 Firefox/51.0");    
+			//httpRequest.setHeader("Accept", "*/*"); 
+			//httpRequest.setHeader("Accept-Encoding", "gzip, deflate"); 
+			//httpRequest.setHeader("Accept-Language", "zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3");
+			//httpRequest.setHeader("Connection", "keep-alive");
+			//httpRequest.addHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
+			//httpRequest.setHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:51.0) Gecko/20100101 Firefox/51.0");    
 			
 			response = httpClient.execute(httpRequest);
 

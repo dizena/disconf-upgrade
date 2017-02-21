@@ -93,7 +93,7 @@
                                     <span id="error_rar" class="text-error error_rar"></span>
 
                                     <div style="color: #999;">
-                                        	支持任意类型配置文件(.properties文件可支持自动注入,非.properties文件则只是简单托管)
+                                        	支持任意类型UTF8编码的配置文件(.properties文件可支持自动注入,非.properties文件则只是简单托管)
                                         <span id="status_rar" class="text-success"></span>
                                     </div>
                                     <div class="progress_rar">

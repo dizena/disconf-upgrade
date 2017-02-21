@@ -1,7 +1,5 @@
 package com.baidu.disconf.web.service.sync.service;
 
-import org.springframework.web.multipart.MultipartFile;
-
 import com.baidu.disconf.web.service.app.form.AppNewForm;
 import com.baidu.disconf.web.service.area.bo.Area;
 import com.baidu.disconf.web.service.config.form.ConfNewForm;
@@ -19,13 +17,13 @@ public interface SyncMgr {
 
 	int addItemSync(ConfNewItemForm confNewForm);
 
-	int updateFileSync(ConfNewForm confNewForm, MultipartFile file);
+	int updateFileSync(ConfNewForm confNewForm, byte[] bs,String name);
 
 	int updateFileWithTextSync(ConfNewForm confNewForm, String fileContent, String fileName);
 
 	int updateItemSync(long configId, String value);
 
-	int updateFileSync(long configId, MultipartFile file);
+	int updateFileSync(long configId, byte[] bs,String name);
 
 	int updateFileWithTextSync(long configId, String fileContent);
 

@@ -76,8 +76,8 @@ public class ConfigUpdateController extends BaseController {
 
 		// HTTP联动操作
 		if (getSysc()) {
-			final  long configIdT=configId;
-			final String valueT=value;
+			final long configIdT = configId;
+			final String valueT = value;
 			ThreadPools.execute(new Runnable() {
 				@Override
 				public void run() {
@@ -116,12 +116,16 @@ public class ConfigUpdateController extends BaseController {
 		// 更新
 		//
 		String emailNotification = "";
+		byte[] bs = null;
+		String name="";
 		try {
-
-			String str = new String(file.getBytes(), "UTF-8");
+			bs = file.getBytes();
+			name=file.getOriginalFilename();
+			String str = new String(bs, "UTF-8");
 			LOG.info("receive file: " + str);
 
 			emailNotification = configMgr.updateItemValue(configId, str);
+
 			LOG.info("update " + configId + " ok");
 
 		} catch (Exception e) {
@@ -137,12 +141,13 @@ public class ConfigUpdateController extends BaseController {
 
 		// HTTP联动操作
 		if (getSysc()) {
-			final long configIdT=configId;
-			final MultipartFile fileT=file;
+			final long configIdT = configId;
+			final byte[] bsT = bs;
+			final String nameT=name;
 			ThreadPools.execute(new Runnable() {
 				@Override
 				public void run() {
-					int i = syncMgr.updateFileSync(configIdT, fileT);
+					int i = syncMgr.updateFileSync(configIdT, bsT,nameT);
 					LOG.info("not sync updatefile " + i);
 				}
 			});
@@ -185,14 +190,14 @@ public class ConfigUpdateController extends BaseController {
 
 		// HTTP联动操作
 		if (getSysc()) {
-			final long configIdT=configId;
-			final String fileContentT=fileContent;
+			final long configIdT = configId;
+			final String fileContentT = fileContent;
 			ThreadPools.execute(new Runnable() {
-				
+
 				@Override
 				public void run() {
 					int i = syncMgr.updateFileWithTextSync(configIdT, fileContentT);
-					LOG.info("not sync updatefileWithText:" + i+","+fileContentT);
+					LOG.info("not sync updatefileWithText:" + i + "," + fileContentT);
 				}
 			});
 		}
@@ -215,16 +220,16 @@ public class ConfigUpdateController extends BaseController {
 
 		// HTTP联动操作
 		if (getSysc()) {
-			final long configIdT=configId;
+			final long configIdT = configId;
 			ThreadPools.execute(new Runnable() {
-				
+
 				@Override
 				public void run() {
 					int i = syncMgr.deleteConfigSync(configIdT);
 					LOG.info("not sync deleteConfigSync " + i);
 				}
 			});
-		}	
+		}
 
 		return buildSuccess("删除成功");
 	}
@@ -241,9 +246,9 @@ public class ConfigUpdateController extends BaseController {
 
 		// HTTP联动操作
 		if (getSysc()) {
-			final Long configIdT=configId;
+			final Long configIdT = configId;
 			ThreadPools.execute(new Runnable() {
-				
+
 				@Override
 				public void run() {
 					int i = syncMgr.notifyOneSync(configIdT);
