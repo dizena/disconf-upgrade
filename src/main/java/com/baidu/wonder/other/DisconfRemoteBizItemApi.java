@@ -7,7 +7,6 @@ import java.util.List;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -15,7 +14,6 @@ import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.baidu.disconf.web.service.config.form.ConfNewForm;
@@ -39,23 +37,11 @@ public class DisconfRemoteBizItemApi extends DisconfRemoteBaseApi {
 			nvps.add(new BasicNameValuePair("version", confNewForm.getVersion()));
 			nvps.add(new BasicNameValuePair("key", confNewForm.getKey()));
 			nvps.add(new BasicNameValuePair("envId", confNewForm.getEnvId() + ""));
-			nvps.add(new BasicNameValuePair("value", confNewForm.getValue()));
+			nvps.add(new BasicNameValuePair("value", new String(confNewForm.getValue().getBytes("UTF-8"))));
 
-			httpPost.setEntity(new UrlEncodedFormEntity(nvps));
+			httpPost.setEntity(new UrlEncodedFormEntity(nvps,"UTF-8"));
 
-			CloseableHttpResponse response = httpClient.execute(httpPost);
-
-			HttpEntity responseEntity = response.getEntity();
-
-			String res = EntityUtils.toString(responseEntity, "UTF-8");
-
-			log.info("\n" + domain + " addItem:\n\t" + res);
-
-			EntityUtils.consume(responseEntity);
-
-			response.close();
-
-			httpPost.releaseConnection();
+			String res =execute(httpPost);
 
 			if (res.contains("true")) {
 				return true;
@@ -88,19 +74,7 @@ public class DisconfRemoteBizItemApi extends DisconfRemoteBaseApi {
 
 			httpPost.setEntity(httpEntity);
 
-			CloseableHttpResponse response = httpClient.execute(httpPost);
-
-			HttpEntity responseEntity = response.getEntity();
-
-			String res = EntityUtils.toString(responseEntity, "UTF-8");
-
-			log.info("\n" + domain + " updateFile:\n\t" + res);
-
-			EntityUtils.consume(responseEntity);
-
-			response.close();
-
-			httpPost.releaseConnection();
+			String res = execute(httpPost);
 
 			if (res.contains("true")) {
 				return true;
@@ -127,22 +101,9 @@ public class DisconfRemoteBizItemApi extends DisconfRemoteBaseApi {
 			nvps.add(new BasicNameValuePair("envId", confNewForm.getEnvId() + ""));
 			nvps.add(new BasicNameValuePair("fileName", fileName));
 
-			httpPost.setEntity(new UrlEncodedFormEntity(nvps));
-
-			CloseableHttpResponse response = httpClient.execute(httpPost);
-
-			HttpEntity responseEntity = response.getEntity();
-
-			String res = EntityUtils.toString(responseEntity, "UTF-8");
-
-			log.info("\n" + domain + " updateFileWithText:\n\t" + res);
-
-			EntityUtils.consume(responseEntity);
-
-			response.close();
-
-			httpPost.releaseConnection();
-
+			httpPost.setEntity(new UrlEncodedFormEntity(nvps,"UTF-8"));
+			String res =execute(httpPost);
+			
 			if (res.contains("true")) {
 				return true;
 			} else {
@@ -164,21 +125,9 @@ public class DisconfRemoteBizItemApi extends DisconfRemoteBaseApi {
 			List<NameValuePair> nvps = new ArrayList<NameValuePair>();
 			nvps.add(new BasicNameValuePair("value", value));
 
-			httpPut.setEntity(new UrlEncodedFormEntity(nvps));
+			httpPut.setEntity(new UrlEncodedFormEntity(nvps,"UTF-8"));
 
-			CloseableHttpResponse response = httpClient.execute(httpPut);
-
-			HttpEntity responseEntity = response.getEntity();
-
-			String res = EntityUtils.toString(responseEntity, "UTF-8");
-
-			log.info("\n" + domain + " updateItem:\n\t" + res);
-
-			EntityUtils.consume(responseEntity);
-
-			response.close();
-
-			httpPut.releaseConnection();
+			String res =execute(httpPut);
 
 			if (res.contains("true")) {
 				return true;
@@ -208,19 +157,7 @@ public class DisconfRemoteBizItemApi extends DisconfRemoteBaseApi {
 
 			httpPost.setEntity(httpEntity);
 
-			CloseableHttpResponse response = httpClient.execute(httpPost);
-
-			HttpEntity responseEntity = response.getEntity();
-
-			String res = EntityUtils.toString(responseEntity, "UTF-8");
-
-			log.info("\n" + domain + " updateFile:\n\t" + res);
-
-			EntityUtils.consume(responseEntity);
-
-			response.close();
-
-			httpPost.releaseConnection();
+			String res = execute(httpPost);
 
 			if (res.contains("true")) {
 				return true;
@@ -243,21 +180,9 @@ public class DisconfRemoteBizItemApi extends DisconfRemoteBaseApi {
 			List<NameValuePair> nvps = new ArrayList<NameValuePair>();
 			nvps.add(new BasicNameValuePair("fileContent", fileContent));
 
-			httpPut.setEntity(new UrlEncodedFormEntity(nvps));
+			httpPut.setEntity(new UrlEncodedFormEntity(nvps,"UTF-8"));
 
-			CloseableHttpResponse response = httpClient.execute(httpPut);
-
-			HttpEntity responseEntity = response.getEntity();
-
-			String res = EntityUtils.toString(responseEntity, "UTF-8");
-
-			log.info("\n" + domain + " updateFileWithText:\n\t" + res);
-
-			EntityUtils.consume(responseEntity);
-
-			response.close();
-
-			httpPut.releaseConnection();
+			String res = execute(httpPut);
 
 			if (res.contains("true")) {
 				return true;
@@ -277,19 +202,7 @@ public class DisconfRemoteBizItemApi extends DisconfRemoteBaseApi {
 
 			HttpDelete http = new HttpDelete(url);
 
-			CloseableHttpResponse response = httpClient.execute(http);
-
-			HttpEntity responseEntity = response.getEntity();
-
-			String res = EntityUtils.toString(responseEntity, "UTF-8");
-
-			log.info("\n" + domain + " deleteConfig:\n\t" + res);
-
-			EntityUtils.consume(responseEntity);
-
-			response.close();
-
-			http.releaseConnection();
+			String res = execute(http);
 
 			if (res.contains("true")) {
 				return true;
@@ -309,19 +222,7 @@ public class DisconfRemoteBizItemApi extends DisconfRemoteBaseApi {
 
 			HttpGet http = new HttpGet(url);
 
-			CloseableHttpResponse response = httpClient.execute(http);
-
-			HttpEntity responseEntity = response.getEntity();
-
-			String res = EntityUtils.toString(responseEntity, "UTF-8");
-
-			log.info("\n" + domain + " notifyOne:\n\t" + res);
-
-			EntityUtils.consume(responseEntity);
-
-			response.close();
-
-			http.releaseConnection();
+			String res = execute(http);
 
 			if (res.contains("true")) {
 				return true;
@@ -341,19 +242,7 @@ public class DisconfRemoteBizItemApi extends DisconfRemoteBaseApi {
 
 			HttpGet http = new HttpGet(url);
 
-			CloseableHttpResponse response = httpClient.execute(http);
-
-			HttpEntity responseEntity = response.getEntity();
-
-			String res = EntityUtils.toString(responseEntity, "UTF-8");
-
-			log.info("\n" + domain + " notifySome:\n\t" + res);
-
-			EntityUtils.consume(responseEntity);
-
-			response.close();
-
-			http.releaseConnection();
+			String res = execute(http);
 
 			if (res.contains("true")) {
 				return true;

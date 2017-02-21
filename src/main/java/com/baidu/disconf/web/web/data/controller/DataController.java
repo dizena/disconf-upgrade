@@ -59,8 +59,6 @@ public class DataController extends BaseController {
 	@ResponseBody
 	public Object sync(@RequestParam("a") Long a, @RequestParam("b") Long b) {
 		
-		LOG.info("a="+a+",b="+b);
-		
 		final Area areaA = areaMgr.getArea(a);
 		final Area areaB = areaMgr.getArea(b);
 
@@ -110,7 +108,7 @@ public class DataController extends BaseController {
 		try {
 			
 			List<DataSync> all = dataMgr.getDataSync();
-
+			
 			// IO
 			out = new ByteArrayOutputStream();
 			oos = new ObjectOutputStream(out);
@@ -148,8 +146,6 @@ public class DataController extends BaseController {
 			Object obj = objins.readObject();
 
 			List<DataSync> datas = (List<DataSync>) obj;
-
-			LOG.info("api2Db:" + datas.size());
 
 			for (DataSync ds : datas) {
 				try {

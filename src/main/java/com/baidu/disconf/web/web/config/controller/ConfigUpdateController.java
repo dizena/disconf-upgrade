@@ -170,10 +170,8 @@ public class ConfigUpdateController extends BaseController {
 		try {
 
 			String str = new String(fileContent.getBytes(), "UTF-8");
-			LOG.info("receive file: " + str);
 
 			emailNotification = configMgr.updateItemValue(configId, str);
-			LOG.info("update " + configId + " ok");
 
 		} catch (Exception e) {
 
@@ -194,7 +192,7 @@ public class ConfigUpdateController extends BaseController {
 				@Override
 				public void run() {
 					int i = syncMgr.updateFileWithTextSync(configIdT, fileContentT);
-					LOG.info("not sync updatefileWithText " + i);
+					LOG.info("not sync updatefileWithText:" + i+","+fileContentT);
 				}
 			});
 		}

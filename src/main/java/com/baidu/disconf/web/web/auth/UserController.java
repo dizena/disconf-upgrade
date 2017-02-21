@@ -162,6 +162,11 @@ public class UserController extends BaseController {
     	if(o==null){
     		return 0;
     	}else{
+    		JsonObjectBase job = get();
+    		Object oo =job.getMessage().get("visitor");
+    		if(oo==null){
+    			return 0;
+    		}
     		return 1;
     	}
     }

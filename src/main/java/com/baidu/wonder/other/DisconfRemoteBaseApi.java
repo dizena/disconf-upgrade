@@ -1,5 +1,6 @@
 package com.baidu.wonder.other;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +10,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
@@ -37,21 +39,9 @@ public abstract class DisconfRemoteBaseApi {
 			nvps.add(new BasicNameValuePair("password", passwd));
 			nvps.add(new BasicNameValuePair("remember", "0"));
 
-			httpPost.setEntity(new UrlEncodedFormEntity(nvps));
+			httpPost.setEntity(new UrlEncodedFormEntity(nvps,"UTF-8"));
 
-			CloseableHttpResponse response = httpClient.execute(httpPost);
-
-			HttpEntity responseEntity = response.getEntity();
-
-			String res = EntityUtils.toString(responseEntity, "UTF-8");
-
-			log.info("\nlogin:\n\t" + res);
-
-			EntityUtils.consume(responseEntity);
-
-			response.close();
-
-			httpPost.releaseConnection();
+			String res = execute(httpPost);
 
 			if (res.contains("true")) {
 				return true;
@@ -68,19 +58,7 @@ public abstract class DisconfRemoteBaseApi {
 		try {
 			HttpGet httpGet = new HttpGet(domain + "/api/account/session");
 
-			CloseableHttpResponse response = httpClient.execute(httpGet);
-
-			HttpEntity responseEntity = response.getEntity();
-
-			String res = EntityUtils.toString(responseEntity, "UTF-8");
-
-			log.info("\nsession:\n\t" + res);
-
-			EntityUtils.consume(responseEntity);
-
-			response.close();
-
-			httpGet.releaseConnection();
+			String res = execute(httpGet);
 
 			if (res.contains("true")) {
 				return true;
@@ -93,28 +71,45 @@ public abstract class DisconfRemoteBaseApi {
 
 	public void signout() {
 		if (session()) {
+			HttpGet httpGet = new HttpGet(domain + "/api/account/signout");
+			execute(httpGet);
+		}
+	}
+
+	public String execute(HttpRequestBase httpRequest) {
+		CloseableHttpResponse response = null;
+		try {
+			httpRequest.setHeader("Accept", "*/*"); 
+			httpRequest.setHeader("Accept-Encoding", "gzip, deflate"); 
+			httpRequest.setHeader("Accept-Language", "zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3");
+			httpRequest.setHeader("Connection", "keep-alive");
+			httpRequest.addHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+			httpRequest.setHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:51.0) Gecko/20100101 Firefox/51.0");    
+			
+			response = httpClient.execute(httpRequest);
+
+			HttpEntity responseEntity = response.getEntity();
+
+			String res = EntityUtils.toString(responseEntity, "UTF-8");
+
+			EntityUtils.consume(responseEntity);
+			
+			log.info("execute res="+res);
+
+			return res;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
 			try {
-				HttpGet httpGet = new HttpGet(domain + "/api/account/signout");
-
-				CloseableHttpResponse response = httpClient.execute(httpGet);
-
-				HttpEntity responseEntity = response.getEntity();
-
-				String res = EntityUtils.toString(responseEntity, "UTF-8");
-
-				log.info("\nsignout:\n\t" + res);
-
-				EntityUtils.consume(responseEntity);
-
-				response.close();
-
-				httpGet.releaseConnection();
-
-			} catch (Exception e) {
-
+				httpRequest.releaseConnection();
+				
+				if (response != null)
+					response.close();
+			} catch (IOException e) {
 			}
 		}
-
+		return null;
 	}
 
 	public void close() {

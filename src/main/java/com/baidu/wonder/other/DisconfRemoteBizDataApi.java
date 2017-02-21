@@ -12,7 +12,6 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.InputStreamEntity;
-import org.apache.http.util.EntityUtils;
 
 import com.baidu.disconf.web.service.data.bo.Data;
 import com.baidu.disconf.web.service.data.bo.DataSql;
@@ -31,21 +30,9 @@ public class DisconfRemoteBizDataApi extends DisconfRemoteBaseApi {
 
 			HttpGet httpGet = new HttpGet(url);
 
-			CloseableHttpResponse response = httpClient.execute(httpGet);
-
-			HttpEntity responseEntity = response.getEntity();
-
-			String res = EntityUtils.toString(responseEntity, "UTF-8");
-
-			log.info("\n" + domain + " getData:\n\t" + res);
-
-			EntityUtils.consume(responseEntity);
+			String res = execute(httpGet);
 
 			Data d = (Data) JsonUtils.json2Object(res, Data.class);
-
-			response.close();
-
-			httpGet.releaseConnection();
 
 			return d;
 		} catch (Exception e) {
@@ -83,7 +70,6 @@ public class DisconfRemoteBizDataApi extends DisconfRemoteBaseApi {
 	}
 
 	public boolean api2Db(List<DataSql> datas) {
-		String res = null;
 		try {
 			// 转发
 			HttpPost httpPost = new HttpPost(domain + "/api/data/api2Db");
@@ -96,41 +82,21 @@ public class DisconfRemoteBizDataApi extends DisconfRemoteBaseApi {
 			bos.flush();
 			InputStream instream = new ByteArrayInputStream(bs);
 
-			InputStreamEntity entity=new InputStreamEntity(instream);
+			InputStreamEntity entity = new InputStreamEntity(instream);
 			httpPost.setEntity(entity);
+			String res = execute(httpPost);
 
-			CloseableHttpResponse response = httpClient.execute(httpPost);
-
-			HttpEntity responseEntity = response.getEntity();
-
-			res = EntityUtils.toString(responseEntity, "UTF-8");
-
-			log.info("\n" + domain + " api2Db:\n\t" + res);
-
-			EntityUtils.consume(responseEntity);
-
-			response.close();
 			bos.close();
 			instream.close();
-
-			httpPost.releaseConnection();
-
-		} catch (Exception e) {
-			e.printStackTrace();
 			if (res.contains("true")) {
 				return true;
-			} else {
-				return false;
 			}
-		}
+		} catch (Exception e) {
 
-		if (res.contains("true")) {
-			return true;
-		} else {
-			return false;
 		}
+		return false;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public List<DataSync> data2Api() {
 		try {
@@ -160,7 +126,6 @@ public class DisconfRemoteBizDataApi extends DisconfRemoteBaseApi {
 	}
 
 	public boolean api2Data(List<DataSync> datas) {
-		String res = null;
 		try {
 			// 转发
 			HttpPost httpPost = new HttpPost(domain + "/api/data/api2Db");
@@ -173,39 +138,22 @@ public class DisconfRemoteBizDataApi extends DisconfRemoteBaseApi {
 			bos.flush();
 			InputStream instream = new ByteArrayInputStream(bs);
 
-			InputStreamEntity entity=new InputStreamEntity(instream);
+			InputStreamEntity entity = new InputStreamEntity(instream);
+			
 			httpPost.setEntity(entity);
 
-			CloseableHttpResponse response = httpClient.execute(httpPost);
+			String res = execute(httpPost);
 
-			HttpEntity responseEntity = response.getEntity();
-
-			res = EntityUtils.toString(responseEntity, "UTF-8");
-
-			log.info("\n" + domain + " api2Db:\n\t" + res);
-
-			EntityUtils.consume(responseEntity);
-
-			response.close();
 			bos.close();
 			instream.close();
 
-			httpPost.releaseConnection();
-
-		} catch (Exception e) {
-			e.printStackTrace();
 			if (res.contains("true")) {
 				return true;
-			} else {
-				return false;
 			}
-		}
+		} catch (Exception e) {
 
-		if (res.contains("true")) {
-			return true;
-		} else {
-			return false;
 		}
+		return false;
 	}
 
 }

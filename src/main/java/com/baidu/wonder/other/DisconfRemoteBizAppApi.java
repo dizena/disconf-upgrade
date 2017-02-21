@@ -3,14 +3,11 @@ package com.baidu.wonder.other;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
 
 import com.baidu.disconf.web.service.app.form.AppNewForm;
 import com.github.knightliao.apollo.utils.data.JsonUtils;
@@ -32,21 +29,9 @@ public class DisconfRemoteBizAppApi extends DisconfRemoteBaseApi {
 			nvps.add(new BasicNameValuePair("desc", appNewForm.getDesc()));
 			nvps.add(new BasicNameValuePair("emails", appNewForm.getEmails()));
 
-			httpPost.setEntity(new UrlEncodedFormEntity(nvps));
+			httpPost.setEntity(new UrlEncodedFormEntity(nvps,"UTF-8"));
 
-			CloseableHttpResponse response = httpClient.execute(httpPost);
-
-			HttpEntity responseEntity = response.getEntity();
-
-			String res = EntityUtils.toString(responseEntity, "UTF-8");
-
-			log.info("\n" + domain + " addapp:\n\t" + res);
-
-			EntityUtils.consume(responseEntity);
-
-			response.close();
-			
-			httpPost.releaseConnection();
+			String res = execute(httpPost);
 
 			if (res.contains("true")) {
 				return true;
@@ -66,19 +51,7 @@ public class DisconfRemoteBizAppApi extends DisconfRemoteBaseApi {
 			
 			HttpGet httpGet = new HttpGet(url);
 
-			CloseableHttpResponse response = httpClient.execute(httpGet);
-
-			HttpEntity responseEntity = response.getEntity();
-
-			String res = EntityUtils.toString(responseEntity, "UTF-8");
-
-			log.info("\n" + domain + " delapp:\n\t" + res);
-
-			EntityUtils.consume(responseEntity);
-
-			response.close();
-			
-			httpGet.releaseConnection();
+			String res = execute(httpGet);
 
 			if (res.contains("true")) {
 				return true;
