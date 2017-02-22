@@ -1,13 +1,16 @@
 package com.baidu.ub.common.dbmanage.datasource;
 
-import org.apache.log4j.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.baidu.ub.common.commons.ThreadContext;
 import com.baidu.ub.common.dbmanage.router.Router;
 
 public class MultiDataSourceKeyContext {
 
-    private static final Logger log = Logger.getLogger(MultiDataSourceKeyContext.class);
+    //private static final Logger log = Logger.getLogger(MultiDataSourceKeyContext.class);
+	private static final Logger log = LoggerFactory.getLogger(MultiDataSourceKeyContext.class);
 
     private String dbName;
 

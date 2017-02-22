@@ -4,11 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 public class SimpleDBShardingRuleImpl implements DBShardingRule {
 
-    private static Logger log = Logger.getLogger(SimpleDBShardingRuleImpl.class);
+    //private static Logger log = Logger.getLogger(SimpleDBShardingRuleImpl.class);
+    private static Logger log = LoggerFactory.getLogger(SimpleDBShardingRuleImpl.class);
 
     protected Random randomprovider = new Random();
     private int tableShardingLength = 6;

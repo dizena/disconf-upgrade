@@ -1,13 +1,15 @@
 package com.baidu.ub.common.dbmanage.datasource;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 
 import com.baidu.ub.common.commons.ThreadContext;
 
 public class MultiDataSource extends AbstractRoutingDataSource {
 
-    private static final Logger log = Logger.getLogger(MultiDataSource.class);
+   // private static final Logger log = Logger.getLogger(MultiDataSource.class);
+    private static final Logger log = LoggerFactory.getLogger(MultiDataSource.class);
 
     static {
         ThreadContext.putContext("Bootstrap", Boolean.TRUE);

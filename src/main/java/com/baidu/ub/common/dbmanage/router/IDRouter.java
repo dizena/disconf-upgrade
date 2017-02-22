@@ -1,6 +1,7 @@
 package com.baidu.ub.common.dbmanage.router;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ApplicationObjectSupport;
 
 import com.baidu.ub.common.dbmanage.datasource.VirtualDataSource;
@@ -8,7 +9,8 @@ import com.baidu.ub.common.dbmanage.rule.DBShardingRule;
 
 public class IDRouter extends ApplicationObjectSupport implements Router {
 
-    private static Logger log = Logger.getLogger(IDRouter.class);
+   // private static Logger log = Logger.getLogger(IDRouter.class);
+    private static Logger log = LoggerFactory.getLogger(IDRouter.class);
     private String prefix;
     private DBShardingRule dbShardingRule;
 
