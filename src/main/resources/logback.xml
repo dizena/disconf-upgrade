@@ -44,24 +44,24 @@
         </encoder>
     </appender>
 
-    <logger name="com.baidu.disconf.web.tasks">
+    <logger name="com.baidu.disconf.web.tasks" additivity="false">
         <level value="INFO"/>
         <appender-ref ref="monitorlog"/>
     </logger>
 
-    <logger name="com.baidu.disconf">
+    <logger name="com.baidu.disconf" additivity="false">
         <level value="INFO"/>
     </logger>
 
-    <logger name="org.springframework">
+    <logger name="org.springframework" additivity="false">
         <level value="INFO"/>
     </logger>
 
-    <logger name="net.sf.ehcache">
+    <logger name="net.sf.ehcache" additivity="false">
         <level value="ERROR"/>
     </logger>
 
-    <logger name="org.springmodules">
+    <logger name="org.springmodules" additivity="false">
         <level value="ERROR"/>
     </logger>
 
